@@ -519,6 +519,28 @@ a {
     border-radius: 2rem 0 0 2rem;
 }
 
+.rm-cart-btn {
+    position: relative;
+    color: #fff;
+    padding: 0.45rem 0.6rem;
+    border-radius: 0.6rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+}
+
+.rm-cart-btn:hover {
+    background-color: rgba(255, 255, 255, 0.12);
+    color: #fff;
+}
+
+.rm-cart-btn .badge {
+    position: absolute;
+    top: -4px;
+    right: -6px;
+    font-size: 0.65rem;
+}
+
 .rm-text-muted {
     color: var(--rm-muted);
 }

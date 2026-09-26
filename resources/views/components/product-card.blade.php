@@ -53,6 +53,10 @@
             <p class="rm-product-meta mb-0"><i class="bi bi-person me-1"></i>Penjual baru</p>
         @endif
 
-        <a href="{{ $detailUrl }}" class="btn rm-btn-primary w-100">Lihat Detail</a>
+        @if (isset($action))
+            <div class="mt-auto pt-2">{{ $action }}</div>
+        @else
+            <a href="{{ $detailUrl }}" class="btn rm-btn-primary w-100">Lihat Detail</a>
+        @endif
     </div>
 </article>

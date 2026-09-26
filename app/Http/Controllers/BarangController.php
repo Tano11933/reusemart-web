@@ -96,13 +96,22 @@ class BarangController extends Controller
 
     public function lihatSemuaBeli(Request $request)
     {
-        $query = Barang::where('status', 'tersedia');
+        $queryInput = $request->input('query');
+
+        $query = Barang::with('penitip')->where('status', 'tersedia');
 
         if ($request->garansi === '1') {
             $query->where('garansi', 1);
         }
 
-        $barang = $query->get();
+        if ($queryInput) {
+            $query->where(function ($q) use ($queryInput) {
+                $q->where('nama_barang', 'like', "%{$queryInput}%")
+                    ->orWhere('kategori', 'like', "%{$queryInput}%");
+            });
+        }
+
+        $barang = $query->orderByDesc('tgl_titip')->get();
 
         $pembeli = null;
         if (session()->has('id_pembeli') && session('role') === 'pembeli') {
