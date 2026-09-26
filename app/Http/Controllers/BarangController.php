@@ -12,18 +12,21 @@ use App\Models\Penitip;
 
 class BarangController extends Controller
 {
+    private const INVALID_PUBLIC_CATEGORIES = ['terjual', 'didonasikan', 'akan diambil', 'barang untuk donasi'];
+
     // ============================ GUEST ============================
     public function home()
     {
-        $barang = Barang::where('status', 'tersedia')
-            ->with('penitip') // ambil data penitip termasuk rating
+        $barang = Barang::with('penitip')
+            ->where('status', 'tersedia')
+            ->whereNotIn('kategori', self::INVALID_PUBLIC_CATEGORIES)
             ->orderByDesc('tgl_titip')
             ->take(8)
             ->get();
 
         // Hanya kategori yang benar-benar punya barang tersedia (dan bukan nilai status yang salah tempat).
         $kategoris = Barang::where('status', 'tersedia')
-            ->whereNotIn('kategori', ['terjual', 'didonasikan', 'akan diambil', 'barang untuk donasi'])
+            ->whereNotIn('kategori', self::INVALID_PUBLIC_CATEGORIES)
             ->select('kategori')
             ->distinct()
             ->orderBy('kategori')
@@ -36,7 +39,9 @@ class BarangController extends Controller
     {
         $queryInput = $request->input('query');
 
-        $barang = Barang::with('penitip')->where('status', 'tersedia');
+        $barang = Barang::with('penitip')
+            ->where('status', 'tersedia')
+            ->whereNotIn('kategori', self::INVALID_PUBLIC_CATEGORIES);
 
         if ($request->has('garansi')) {
             $barang->where('garansi', $request->garansi);
@@ -70,6 +75,7 @@ class BarangController extends Controller
         // Barang lain di kategori yang sama untuk bagian "Barang Serupa".
         $serupa = Barang::with('penitip')
             ->where('status', 'tersedia')
+            ->whereNotIn('kategori', self::INVALID_PUBLIC_CATEGORIES)
             ->where('kategori', $item->kategori)
             ->where('id_barang', '!=', $item->id_barang)
             ->orderByDesc('tgl_titip')
@@ -83,6 +89,7 @@ class BarangController extends Controller
     {
         $barangs = Barang::with('penitip')
             ->where('status', 'tersedia')
+            ->whereNotIn('kategori', self::INVALID_PUBLIC_CATEGORIES)
             ->where('kategori', $kategori)
             ->orderByDesc('tgl_titip')
             ->get();
@@ -93,7 +100,12 @@ class BarangController extends Controller
     // ============================ PEMBELI ============================
     public function homeBeli()
     {
-        $barang = Barang::where('status', 'tersedia')->get();
+        $barang = Barang::with('penitip')
+            ->where('status', 'tersedia')
+            ->whereNotIn('kategori', self::INVALID_PUBLIC_CATEGORIES)
+            ->orderByDesc('tgl_titip')
+            ->take(8)
+            ->get();
 
         $pembeli = null;
         if (session()->has('user_id') && session('role') === 'pembeli') {
@@ -107,7 +119,9 @@ class BarangController extends Controller
     {
         $queryInput = $request->input('query');
 
-        $query = Barang::with('penitip')->where('status', 'tersedia');
+        $query = Barang::with('penitip')
+            ->where('status', 'tersedia')
+            ->whereNotIn('kategori', self::INVALID_PUBLIC_CATEGORIES);
 
         if ($request->garansi === '1') {
             $query->where('garansi', 1);
@@ -137,38 +151,57 @@ class BarangController extends Controller
             ->where('status', 'tersedia')
             ->firstOrFail();
 
-
-        if (!$barang) {
-            return redirect()->route('lihat_semua_beli')->with('already', 'Barang tidak tersedia.');
-        }
-
-        $pembeli = session()->has('user_id') && session('role') === 'pembeli'
-            ? Pembeli::where('id_pembeli', session('user_id'))->first()
+        $idPembeli = session('id_pembeli') ?? (session('role') === 'pembeli' ? session('user_id') : null);
+        $pembeli = $idPembeli
+            ? Pembeli::where('id_pembeli', $idPembeli)->first()
             : null;
 
         $diskusi = DiskusiProduk::where('id_barang', $id)
-            ->with('pembeli')
+            ->with(['pembeli:id_pembeli,nama_pembeli', 'pegawai:id_pegawai,nama_pegawai'])
             ->orderBy('tgl_komentar', 'asc')
-            ->limit(10)
             ->get();
 
-        $penitip = DB::table('penitip')
-            ->where('id_penitip', $barang->id_penitip)
-            ->select('rating')
-            ->first();
+        $penitip = $barang->penitip;
+        $ratingGiven = null;
+        $canRate = false;
+
+        if ($idPembeli) {
+            $completedPurchase = DB::table('detail_pemesanan')
+                ->join('pemesanan', 'detail_pemesanan.id_pemesanan', '=', 'pemesanan.id_pemesanan')
+                ->where('pemesanan.id_pembeli', $idPembeli)
+                ->where('pemesanan.status', 'transaksi selesai')
+                ->where('detail_pemesanan.id_barang', $id)
+                ->select('detail_pemesanan.rating_diberikan')
+                ->first();
+
+            $ratingGiven = $completedPurchase?->rating_diberikan;
+            $canRate = $completedPurchase && is_null($ratingGiven);
+        }
+
+        $serupa = Barang::with('penitip')
+            ->where('status', 'tersedia')
+            ->whereNotIn('kategori', self::INVALID_PUBLIC_CATEGORIES)
+            ->where('kategori', $barang->kategori)
+            ->where('id_barang', '!=', $barang->id_barang)
+            ->orderByDesc('tgl_titip')
+            ->take(4)
+            ->get();
 
         return view('pembeli.detail_barang_beli', compact(
-            'barang', 'diskusi', 'pembeli', 'penitip'
+            'barang', 'diskusi', 'pembeli', 'penitip', 'ratingGiven', 'canRate', 'serupa'
         ));
     }
 
     public function rate(Request $request, $idBarang)
     {
-        $ratingBaru = (int) $request->input('rating');
-        $idPembeli = $request->input('id_pembeli');
+        $validated = $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+        ]);
+        $ratingBaru = (int) $validated['rating'];
+        $idPembeli = session('id_pembeli') ?? (session('role') === 'pembeli' ? session('user_id') : null);
 
-        if (!$ratingBaru || !$idPembeli) {
-            return response()->json(['success' => false, 'message' => 'Data tidak lengkap.']);
+        if (!$idPembeli) {
+            return response()->json(['success' => false, 'message' => 'Silakan masuk sebagai pembeli.'], 401);
         }
 
         // Cari transaksi pembeli atas barang ini
@@ -206,10 +239,6 @@ class BarangController extends Controller
             ->whereNotNull('rating_diberikan')
             ->pluck('rating_diberikan');
 
-        if ($ratings->isEmpty()) {
-            return response()->json(['success' => false, 'message' => 'Belum ada rating.']);
-        }
-
         $avgRating = round($ratings->avg(), 2);
 
         // Update rating ke penitip
@@ -217,7 +246,11 @@ class BarangController extends Controller
             'rating' => $avgRating
         ]);
 
-        return response()->json(['success' => true, 'message' => 'Rating berhasil diberikan.']);
+        return response()->json([
+            'success' => true,
+            'message' => 'Rating berhasil diberikan.',
+            'newRating' => $avgRating,
+        ]);
     }
 
     // ============================ CS ============================

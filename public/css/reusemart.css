@@ -83,7 +83,7 @@ body.rm-body {
     font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
     background-color: var(--rm-bg);
     color: var(--rm-ink);
-    font-size: 1rem;
+    font-size: clamp(0.94rem, 0.18vw + 0.9rem, 1rem);
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
@@ -92,6 +92,7 @@ body.rm-body {
 h1, h2, h3, h4, h5, h6 {
     color: var(--rm-ink);
     letter-spacing: -0.015em;
+    line-height: 1.25;
 }
 
 p {
@@ -300,12 +301,13 @@ img {
    5. Tombol
    --------------------------------------------------------------------------- */
 .btn {
+    min-height: 42px;
     transition: background-color var(--rm-fast), border-color var(--rm-fast),
-                color var(--rm-fast), box-shadow var(--rm-fast), transform var(--rm-fast);
+                color var(--rm-fast), box-shadow var(--rm-fast);
 }
 
 .btn:active {
-    transform: translateY(1px) scale(0.995);
+    filter: brightness(0.94);
 }
 
 .btn.rm-btn-primary {
@@ -323,8 +325,7 @@ img {
     background-color: var(--rm-primary-hover);
     border-color: var(--rm-primary-hover);
     color: #fff;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 18px rgba(15, 47, 46, 0.22);
+    box-shadow: 0 4px 12px rgba(15, 47, 46, 0.2);
 }
 
 .btn.rm-btn-outline {
@@ -341,8 +342,7 @@ img {
     background-color: var(--rm-primary);
     border-color: var(--rm-primary);
     color: #fff;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 18px rgba(15, 47, 46, 0.2);
+    box-shadow: 0 4px 12px rgba(15, 47, 46, 0.18);
 }
 
 .btn.rm-btn-light {
@@ -360,8 +360,7 @@ img {
     background-color: var(--rm-primary-soft);
     border-color: var(--rm-primary-soft);
     color: var(--rm-primary-dark);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.16);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.14);
 }
 
 .btn.rm-btn-soft {
@@ -376,7 +375,6 @@ img {
 .btn.rm-btn-soft:hover {
     background-color: var(--rm-primary);
     color: #fff;
-    transform: translateY(-2px);
 }
 
 .btn:disabled,
@@ -393,6 +391,7 @@ img {
     border: 1.5px solid var(--rm-line-strong);
     border-radius: var(--rm-radius-sm);
     padding: 0.55rem 0.9rem;
+    min-height: 44px;
     color: var(--rm-ink);
     background-color: #fff;
     transition: border-color var(--rm-fast), box-shadow var(--rm-fast), background-color var(--rm-fast);
@@ -511,6 +510,7 @@ img {
     color: #fff;
     font-weight: 800;
     letter-spacing: -0.025em;
+    text-wrap: balance;
 }
 
 .rm-hero p,
@@ -642,6 +642,9 @@ img {
     font-weight: 800;
     letter-spacing: -0.02em;
     margin-bottom: 0.15rem;
+    font-size: clamp(1.55rem, 2.3vw, 2rem);
+    line-height: 1.2;
+    text-wrap: balance;
 }
 
 .rm-page-sub {
@@ -729,8 +732,8 @@ img {
 }
 
 .rm-category-card:hover {
-    transform: translateY(-6px);
-    box-shadow: var(--rm-shadow-md);
+    transform: none;
+    box-shadow: var(--rm-shadow-sm);
     border-color: rgba(30, 91, 90, 0.45);
     background-color: #fff;
     color: var(--rm-primary-dark);
@@ -753,7 +756,7 @@ img {
 .rm-category-card:hover .rm-category-icon {
     background-color: var(--rm-primary);
     color: #fff;
-    transform: scale(1.06) rotate(-4deg);
+    transform: none;
 }
 
 .rm-category-card .rm-category-name {
@@ -775,13 +778,13 @@ img {
     display: flex;
     flex-direction: column;
     box-shadow: var(--rm-shadow-xs);
-    transition: transform var(--rm-base), box-shadow var(--rm-base), border-color var(--rm-base);
+    transition: box-shadow var(--rm-base), border-color var(--rm-base);
 }
 
-.rm-product-card:hover {
-    transform: translateY(-6px);
-    border-color: rgba(30, 91, 90, 0.45);
-    box-shadow: var(--rm-shadow-md);
+.rm-product-card:has(.rm-product-media:hover),
+.rm-product-card:has(.rm-product-media:focus-visible) {
+    border-color: var(--rm-line-strong);
+    box-shadow: var(--rm-shadow-sm);
 }
 
 .rm-product-media {
@@ -791,30 +794,17 @@ img {
     background-color: var(--rm-primary-soft);
 }
 
-.rm-product-media::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, rgba(15, 47, 46, 0.22), transparent 45%);
-    opacity: 0;
-    transition: opacity var(--rm-base);
-    pointer-events: none;
-    z-index: 1;
-}
-
-.rm-product-card:hover .rm-product-media::after {
-    opacity: 1;
-}
-
 .rm-product-media img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
+    object-position: center;
+    padding: 0.55rem;
     transition: transform 0.45s var(--rm-ease);
 }
 
-.rm-product-card:hover .rm-product-media img {
-    transform: scale(1.06);
+.rm-product-media:focus-visible img {
+    transform: scale(1.035);
 }
 
 .rm-product-body {
@@ -826,7 +816,7 @@ img {
 }
 
 .rm-product-title {
-    font-size: 0.97rem;
+    font-size: clamp(0.86rem, 0.2vw + 0.8rem, 0.96rem);
     font-weight: 700;
     line-height: 1.35;
     margin: 0;
@@ -839,12 +829,13 @@ img {
     transition: color var(--rm-fast);
 }
 
-.rm-product-card:hover .rm-product-title {
+.rm-product-media:hover ~ .rm-product-body .rm-product-title,
+.rm-product-media:focus-visible ~ .rm-product-body .rm-product-title {
     color: var(--rm-primary);
 }
 
 .rm-product-price {
-    font-size: 1.08rem;
+    font-size: clamp(0.94rem, 0.22vw + 0.87rem, 1.06rem);
     font-weight: 800;
     color: var(--rm-primary);
     margin: 0;
@@ -1004,7 +995,7 @@ img {
 
 .rm-detail-media {
     position: relative;
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 4 / 3;
     max-height: 520px;
     border-radius: var(--rm-radius);
     overflow: hidden;
@@ -1014,13 +1005,14 @@ img {
 .rm-detail-media img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
+    padding: clamp(0.75rem, 2vw, 1.5rem);
     cursor: zoom-in;
     transition: transform 0.45s var(--rm-ease);
 }
 
 .rm-detail-media img:hover {
-    transform: scale(1.03);
+    transform: scale(1.015);
 }
 
 .rm-detail-indicators {
@@ -1346,6 +1338,10 @@ img {
         margin-right: auto;
     }
 
+    .rm-hero h1 {
+        font-size: clamp(1.8rem, 8vw, 2.5rem);
+    }
+
     .rm-hero-mascot {
         max-width: 155px;
     }
@@ -1354,7 +1350,106 @@ img {
         padding: 1.15rem;
     }
 
+    .rm-detail-card > .row {
+        margin-left: 0;
+        margin-right: 0;
+        --bs-gutter-x: 1rem;
+    }
+
+    .rm-detail-card > .row > * {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
     .rm-product-body {
-        padding: 0.85rem 0.9rem 1rem;
+        padding: 0.7rem 0.75rem 0.85rem;
+        gap: 0.32rem;
+    }
+
+    .rm-product-media {
+        aspect-ratio: 1 / 1;
+    }
+
+    .rm-product-title {
+        min-height: 2.5em;
+    }
+
+    .rm-product-body .btn {
+        padding: 0.48rem 0.7rem;
+        font-size: 0.84rem;
+    }
+
+    .rm-product-meta {
+        font-size: 0.72rem;
+    }
+
+    .rm-rating {
+        font-size: 0.74rem;
+    }
+
+    .rm-category-card {
+        min-height: 116px;
+        padding: 1rem 0.6rem;
+    }
+
+    .rm-category-icon {
+        width: 46px;
+        height: 46px;
+        font-size: 1.25rem;
+    }
+
+    .rm-auth-panel {
+        padding: 1.25rem 0.85rem;
+    }
+
+    .rm-auth-card {
+        padding: 1.35rem;
+    }
+
+    .rm-detail-info {
+        position: static;
+    }
+
+    .table > :not(caption) > * > * {
+        padding: 0.65rem 0.55rem;
+    }
+}
+
+/* Motion hanya aktif pada perangkat dengan pointer hover; kartu tidak ikut
+   bergeser ketika pointer berada di tombol sehingga elemen tidak terasa menyatu. */
+@media (hover: hover) and (pointer: fine) {
+    .rm-category-card:hover {
+        transform: translateY(-3px);
+    }
+
+    .rm-category-card:hover .rm-category-icon {
+        transform: scale(1.03);
+    }
+
+    .rm-product-media:hover img {
+        transform: scale(1.035);
+    }
+
+    .rm-category-card:hover {
+        transform: translateY(-3px);
+    }
+}
+
+@media (max-width: 380px) {
+    .rm-product-price {
+        font-size: 0.88rem;
+    }
+
+    .rm-product-title {
+        font-size: 0.82rem;
+    }
+
+    .rm-product-body .btn {
+        font-size: 0.78rem;
+    }
+
+    .rm-rating .rm-rating-value {
+        font-size: 0.68rem;
+        padding: 0.02rem 0.35rem;
     }
 }

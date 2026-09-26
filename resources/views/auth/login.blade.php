@@ -96,6 +96,7 @@
                     .then(function (res) {
                         if (res.success) {
                             localStorage.setItem('id_user', res.id_user);
+                            localStorage.setItem('user_id', res.id_user);
                             localStorage.setItem('nama', res.nama);
                             localStorage.setItem('role', res.role);
 

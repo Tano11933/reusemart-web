@@ -178,7 +178,7 @@
                     </a>
                 </div>
 
-                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 justify-content-center">
+                <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3 g-md-4 justify-content-center">
                     @foreach ($serupa as $lain)
                         <div class="col">
                             <x-product-card :item="$lain" />

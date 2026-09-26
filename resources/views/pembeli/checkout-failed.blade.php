@@ -1,78 +1,59 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <title>Pembayaran Gagal - ReuseMart</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet" />
+@extends('layouts.buyer')
+
+@section('title', 'Pembayaran Belum Selesai — ReuseMart')
+
+@section('content')
+    <section class="container py-5">
+        <div class="rm-result-card rm-result-failed mx-auto">
+            <span class="rm-result-icon"><i class="bi bi-arrow-counterclockwise"></i></span>
+            <span class="rm-result-eyebrow">Pembayaran belum selesai</span>
+            <h1 class="h3 fw-bold">Pesananmu belum dapat diproses</h1>
+            <p class="rm-text-muted mb-4">
+                Waktu pembayaran mungkin sudah berakhir atau pesanan dibatalkan. Kamu bisa kembali ke katalog untuk memilih barang lagi.
+            </p>
+            <div class="d-flex flex-column flex-sm-row justify-content-center gap-2">
+                <a href="{{ route('home_beli') }}" class="btn rm-btn-primary">
+                    <i class="bi bi-grid me-1"></i>Kembali ke Beranda
+                </a>
+                <a href="{{ route('pembeli.history') }}" class="btn rm-btn-outline">Lihat Riwayat</a>
+            </div>
+        </div>
+    </section>
+@endsection
+
+@push('styles')
     <style>
-        body {
-            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
-            font-family: 'Poppins', sans-serif;
-            height: 100vh;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .container-fail {
-            background: white;
-            padding: 40px 50px;
-            border-radius: 20px;
-            box-shadow: 0 15px 30px rgba(220, 53, 69, 0.4);
-            max-width: 400px;
-            width: 90%;
+        .rm-result-card {
+            max-width: 620px;
             text-align: center;
-            animation: fadeInUp 0.8s ease forwards;
+            padding: clamp(2rem, 6vw, 3.5rem);
+            border: 1px solid var(--rm-line);
+            border-radius: var(--rm-radius-lg);
+            background: #fff;
+            box-shadow: var(--rm-shadow-sm);
         }
-        h1 {
-            font-size: 4rem;
-            color: #d6334f;
-            margin-bottom: 20px;
-            user-select: none;
+
+        .rm-result-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 76px;
+            height: 76px;
+            margin: 0 auto 1.25rem;
+            border-radius: 50%;
+            background: var(--rm-danger-soft);
+            color: var(--rm-danger);
+            font-size: 2rem;
         }
-        p {
-            font-size: 1.15rem;
-            color: #6c757d;
-            margin-bottom: 30px;
-        }
-        a.btn-primary {
-            background-color: #d6334f;
-            border: none;
-            font-weight: 600;
-            padding: 12px 30px;
-            border-radius: 50px;
-            box-shadow: 0 5px 15px rgba(214, 51, 79, 0.4);
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
-            font-size: 1.1rem;
-        }
-        a.btn-primary:hover, a.btn-primary:focus {
-            background-color: #b02a37;
-            box-shadow: 0 8px 20px rgba(176, 42, 55, 0.6);
-            outline: none;
-            text-decoration: none;
-            color: white;
-        }
-        /* Subtle fade in up animation */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+
+        .rm-result-eyebrow {
+            display: block;
+            color: var(--rm-danger);
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
         }
     </style>
-</head>
-<body>
-    <div class="container-fail">
-        <h1>⚠</h1>
-        <h2 class="mb-3" style="color:#d6334f; font-weight: 700;">Pembayaran Gagal!</h2>
-        <p>Waktu pembayaran telah habis atau pembayaran dibatalkan.<br>Silakan coba lagi atau hubungi layanan pelanggan jika butuh bantuan.</p>
-        <a href="{{ route('home_beli') }}" class="btn btn-primary mt-3">Kembali ke Beranda</a>
-    </div>
-</body>
-</html>
+@endpush

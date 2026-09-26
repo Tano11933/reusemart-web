@@ -33,13 +33,21 @@ class CartController extends Controller
 
         return view('pembeli.cart', compact('cartItems', 'pembeli', 'adaBarangTerjual'));
     }
-    public function addToCart($id)
+    public function addToCart(Request $request, $id)
     {
         $barang = Barang::findOrFail($id);
+
+        if ($barang->status !== 'tersedia') {
+            return redirect()->back()->with('error', 'Barang ini sudah tidak tersedia.');
+        }
 
         $cart = session()->get('cart', []);
 
         if (isset($cart[$id])) {
+            if ($request->boolean('buy_now')) {
+                return redirect()->route('checkout.index');
+            }
+
             return redirect()->back()->with('cart_success', 'Barang sudah ada di keranjang!');
         }
 
@@ -53,7 +61,9 @@ class CartController extends Controller
 
         session()->put('cart', $cart);
 
-        // Jangan ubah status barang di sini supaya tetap muncul di cart pembeli lain
+        if ($request->boolean('buy_now')) {
+            return redirect()->route('checkout.index')->with('success', 'Barang siap untuk checkout.');
+        }
 
         return redirect()->back()->with('success', 'Barang berhasil ditambahkan ke keranjang!');
     }
@@ -68,13 +78,6 @@ class CartController extends Controller
 
         unset($cart[$id]);
         session()->put('cart', $cart);
-
-        // Update status barang kembali ke 'tersedia'
-        $barang = Barang::find($id);
-        if ($barang) {
-            $barang->status = 'tersedia';
-            $barang->save();
-        }
 
         return redirect()->back()->with('success', 'Barang dihapus dari keranjang!');
     }

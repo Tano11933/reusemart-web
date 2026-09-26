@@ -1,368 +1,312 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>History Pembelian</title>
+@extends('layouts.buyer')
 
-  <!-- CSS CDN -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <!-- Custom Styles -->
-  <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-    }
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: #f8f9fa;
-    }
-    main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: start;
-    }
-    .footer {
-      flex-shrink: 0;
-    }
-    .navbar {
-      background-color: #1E5B5A;
-    }
-    .navbar-brand {
-      font-weight: bold;
-      font-size: 20px;
-    }
-    .btn-profile {
-      font-size: 16px;
-      padding: 12px 25px;
-      border-radius: 30px;
-      background-color: #fff;
-      color: black;
-      border: none;
-      font-weight: 500;
-      transition: background-color 0.3s ease;
-    }
-    .btn-profile:hover {
-      background-color: #7697A0;
-      color: black;
-    }
-    .welcome-message {
-      margin-top: 40px;
-      text-align: center;
-      font-size: 28px;
-      font-weight: 600;
-      color: #1E5B5A;
-    }
-    .table-container {
-      margin-top: 30px;
-      margin-bottom: 80px;
-    }
-    td, th {
-      text-align: center;
-      vertical-align: middle;
-    }
-    .footer {
-      background: linear-gradient(to top, #4f7b7c, #D9F1F0);
-      padding: 40px 0;
-      color: #333;
-    }
-    .footer-title {
-      font-size: 18px;
-      color: #1E5B5A;
-    }
-    .footer-text {
-      font-size: 14px;
-    }
-    .footer .bi {
-      font-size: 20px;
-      color: #1E5B5A;
-    }
-    .footer .bi:hover {
-      color: #FFD700;
-    }
-    .footer .text-center p {
-      font-size: 12px;
-      color: #1E5B5A;
-    }
-  </style>
-</head>
+@section('title', 'Riwayat Pembelian — ReuseMart')
 
-<body>
+@section('content')
+    <section class="container py-4 py-lg-5">
+        <nav class="rm-breadcrumb small mb-3" aria-label="Breadcrumb">
+            <a href="{{ route('home_beli') }}">Home</a>
+            <span class="mx-1">/</span>
+            <a href="{{ route('pembeli-profile', ['id' => $pembeli->id_pembeli]) }}">Profil Saya</a>
+            <span class="mx-1">/</span>
+            <span class="rm-text-muted">Riwayat Pembelian</span>
+        </nav>
 
-<!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg navbar-dark sticky-top px-4">
-  <a class="navbar-brand text-white" href="/home-beli">
-    <img src="/image/white.png" alt="R/M Logo" style="max-width: 50px; height: auto;">
-  </a>
-  <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link text-white" href="/home-beli">Home</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link text-white" href="/lihat-semua-beli">Product</a>
-      </li>
-    </ul>
-    <div class="d-flex align-items-center gap-3">
-      <a href="/cart"><i class="bi bi-cart text-white fs-5"></i></a>
-      <a id="profileLink" class="btn btn-profile">Profile</a>
-    </div>
-  </div>
-</nav>
-
-<!-- CONTENT -->
-<main class="container">
-  <div class="welcome-message" id="welcomeMessage">Memuat data pembeli...</div>
-  <div class="text-center mb-4" id="poinInfo"></div>
-
-  <div class="table-container">
-    <h4 class="text-center">History Pembelian</h4>
-    <div id="transactions-table" class="mt-4 text-center">
-      <p>Memuat data pembelian...</p>
-    </div>
-  </div>
-</main>
-
-<!-- FOOTER -->
-<div class="footer container-fluid text-center text-md-start px-5 py-4">
-  <div class="row">
-    <div class="col-md-4 mb-3">
-      <h5 class="fw-bold footer-title">ReuseMart</h5>
-      <p class="footer-text">A Second Life for Quality Goods — A Better Life for the Planet</p>
-    </div>
-    <div class="col-md-4 mb-3">
-      <h6 class="fw-bold footer-title">Contact Us</h6>
-      <p class="footer-text">ReuseMart@gmail.com</p>
-      <p class="footer-text">Jl. Jalan Apa Aja No.04, RT.01/RW.01, DI Yogyakarta</p>
-      <p class="footer-text">+62 987 654 321</p>
-    </div>
-    <div class="col-md-4 mb-3">
-      <h6 class="fw-bold footer-title">Follow Us</h6>
-      <div class="d-flex justify-content-center justify-content-md-start">
-        <a href="#" class="text-decoration-none text-dark me-3"><i class="bi bi-instagram fs-5"></i></a>
-        <a href="#" class="text-decoration-none text-dark me-3"><i class="bi bi-twitter fs-5"></i></a>
-        <a href="#" class="text-decoration-none text-dark"><i class="bi bi-facebook fs-5"></i></a>
-      </div>
-    </div>
-  </div>
-  <div class="text-center mt-4 footer-text">
-    <p>&copy; 2025 ReuseMart. All rights reserved.</p>
-  </div>
-</div>
-
-<!-- SCRIPT -->
-<script>
-  const userId = localStorage.getItem('user_id');
-  console.log('user_id dari localStorage:', userId);
-
-  if (!userId) {
-    document.getElementById('transactions-table').innerHTML = '<p>Data user tidak ditemukan. Silakan login ulang.</p>';
-  } else {
-    $.ajax({
-      url: `/pembeli/${userId}/history-data`,
-      method: 'GET',
-      success: function(response) {
-        console.log('Data berhasil dimuat:', response);
-        if (response.success) {
-          const pembeli = response.pembeli;
-          const transactions = response.data;
-
-          document.getElementById('welcomeMessage').innerHTML = `
-            <div class="text-center">
-              <h4 class="mb-1">Halo, <strong>${pembeli.nama_pembeli}</strong>!</h4>
-              <p class="mb-0">ID Pembeli: <strong>${pembeli.id_pembeli}</strong></p>
+        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-end gap-3 mb-4">
+            <div>
+                <h1 class="rm-page-title">Riwayat Pembelian</h1>
+                <p class="rm-page-sub">Pantau status pesanan dan beri penilaian setelah transaksi selesai.</p>
             </div>
-          `;
-
-          document.getElementById('poinInfo').innerHTML = `
-            <p class="fw-semibold" style="font-size: 18px; color: #1E5B5A;">
-              Poin Saat Ini: <strong>${Number(pembeli.poin ?? 0).toLocaleString('id-ID')} Poin</strong>
-            </p>
-          `;
-
-          document.getElementById('profileLink').setAttribute('href', `/pembeli/profile/${pembeli.id_pembeli}`);
-
-          if (Array.isArray(transactions) && transactions.length > 0) {
-            let tableHtml = `
-              <table class="table table-bordered mt-3 bg-white">
-                <thead class="table-secondary">
-                  <tr>
-                    <th>Nama Barang</th>
-                    <th>Harga</th>
-                    <th>ID Pemesanan</th>
-                    <th>Status</th>
-                    <th>Aksi</th>
-                  </tr>
-                </thead>
-                <tbody>
-            `;
-
-            transactions.forEach(item => {
-              const detail = item.detail_pemesanans[0] ?? {};
-              const barang = detail.barang ?? {};
-              const nama = barang.nama_barang || '-';
-              const harga = Number(item.total_harga || 0).toLocaleString('id-ID');
-              const status = item.status || '-';
-              const idPemesanan = item.id_pemesanan || '-';
-              const foto = barang.foto_barang ? '/image/' + encodeURIComponent(barang.foto_barang) : '/image/default.jpg';
-              const ratingPenitip = barang.penitip?.rating || null;
-
-              let aksi = '-';
-              if (status === 'transaksi selesai') {
-                if (!detail.rating_diberikan) {
-                  aksi = `
-                    <div class="d-flex flex-column align-items-center">
-                      <button class="btn btn-sm btn-warning btn-rating mb-1"
-                        data-idpemesanan="${idPemesanan}"
-                        data-namabarang="${nama}"
-                        data-idbarang="${barang.id_barang}"
-                        data-foto="${foto}">
-                        <i class="fa fa-star"></i> Beri Rating
-                      </button>
-                      <small class="text-muted fst-italic">Belum dinilai</small>
-                    </div>
-                  `;
-                } else {
-                  aksi = `
-                    <div class="d-flex flex-column align-items-center">
-                      <button class="btn btn-sm btn-secondary mb-1" style="cursor: not-allowed;" disabled>
-                        <i class="fa fa-check-circle"></i> Sudah Dinilai
-                      </button>
-                      <small class="text-success fw-semibold">
-                        <i class="fa fa-star text-warning"></i> ${detail.rating_diberikan}
-                      </small>
-                    </div>
-                  `;
-                }
-              } else {
-                aksi = '-';
-              }
-
-              tableHtml += `
-                <tr>
-                  <td>${nama}</td>
-                  <td>Rp ${harga}</td>
-                  <td>${idPemesanan}</td>
-                  <td>${status}</td>
-                  <td>${aksi}</td>
-                </tr>
-              `;
-            });
-
-
-            tableHtml += '</tbody></table>';
-            document.getElementById('transactions-table').innerHTML = tableHtml;
-
-            // ✅ Tambahkan event listener tombol rating setelah tabel dimuat
-            document.querySelectorAll('.btn-rating').forEach(button => {
-              button.addEventListener('click', function () {
-                const idPemesanan = this.getAttribute('data-idpemesanan');
-                const namaBarang = this.getAttribute('data-namabarang');
-                const idBarang = this.getAttribute('data-idbarang');
-                const fotoBarang = this.getAttribute('data-foto');
-                openRating(idPemesanan, namaBarang, idBarang, fotoBarang);
-              });
-            });
-
-          } else {
-            document.getElementById('transactions-table').innerHTML = '<p>Tidak ada pembelian ditemukan.</p>';
-          }
-        } else {
-          document.getElementById('transactions-table').innerHTML = '<p>Gagal memuat data pembeli.</p>';
-        }
-      },
-      error: function(err) {
-        console.error('AJAX Error:', err);
-        document.getElementById('transactions-table').innerHTML = '<p>Gagal memuat data pembeli dan transaksi.</p>';
-      }
-    });
-  }
-</script>
-
-<script>
-  function openRating(idPemesanan, namaBarang, idBarang, imageBarang) {
-    Swal.fire({
-      title: `Beri Rating untuk ${namaBarang}`,
-      html: `
-        <div>
-          <img src="${imageBarang}" alt="${namaBarang}" style="max-width: 200px; border-radius: 12px; margin-bottom: 15px;">
-          <div id="ratingStars" style="font-size: 28px; color: #FFD700; cursor: pointer;">
-            <i class="far fa-star" data-value="1"></i>
-            <i class="far fa-star" data-value="2"></i>
-            <i class="far fa-star" data-value="3"></i>
-            <i class="far fa-star" data-value="4"></i>
-            <i class="far fa-star" data-value="5"></i>
-          </div>
+            <span class="rm-chip"><i class="bi bi-receipt"></i>{{ $transactions->count() }} transaksi</span>
         </div>
-      `,
-      showConfirmButton: false,
-      showCancelButton: true,
-      cancelButtonText: 'Batal',
-      didOpen: () => {
-        const stars = Swal.getPopup().querySelectorAll('#ratingStars i');
-        stars.forEach(star => {
-          star.addEventListener('click', function () {
-            const rating = parseInt(this.getAttribute('data-value'));
-            stars.forEach((s, index) => {
-              s.className = index < rating ? 'fas fa-star' : 'far fa-star';
-            });
 
-            Swal.fire({
-              title: `Konfirmasi`,
-              text: `Kamu yakin memberi ${rating} bintang?`,
-              icon: 'question',
-              showCancelButton: true,
-              confirmButtonText: 'Ya, kirim!',
-              cancelButtonText: 'Batal',
-              confirmButtonColor: '#1E5B5A'
-            }).then(result => {
-              if (result.isConfirmed) {
-                submitRating(idBarang, rating);
-              }
+        @if ($transactions->isEmpty())
+            <div class="rm-empty">
+                <i class="bi bi-bag-x d-block"></i>
+                <h2 class="h5 fw-bold">Belum ada pembelian</h2>
+                <p class="mb-3">Pesanan yang kamu buat akan muncul di sini.</p>
+                <a href="{{ route('lihat_semua_beli') }}" class="btn rm-btn-primary">
+                    <i class="bi bi-grid me-1"></i>Jelajahi Produk
+                </a>
+            </div>
+        @else
+            <div class="d-flex flex-column gap-3">
+                @foreach ($transactions as $transaction)
+                    @php
+                        $status = strtolower((string) $transaction->status);
+                        $statusClass = match (true) {
+                            str_contains($status, 'selesai') => 'rm-status-success',
+                            str_contains($status, 'batal'), str_contains($status, 'hangus') => 'rm-status-danger',
+                            str_contains($status, 'kirim') => 'rm-status-info',
+                            default => 'rm-status-pending',
+                        };
+                    @endphp
+
+                    <article class="rm-order-card">
+                        <header class="rm-order-header">
+                            <div class="d-flex flex-wrap align-items-center gap-2">
+                                <span class="rm-order-icon"><i class="bi bi-receipt"></i></span>
+                                <div>
+                                    <div class="fw-bold">Pesanan {{ $transaction->id_pemesanan }}</div>
+                                    <div class="small rm-text-muted">
+                                        {{ $transaction->tgl_pesan ? \Carbon\Carbon::parse($transaction->tgl_pesan)->translatedFormat('d F Y') : 'Tanggal tidak tersedia' }}
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="rm-status-pill {{ $statusClass }}">{{ ucfirst($transaction->status ?: 'Diproses') }}</span>
+                        </header>
+
+                        <div class="rm-order-items">
+                            @if ($transaction->detailPemesanans->isEmpty())
+                                <div class="rm-order-empty">
+                                    <i class="bi bi-info-circle"></i>
+                                    Detail barang untuk pesanan ini tidak tersedia.
+                                </div>
+                            @endif
+                            @foreach ($transaction->detailPemesanans as $detail)
+                                @php
+                                    $item = $detail->barang;
+                                    $foto = trim((string) ($item->foto_barang ?? ''));
+                                    $img = ($foto !== '' && file_exists(public_path('image/' . ltrim($foto, '/'))))
+                                        ? asset('image/' . ltrim($foto, '/'))
+                                        : asset('image/placeholder.svg');
+                                @endphp
+
+                                <div class="rm-history-item">
+                                    <img src="{{ $img }}" alt="{{ $item->nama_barang ?? 'Barang' }}" loading="lazy"
+                                         onerror="this.onerror=null;this.src='{{ asset('image/placeholder.svg') }}'">
+                                    <div class="rm-history-item-main">
+                                        <h3 class="h6 fw-bold mb-1">{{ $item->nama_barang ?? 'Barang tidak tersedia' }}</h3>
+                                        <p class="small rm-text-muted mb-1">{{ $item->kategori ?? 'Kategori tidak tersedia' }}</p>
+                                        <span class="fw-semibold">Rp {{ number_format($detail->harga ?? 0, 0, ',', '.') }}</span>
+                                    </div>
+
+                                    @if ($transaction->status === 'transaksi selesai' && $item)
+                                        @if (is_null($detail->rating_diberikan))
+                                            <form class="rm-rate-form" action="{{ route('barang.rate', $item->id_barang) }}" method="POST">
+                                                @csrf
+                                                <label class="small fw-semibold" for="rating-{{ $detail->id_detail_pemesanan }}">Penilaian</label>
+                                                <select class="form-select form-select-sm" id="rating-{{ $detail->id_detail_pemesanan }}" name="rating" required>
+                                                    <option value="">Pilih bintang</option>
+                                                    @for ($star = 5; $star >= 1; $star--)
+                                                        <option value="{{ $star }}">{{ $star }} {{ $star === 1 ? 'bintang' : 'bintang' }}</option>
+                                                    @endfor
+                                                </select>
+                                                <button type="submit" class="btn rm-btn-outline btn-sm mt-2 w-100">
+                                                    <i class="bi bi-star me-1"></i>Kirim
+                                                </button>
+                                            </form>
+                                        @else
+                                            <div class="rm-rated-label">
+                                                <i class="bi bi-star-fill"></i>
+                                                Dinilai {{ $detail->rating_diberikan }}/5
+                                            </div>
+                                        @endif
+                                    @endif
+                                </div>
+                            @endforeach
+                        </div>
+
+                        <footer class="rm-order-footer">
+                            <span class="small rm-text-muted">{{ $transaction->jenis_pengantaran === 'diambil' ? 'Ambil sendiri' : 'Pengiriman kurir' }}</span>
+                            <span class="small rm-text-muted">Total pesanan</span>
+                            <strong>Rp {{ number_format($transaction->total_harga ?? $transaction->total_harga_pesanan ?? 0, 0, ',', '.') }}</strong>
+                        </footer>
+                    </article>
+                @endforeach
+            </div>
+        @endif
+    </section>
+@endsection
+
+@push('styles')
+    <style>
+        .rm-order-card {
+            background: #fff;
+            border: 1px solid var(--rm-line);
+            border-radius: var(--rm-radius-lg);
+            box-shadow: var(--rm-shadow-xs);
+            overflow: hidden;
+        }
+
+        .rm-order-header,
+        .rm-order-footer {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 1rem 1.25rem;
+            background: var(--rm-bg-soft);
+        }
+
+        .rm-order-header {
+            justify-content: space-between;
+            border-bottom: 1px solid var(--rm-line);
+        }
+
+        .rm-order-icon {
+            width: 40px;
+            height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: var(--rm-primary-soft);
+            color: var(--rm-primary);
+            font-size: 1.1rem;
+        }
+
+        .rm-status-pill {
+            display: inline-flex;
+            align-items: center;
+            border-radius: var(--rm-radius-pill);
+            padding: 0.35rem 0.75rem;
+            font-size: 0.76rem;
+            line-height: 1.3;
+            font-weight: 700;
+        }
+
+        .rm-status-success { color: #176246; background: var(--rm-success-soft); }
+        .rm-status-danger { color: #8e2a20; background: var(--rm-danger-soft); }
+        .rm-status-info { color: #1f5573; background: var(--rm-info-soft); }
+        .rm-status-pending { color: #76540f; background: var(--rm-warning-soft); }
+
+        .rm-order-items {
+            padding: 0 1.25rem;
+        }
+
+        .rm-order-empty {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 0;
+            color: var(--rm-muted);
+            font-size: 0.85rem;
+        }
+
+        .rm-order-empty i {
+            color: var(--rm-info);
+        }
+
+        .rm-history-item {
+            display: grid;
+            grid-template-columns: 72px minmax(0, 1fr) 140px;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--rm-line);
+        }
+
+        .rm-history-item:last-child {
+            border-bottom: 0;
+        }
+
+        .rm-history-item > img {
+            width: 72px;
+            height: 72px;
+            object-fit: contain;
+            padding: 0.25rem;
+            background: var(--rm-primary-soft-2);
+            border-radius: var(--rm-radius-sm);
+        }
+
+        .rm-history-item-main {
+            min-width: 0;
+            overflow-wrap: anywhere;
+        }
+
+        .rm-rate-form {
+            width: 140px;
+        }
+
+        .rm-rated-label {
+            justify-self: end;
+            color: #835f14;
+            background: var(--rm-warning-soft);
+            border-radius: var(--rm-radius-pill);
+            padding: 0.45rem 0.7rem;
+            white-space: nowrap;
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+
+        .rm-rated-label i {
+            color: var(--rm-gold);
+        }
+
+        .rm-order-footer {
+            border-top: 1px solid var(--rm-line);
+            justify-content: flex-end;
+        }
+
+        .rm-order-footer strong {
+            color: var(--rm-primary-dark);
+            font-size: 1.05rem;
+            margin-left: 0.25rem;
+        }
+
+        @media (max-width: 575.98px) {
+            .rm-order-header,
+            .rm-order-footer {
+                padding: 0.85rem;
+            }
+
+            .rm-order-items {
+                padding: 0 0.85rem;
+            }
+
+            .rm-history-item {
+                grid-template-columns: 56px minmax(0, 1fr);
+                gap: 0.75rem;
+            }
+
+            .rm-history-item > img {
+                width: 56px;
+                height: 56px;
+            }
+
+            .rm-rate-form,
+            .rm-rated-label {
+                grid-column: 2;
+                justify-self: start;
+                width: 100%;
+                max-width: 220px;
+            }
+
+            .rm-order-footer {
+                flex-wrap: wrap;
+                gap: 0.35rem 0.6rem;
+            }
+        }
+    </style>
+@endpush
+
+@push('scripts')
+    <script>
+        document.querySelectorAll('.rm-rate-form').forEach(function (form) {
+            form.addEventListener('submit', async function (event) {
+                event.preventDefault();
+                const button = form.querySelector('button[type="submit"]');
+                button.disabled = true;
+
+                try {
+                    const response = await fetch(form.action, {
+                        method: 'POST',
+                        headers: { 'Accept': 'application/json' },
+                        body: new FormData(form),
+                    });
+                    const result = await response.json();
+
+                    if (!response.ok || !result.success) {
+                        throw new Error(result.message || 'Rating gagal disimpan.');
+                    }
+
+                    form.outerHTML = '<span class="rm-rated-label"><i class="bi bi-star-fill"></i> Terima kasih atas penilaianmu</span>';
+                    Swal.fire({ icon: 'success', title: 'Terima kasih!', text: result.message });
+                } catch (error) {
+                    button.disabled = false;
+                    Swal.fire({ icon: 'error', title: 'Rating gagal', text: error.message });
+                }
             });
-          });
         });
-      }
-    });
-  }
-
-  function submitRating(idBarang, rating) {
-    const idPembeli = localStorage.getItem('user_id'); // Ambil dari localStorage
-
-    fetch(`/rate-barang/${idBarang}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-      },
-      body: JSON.stringify({
-        rating: rating,
-        id_pembeli: idPembeli
-      })
-    })
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) {
-        Swal.fire('Terima kasih!', data.message, 'success').then(() => location.reload());
-      } else {
-        Swal.fire('Gagal', data.message, 'error');
-      }
-    })
-    .catch(err => {
-      console.error('Fetch error:', err);
-      Swal.fire('Error', 'Terjadi kesalahan saat mengirim rating.', 'error');
-    });
-  }
-
-</script>
-
-</body>
-</html>
+    </script>
+@endpush

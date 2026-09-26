@@ -24,7 +24,7 @@
                 <span>ReuseMart</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#guestNavbar" aria-controls="guestNavbar" aria-expanded="false" aria-label="Buka navigasi">
-                <span class="navbar-toggler-icon"></span>
+                <i class="bi bi-list fs-4 text-white" aria-hidden="true"></i>
             </button>
 
             <div class="collapse navbar-collapse" id="guestNavbar">

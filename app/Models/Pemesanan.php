@@ -38,6 +38,8 @@ class Pemesanan extends Model
 		'status',
 		'jenis_pengantaran',
 		'tgl_pembayaran',
+		'alamat_pengiriman',
+		'metode_pembayaran',
 		'total_harga_pesanan',
 		'total_ongkir',
 		'harga_setelah_ongkir',

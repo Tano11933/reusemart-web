@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Pemesanan;
 use App\Models\Pegawai;
 use App\Models\Pembeli;
+use App\Models\Alamat;
 use App\Models\DetailPemesanan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -376,17 +377,30 @@ class PemesananController extends Controller
     public function index()
     {
         $cartItems = session('cart', []);
-        $idPembeli = session('id_pembeli') ?? auth()->id();
+        $idPembeli = session('id_pembeli') ?? (session('role') === 'pembeli' ? session('user_id') : null);
         $pembeli = \App\Models\Pembeli::find($idPembeli);
+
+        if (!$pembeli) {
+            return redirect()->route('login')->with('error', 'Silakan masuk sebagai pembeli untuk checkout.');
+        }
+
+        if (empty($cartItems)) {
+            return redirect()->route('cart.index')->with('error', 'Keranjang masih kosong.');
+        }
 
         return view('pembeli.checkout', compact('cartItems', 'pembeli'));
     }
 
     public function store(Request $request)
     {
-        $userId = session('id_pembeli') ?? auth()->id();
+        $userId = session('id_pembeli') ?? (session('role') === 'pembeli' ? session('user_id') : null);
         if (!$userId) {
             return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu.');
+        }
+
+        $user = Pembeli::find($userId);
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Akun pembeli tidak ditemukan. Silakan masuk kembali.');
         }
 
         $cart = session('cart', []);
@@ -394,9 +408,30 @@ class PemesananController extends Controller
             return redirect()->back()->with('error', 'Keranjang kosong.');
         }
 
+        $barangTersedia = \App\Models\Barang::whereIn('id_barang', array_keys($cart))
+            ->where('status', 'tersedia')
+            ->get()
+            ->keyBy('id_barang');
+
+        if ($barangTersedia->count() !== count($cart)) {
+            return redirect()->route('cart.index')->with('error', 'Sebagian barang sudah tidak tersedia. Periksa kembali keranjangmu.');
+        }
+
+        // Ambil harga terbaru dari database agar nilai di session tidak bisa usang atau diubah klien.
+        foreach ($cart as $idBarang => &$item) {
+            $barang = $barangTersedia->get($idBarang);
+            $item['nama_barang'] = $barang->nama_barang;
+            $item['harga_barang'] = $barang->harga_barang;
+            $item['foto_barang'] = $barang->foto_barang;
+            $item['status'] = $barang->status;
+            $item['quantity'] = 1;
+        }
+        unset($item);
+        session(['cart' => $cart]);
+
         $request->validate([
             'jenis_pengantaran' => 'required|in:dikirim,diambil',
-            'alamat_pengiriman' => 'required_if:jenis_pengantaran,dikirim',
+            'alamat_pengiriman' => 'required_if:jenis_pengantaran,dikirim|nullable|string',
             'pakai_poin' => 'required|in:ya,tidak',
             'poin_ditukar' => 'nullable|integer|min:0',
         ]);
@@ -409,13 +444,17 @@ class PemesananController extends Controller
 
         // Jika jenis pengantaran "ambil", ongkir otomatis 0
         $jenisPengantaran = $request->input('jenis_pengantaran');
+        if ($jenisPengantaran === 'dikirim' && !Alamat::where('id_alamat', $request->input('alamat_pengiriman'))
+            ->where('id_pembeli', $userId)
+            ->exists()) {
+            return back()->withInput()->withErrors(['alamat_pengiriman' => 'Pilih alamat pengiriman yang tersimpan di akunmu.']);
+        }
         $ongkir = ($jenisPengantaran === 'diambil') ? 0 : (($totalHargaBarang >= 1500000) ? 0 : 100000);
 
         // Hitung poin yang dipakai dan validasi batas maksimal
         $pakaiPoin = $request->input('pakai_poin');
         $poinDitukar = ($pakaiPoin === 'ya') ? (int) $request->input('poin_ditukar', 0) : 0;
 
-        $user = Pembeli::find($userId);
         $poinUser = $user->poin ?? 0;
 
         if ($poinDitukar > $poinUser) {
@@ -455,6 +494,7 @@ class PemesananController extends Controller
             'id_pembeli'          => $userId,
             'tgl_pesan'           => now(),
             'status'              => 'diproses', // status awal
+            'status_pembayaran'   => 'menunggu verifikasi',
             'jenis_pengantaran'   => $jenisPengantaran,
             'total_harga_pesanan' => $totalHargaBarang,
             'total_ongkir'        => $ongkir,
@@ -485,12 +525,26 @@ class PemesananController extends Controller
     public function showPaymentForm($id)
     {
         $pemesanan = Pemesanan::with('detailPemesanans.barang')->findOrFail($id);
-        return view('pembeli.konfirmasi-pembayaran', compact('pemesanan'));
+        $idPembeli = session('id_pembeli') ?? (session('role') === 'pembeli' ? session('user_id') : null);
+
+        if (!$idPembeli || $pemesanan->id_pembeli !== $idPembeli) {
+            return redirect()->route('login')->with('error', 'Silakan masuk ke akun pembeli yang membuat pesanan ini.');
+        }
+
+        $pembeli = Pembeli::findOrFail($idPembeli);
+
+        return view('pembeli.konfirmasi-pembayaran', compact('pemesanan', 'pembeli'));
     }
 
     public function submitPayment(Request $request, $id)
     {
         $pemesanan = Pemesanan::findOrFail($id);
+
+        $idPembeli = session('id_pembeli') ?? (session('role') === 'pembeli' ? session('user_id') : null);
+        if (!$idPembeli || $pemesanan->id_pembeli !== $idPembeli) {
+            abort(403, 'Tidak memiliki akses ke pesanan ini.');
+        }
+
         $user = $pemesanan->pembeli;
 
         $request->validate([
@@ -502,8 +556,10 @@ class PemesananController extends Controller
 
         $pemesanan->update([
             'bukti_transfer' => $filePath,
+            'metode_pembayaran' => $request->input('metode_pembayaran'),
             'tgl_pembayaran' => now(),
             'status' => 'diproses',
+            'status_pembayaran' => 'menunggu verifikasi',
         ]);
 
         // Update status barang jadi 'diproses' dan isi tgl_laku
@@ -522,10 +578,15 @@ class PemesananController extends Controller
     public function cancelPayment(Request $request, $id)
     {
         $pemesanan = Pemesanan::with('detailPemesanans')->findOrFail($id);
-        $user = $pemesanan->pembeli;
+        $idPembeli = session('id_pembeli') ?? (session('role') === 'pembeli' ? session('user_id') : null);
+
+        if (!$idPembeli || $pemesanan->id_pembeli !== $idPembeli) {
+            abort(403, 'Tidak memiliki akses ke pesanan ini.');
+        }
 
         // Update status jadi batal
         $pemesanan->status = 'batal';
+        $pemesanan->status_pembayaran = 'tidak valid';
         $pemesanan->save();
 
         // Poin TIDAK dikembalikan, jadi tidak ada perubahan saldo poin pembeli di sini

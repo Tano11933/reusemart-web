@@ -369,7 +369,7 @@ class PegawaiController extends Controller
                     $user->save();
                 }
 
-                if ($pemesanan->jenis_pengantaran === 'kurir') {
+                if ($pemesanan->jenis_pengantaran === 'dikirim') {
                     $tglPembayaran = $pemesanan->tgl_pembayaran;
 
                     if ($tglPembayaran) {
@@ -1252,4 +1252,4 @@ public function cetakDonasiBarang(Request $request)
     }
 
 
-}   
+}

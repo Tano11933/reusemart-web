@@ -18,14 +18,17 @@
 
     // Rating berasal dari penitip (penjual), bukan dari barang.
     $rating = optional($item->penitip)->rating;
-    $fullStars = $rating ? (int) floor($rating) : 0;
-    $halfStar = $rating ? ($rating - $fullStars) >= 0.5 : false;
-    $emptyStars = $rating ? 5 - $fullStars - ($halfStar ? 1 : 0) : 0;
+    $hasRating = !is_null($rating);
+    $ratingValue = $hasRating ? max(0, min(5, (float) $rating)) : null;
+    $fullStars = $hasRating ? (int) floor($ratingValue) : 0;
+    $halfStar = $hasRating && ($ratingValue - $fullStars) >= 0.5;
+    $emptyStars = $hasRating ? 5 - $fullStars - ($halfStar ? 1 : 0) : 0;
 @endphp
 
 <article class="rm-product-card">
     <a href="{{ $detailUrl }}" class="rm-product-media d-block" aria-label="Lihat detail {{ $item->nama_barang }}">
-        <img src="{{ $img }}" alt="{{ $item->nama_barang }}" loading="lazy">
+        <img src="{{ $img }}" alt="{{ $item->nama_barang }}" loading="lazy"
+             onerror="this.onerror=null;this.src='{{ asset('image/placeholder.svg') }}'">
         @if (($item->garansi ?? false))
             <span class="rm-badge rm-badge-garansi"><i class="bi bi-shield-check me-1"></i>Garansi</span>
         @endif
@@ -36,8 +39,8 @@
         <p class="rm-product-price">Rp {{ number_format($item->harga_barang, 0, ',', '.') }}</p>
         <p class="rm-product-meta"><i class="bi bi-tag me-1"></i>{{ $item->kategori }}</p>
 
-        @if (!is_null($rating))
-            <div class="rm-rating" aria-label="Rating penjual {{ number_format($rating, 1) }} dari 5">
+        @if ($hasRating)
+            <div class="rm-rating" aria-label="Rating penjual {{ number_format($ratingValue, 1) }} dari 5">
                 @for ($i = 0; $i < $fullStars; $i++)
                     <i class="bi bi-star-fill"></i>
                 @endfor
@@ -47,7 +50,7 @@
                 @for ($i = 0; $i < $emptyStars; $i++)
                     <i class="bi bi-star"></i>
                 @endfor
-                <span class="rm-rating-value">{{ number_format($rating, 1) }}</span>
+                <span class="rm-rating-value">{{ number_format($ratingValue, 1) }}</span>
             </div>
         @else
             <p class="rm-product-meta mb-0"><i class="bi bi-person me-1"></i>Penjual baru</p>

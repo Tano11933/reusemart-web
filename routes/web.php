@@ -73,9 +73,7 @@ Route::put('/pegawai/{id}', [PegawaiController::class, 'update'])->name('pegawai
 Route::delete('/pegawai/{id}', [PegawaiController::class, 'destroy'])->name('pegawai.destroy');
 
 Route::get('/pembeli/{id}/history-data', [PembeliController::class, 'getPembeliHistory']);
-Route::get('/pembeli/history', function () {
-    return view('pembeli.history-pembelian');
-})->name('pembeli.history');
+Route::get('/pembeli/history', [PembeliController::class, 'showHistoryPage'])->name('pembeli.history');
 Route::get('/pembeli-history', [PembeliController::class, 'showHistoryPage']);
 
 Route::get('/penitip/history-penjualan', function () {
@@ -134,9 +132,7 @@ Route::prefix('pegawai/gudang')->group(function () {
     Route::delete('/{id}', [PegawaiController::class, 'destroyGudang'])->name('gudang.destroy');
 });
 
-Route::get('/pembeli-alamat', function () {
-    return view('pembeli.index-pembeli');
-})->name('pembeli.alamat');
+Route::get('/pembeli-alamat', [PembeliController::class, 'manageAddresses'])->name('pembeli.alamat');
 
 Route::get('pembeli/{userId}/alamat', [AlamatController::class, 'index']);
 Route::post('pembeli/{userId}/alamat', [AlamatController::class, 'store']);
@@ -248,4 +244,3 @@ Route::get('/laporan-transaksi-penitip', [PegawaiController::class, 'laporanTran
 Route::get('/laporan-transaksi-penitip/pdf', [PegawaiController::class, 'cetakTransaksiPenitipPDF'])->name('transaksi.penitip.pdf');
 
 Route::post('/transaksi/jadwalkan/{id}', [PemesananController::class, 'jadwalkanPengiriman'])->name('transaksi.jadwalkan');
-

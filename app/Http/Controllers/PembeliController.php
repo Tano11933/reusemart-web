@@ -65,7 +65,13 @@ class PembeliController extends Controller
 
     public function profile($id)
     {
-        $pembeli = Pembeli::where('id_pembeli', $id)->firstOrFail();
+        $sessionId = session('id_pembeli') ?? (session('role') === 'pembeli' ? session('user_id') : null);
+
+        if (!$sessionId || $sessionId !== $id) {
+            return redirect()->route('login')->with('error', 'Silakan masuk ke akun pembeli untuk melihat profil.');
+        }
+
+        $pembeli = Pembeli::where('id_pembeli', $sessionId)->firstOrFail();
         return view('pembeli.profil', compact('pembeli'));
     }
 
@@ -165,7 +171,32 @@ class PembeliController extends Controller
 
     public function showHistoryPage()
     {
-        return view('pembeli.history-pembelian');
+        $idPembeli = session('id_pembeli') ?? (session('role') === 'pembeli' ? session('user_id') : null);
+
+        if (!$idPembeli) {
+            return redirect()->route('login')->with('error', 'Silakan masuk untuk melihat riwayat pembelian.');
+        }
+
+        $pembeli = Pembeli::where('id_pembeli', $idPembeli)->firstOrFail();
+        $transactions = $pembeli->pemesanans()
+            ->with('detailPemesanans.barang')
+            ->orderByDesc('tgl_pesan')
+            ->get();
+
+        return view('pembeli.history-pembelian', compact('pembeli', 'transactions'));
+    }
+
+    public function manageAddresses()
+    {
+        $idPembeli = session('id_pembeli') ?? (session('role') === 'pembeli' ? session('user_id') : null);
+
+        if (!$idPembeli) {
+            return redirect()->route('login')->with('error', 'Silakan masuk untuk mengelola alamat.');
+        }
+
+        $pembeli = Pembeli::where('id_pembeli', $idPembeli)->firstOrFail();
+
+        return view('pembeli.index-pembeli', compact('pembeli'));
     }
 
     public function apiProfile($id)
