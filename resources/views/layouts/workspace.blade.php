@@ -62,6 +62,7 @@
                         <a href="{{ route('verifikasi-pembayaran.cs') }}" class="{{ request()->routeIs('verifikasi-pembayaran.cs') ? 'active' : '' }}"><i class="bi bi-credit-card"></i>Verifikasi Pembayaran</a>
                         <a href="{{ route('diskusi.index') }}" class="{{ request()->routeIs('diskusi.index') ? 'active' : '' }}"><i class="bi bi-chat-square-text"></i>Diskusi Produk</a>
                         <a href="{{ route('cs.tukarPoin') }}" class="{{ request()->routeIs('cs.tukarPoin') ? 'active' : '' }}"><i class="bi bi-stars"></i>Penukaran Poin</a>
+                        <a href="{{ route('cs.klaimMerchandise') }}" class="{{ request()->routeIs('cs.klaimMerchandise') ? 'active' : '' }}"><i class="bi bi-gift"></i>Klaim Merchandise</a>
                     @elseif ($jabatan === 'Gudang')
                         <span class="rm-workspace-nav-label">Operasional Gudang</span>
                         <a href="{{ route('pegawai.gudang') }}" class="{{ request()->routeIs('pegawai.gudang', 'pegawai.gudang.index_gudang') ? 'active' : '' }}"><i class="bi bi-box-seam"></i>Barang Gudang</a>

@@ -8,10 +8,16 @@ use Carbon\Carbon;
 
 class KlaimMerchandiseController extends Controller
 {
+    private function ensureCustomerService(): void
+    {
+        $pegawai = DB::table('pegawai')->where('id_pegawai', session('id_pegawai'))->first();
+        abort_unless($pegawai && $pegawai->id_jabatan === 'J1', 403, 'Akses hanya untuk customer service.');
+    }
+
     // Tampilkan halaman daftar klaim
     public function index(Request $request)
     {
-        // === DEBUG: Cek apakah user sudah login atau belum ===
+        $this->ensureCustomerService();
         $filter = $request->get('filter', 'semua');
         
         // Join dengan pembeli, merchandise, pegawai (CS)
@@ -42,12 +48,15 @@ class KlaimMerchandiseController extends Controller
     // Update tanggal ambil
     public function updateTanggalAmbil(Request $request, $id)
     {
+        $this->ensureCustomerService();
+
         $request->validate([
-            'tanggal_ambil' => 'required|date'
+            'tanggal_ambil' => 'required|date|after_or_equal:today'
         ]);
 
         $update = DB::table('klaim_merchandise')
             ->where('id_klaim', $id)
+            ->where('status_ambil', 'belum')
             ->update([
                 'tanggal_ambil' => $request->tanggal_ambil,
                 'status_ambil' => 'sudah',
