@@ -17,9 +17,17 @@ class BarangController extends Controller
     {
         $barang = Barang::where('status', 'tersedia')
             ->with('penitip') // ambil data penitip termasuk rating
+            ->orderByDesc('tgl_titip')
+            ->take(8)
             ->get();
 
-        $kategoris = Barang::select('kategori')->distinct()->get();
+        // Hanya kategori yang benar-benar punya barang tersedia (dan bukan nilai status yang salah tempat).
+        $kategoris = Barang::where('status', 'tersedia')
+            ->whereNotIn('kategori', ['terjual', 'didonasikan', 'akan diambil', 'barang untuk donasi'])
+            ->select('kategori')
+            ->distinct()
+            ->orderBy('kategori')
+            ->get();
 
         return view('guest.home', compact('kategoris', 'barang'));
     }
@@ -41,7 +49,7 @@ class BarangController extends Controller
             });
         }
 
-        $barang = $barang->get();
+        $barang = $barang->orderByDesc('tgl_titip')->get();
 
         return view('guest.lihat_semua', compact('barang'));
     }
@@ -64,7 +72,11 @@ class BarangController extends Controller
 
     public function showByCategory($kategori)
     {
-        $barangs = Barang::where('kategori', $kategori)->get();
+        $barangs = Barang::with('penitip')
+            ->where('status', 'tersedia')
+            ->where('kategori', $kategori)
+            ->orderByDesc('tgl_titip')
+            ->get();
 
         return view('guest.per_kategori', compact('barangs', 'kategori'));
     }
@@ -332,7 +344,7 @@ class BarangController extends Controller
     public function search(Request $request)
     {
         $query = $request->input('query');
-        $barang = Barang::where('status', 'aktif')
+        $barang = Barang::where('status', 'tersedia')
                         ->where(function($q) use ($query) {
                             $q->where('nama_barang', 'like', "%$query%")
                               ->orWhere('kategori', 'like', "%$query%")

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600" role="img" aria-label="Foto barang belum tersedia">
+  <rect width="800" height="600" fill="#D9F1F0"/>
+  <g fill="none" stroke="#1E5B5A" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" transform="translate(310 190) scale(1.9)">
+    <path d="M3 7.5 12 2l9 5.5v9L12 22l-9-5.5v-9Z"/>
+    <path d="m3 7.5 9 5.5 9-5.5"/>
+    <path d="M12 13v9"/>
+  </g>
+  <text x="400" y="440" text-anchor="middle" font-family="Inter, Segoe UI, sans-serif" font-size="30" font-weight="700" fill="#1E5B5A">Foto belum tersedia</text>
+  <text x="400" y="480" text-anchor="middle" font-family="Inter, Segoe UI, sans-serif" font-size="22" fill="#6B7C79">ReuseMart</text>
+</svg>
