@@ -12,7 +12,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        // Login dari aplikasi mobile (Flutter) memakai endpoint yang sama dengan web.
+        // Endpoint ini harus bebas CSRF agar request JSON dari aplikasi tidak kena 419.
+        $middleware->validateCsrfTokens(except: [
+            'api/login',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

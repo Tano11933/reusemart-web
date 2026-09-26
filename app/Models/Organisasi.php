@@ -22,6 +22,8 @@ class Organisasi extends Model
         'id_role',
     ];
 
+    protected $hidden = ['password'];
+
     public function role()
     {
         return $this->belongsTo(Role::class, 'id_role');

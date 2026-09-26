@@ -12,6 +12,7 @@ use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\MerchandiseController;
 use App\Http\Controllers\RequestDonasiController;
 use App\Http\Controllers\BarangController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\TukarPoinController;
 use App\Http\Controllers\PemesananController;
 
@@ -62,6 +63,14 @@ Route::get('/pemesanan/{id_pembeli}', [PemesananController::class, 'getByPembeli
 
 Route::get('/penitip/{idPenitip}/barang', [PenitipController::class, 'getBarangPenitip']);
 Route::get('/barang-tersedia', [BarangController::class, 'barangTersedia']);
+
+// Token FCM & notifikasi untuk aplikasi mobile
+Route::post('/store-token', [NotificationController::class, 'storeToken']);
+Route::get('/notifications/penitip/{id}', [NotificationController::class, 'penitipNotifications']);
+
+// Alias riwayat agar cocok dengan path yang dipanggil client Flutter
+Route::get('/penitip/history/{id}', [PenitipController::class, 'getHistoryPenjualan']);
+Route::get('/pembeli/history/{id}', [PembeliController::class, 'getPembeliHistory']);
 
 Route::get('/pegawai/{id}/komisi', [PegawaiController::class, 'getKomisiTotal']);
 Route::get('/pegawai/{id}/komisi-list', [PegawaiController::class, 'getKomisiList']);

@@ -28,6 +28,8 @@ class Penitip extends Model
         'foto_ktp',
     ];
 
+    protected $hidden = ['password'];
+
     public function role()
     {
         return $this->belongsTo(Role::class, 'id_role');

@@ -592,7 +592,7 @@ class PemesananController extends Controller
 
     public function detailPembelian($idPembeli, $idPemesanan)
     {
-        $pemesanan = Pemesanan::with(['detail'])
+        $pemesanan = Pemesanan::with(['detailPemesanans.barang'])
             ->where('id_pembeli', $idPembeli)
             ->where('id_pemesanan', $idPemesanan)
             ->first();
@@ -606,14 +606,15 @@ class PemesananController extends Controller
             'tgl_pesan' => $pemesanan->tgl_pesan,
             'status' => $pemesanan->status,
             'total_harga_pesanan' => $pemesanan->total_harga_pesanan,
-            'detail' => $pemesanan->detail->map(function($d) {
+            'detail' => $pemesanan->detailPemesanans->map(function ($d) {
                 return [
                     'id_detail_pemesanan' => $d->id_detail_pemesanan,
-                    'nama_barang' => $d->nama_barang,
+                    'nama_barang' => $d->barang->nama_barang ?? '-',
                     'harga' => $d->harga,
-                    'foto_barang' => $d->foto_barang,
+                    'foto_barang' => $d->barang->foto_barang ?? '',
+                    'kategori' => $d->barang->kategori ?? '-',
                 ];
-            }),
+            })->values(),
         ];
 
         return response()->json($response);
