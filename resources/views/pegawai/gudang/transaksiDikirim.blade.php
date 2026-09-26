@@ -1,450 +1,101 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <title>Gudang - Transaksi Dikirim</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-  <style>
-    * {
-      box-sizing: border-box;
-      font-family: 'Segoe UI', sans-serif;
-    }
+@extends('layouts.workspace')
 
-    html, body {
-      margin: 0;
-      padding: 0;
-      background-color: #f8f8f8;
-    }
+@section('title', 'Pesanan Pengiriman — ReuseMart')
+@section('page-title', 'Pesanan Pengiriman')
 
-    .sidebar {
-      width: 220px;
-      height: 100vh;
-      position: fixed;
-      background: linear-gradient(to bottom, #365a64, #f0e6dd);
-      padding: 35px 0;
-      color: white;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo-wrapper {
-      margin-bottom: 40px;
-      text-align: center;
-    }
-
-    .logo-wrapper img {
-      max-width: 60px;
-      height: auto;
-      pointer-events: none;
-      user-select: none;
-    }
-
-    .menu {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .menu a {
-      width: 80%;
-      text-align: center;
-      padding: 10px;
-      font-weight: bold;
-      color: white;
-      text-decoration: none;
-      border-radius: 8px;
-      transition: all 0.2s ease-in-out;
-    }
-
-    .menu a:hover,
-    .menu a.active {
-      background-color: white;
-      color: #2c3e65;
-    }
-
-    .logout-wrapper {
-      text-align: center;
-      margin-bottom: 10px;
-    }
-
-    .logout-btn {
-      padding: 12px 24px;
-      background-color: #365a64;
-      border: none;
-      color: white;
-      font-size: 14px;
-      font-weight: bold;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    .logout-btn:hover {
-      background-color: #2c2c2c;
-    }
-
-    .main {
-      margin-left: 220px;
-      padding: 30px;
-    }
-
-    .card {
-      background-color: #fdf3e7;
-      padding: 10px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
-
-    h3 {
-      margin-top: 0;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 15px;
-      table-layout: auto;
-      font-size: 13px;
-    }
-
-    table thead tr {
-      background-color: #365a64;
-    }
-
-    table thead th {
-      color: white;
-      font-weight: bold;
-    }
-
-
-    th, td {
-      border: 1px solid #ddd;
-      padding: 8px 10px;
-      text-align: left;
-      color: #2c3e50;
-      vertical-align: middle;
-    }
-
-    thead tr {
-      background-color: #365a64;
-      color: white;
-    }
-
-    tbody tr {
-      background-color: #e6e6e6;
-      transition: background-color 0.2s ease;
-    }
-
-    .btn-danger, .btn-primary {
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: bold;
-      padding: 4px 8px;
-      font-size: 12px;
-    }
-
-    .btn-danger {
-      background-color: #e74c3c;
-      color: white;
-    }
-
-    .btn-primary {
-      background-color: #1c5980;
-      color: white;
-    }
-
-    .btn-filter {
-      margin: 5px;
-      padding: 6px 14px;
-      border: none;
-      border-radius: 5px;
-      font-size: 12px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .btn-filter.tersedia {
-      background-color: #27ae60;
-      color: white;
-    }
-
-    .btn-filter.terjual {
-      background-color: #2980b9;
-      color: white;
-    }
-
-    .btn-filter.didonasikan {
-      background-color: #8e44ad;
-      color: white;
-    }
-
-    .btn-filter.active {
-      box-shadow: 0 0 0 2px white, 0 0 0 4px currentColor;
-    }
-
-    .btn-danger:hover {
-      background-color: #c0392b;
-    }
-
-    .btn-primary:hover {
-      background-color: #2980b9;
-    }
-
-    .action-cell {
-      display: flex;
-      gap: 6px;
-      justify-content: center;
-    }
-
-    .modal-content {
-      background-color: #f0f8ff; 
-      color: #1e2d4f;             
-      border-radius: 10px;
-      padding: 20px;
-    }
-
-  </style>
-    <link rel="stylesheet" href="{{ asset('css/reusemart.css') }}">
-</head>
-<body class="rm-body rm-legacy-workspace">
-<div class="sidebar">
-  <div>
-    <div class="logo-wrapper">
-      <img src="{{ asset('image/white.png') }}" alt="Logo" />
+@section('content')
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3 mb-4">
+        <div><h1 class="rm-page-title">Pesanan Pengiriman</h1><p class="rm-page-sub">Jadwalkan pengiriman dan tugaskan kurir untuk pesanan yang valid.</p></div>
+        <span class="rm-chip"><i class="bi bi-truck"></i>{{ $pemesanan->count() }} pesanan perlu diatur</span>
     </div>
-    <div class="menu">
-      <a href="{{ url('/pegawai/gudang') }}"
-         class="{{ request()->is('pegawai/gudang') ? 'active' : '' }}">
-         Data Barang
-      </a>
-      <a href="{{ route('gudang.ambil-barang') }}"
-         class="{{ request()->is('gudang/ambil-barang') ? 'active' : '' }}">
-         Data Ambil Barang Penitip
-      </a>
-      <a href="{{ route('transaksi.diambil') }}"
-        class="{{ request()->is('pegawai/transaksi-diambil') ? 'active' : '' }}">
-        Data Transaksi Diambil Pembeli
-      </a>
-      <a href="{{ route('transaksi.dikirim') }}"
-        class="{{ request()->is('pegawai/transaksi-dikirim') ? 'active' : '' }}">
-        Data Transaksi Dikirim ke Pembeli
-      </a>
-      <a href="{{ route('nota.pemesanan') }}"
-        class="{{ request()->is('pegawai/nota-pemesanan') ? 'active' : '' }}">
-        Nota Pemesanan
-      </a>
-    </div>
-  </div>
-  <div class="logout-wrapper">
-    <button id="logoutBtn" class="logout-btn">Log out</button>
-  </div>
-</div>
 
-
-<div class="main">
-  <div class="card">
-    <h3>Penjadwalan Pengiriman & Penugasan Kurir</h3>
-
-    @if(session('success'))
-      <div class="alert alert-success">
-        {{ session('success') }}
-      </div>
-    @endif
-
-    <table>
-      <thead>
-        <tr>
-          <th>ID Pemesanan</th>
-          <th>ID Pembeli</th>
-          <th>Nama Pembeli</th>
-          <th>Jenis Pengantaran</th>
-          <th>Status Pembayaran</th>
-          <th>Tanggal Pesan</th>
-          <th>Tanggal kirim</th>
-          <th>Detail</th>
-          <th>Jadwalkan Pengiriman</th>
-          <th>Pilih Kurir</th>
-        </tr>
-      </thead>
-      <tbody>
-        @foreach ($pemesanan as $item)
-          <tr>
-            <td>{{ $item->id_pemesanan }}</td>
-            <td>{{ $item->pembeli->id_pembeli ?? '-' }}</td>
-            <td>{{ $item->pembeli->nama_pembeli ?? '-' }}</td>
-            <td>{{ $item->jenis_pengantaran }}</td>
-            <td>{{ $item->status_pembayaran }}</td>
-            <td>{{ $item->tgl_pesan }}</td>
-            <td>
-              @if($item->tgl_kirim)
-                {{ \Carbon\Carbon::parse($item->tgl_kirim)->format('Y-m-d') }}
-              @else
-                <span class="text-warning">Belum Diisi</span>
-              @endif
-            </td>
-            <td>
-              <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#modalDetail{{ $item->id_pemesanan }}">
-                Lihat
-              </button>
-            </td>
-            <td>
-              <form action="{{ route('transaksi.jadwalkan', $item->id_pemesanan) }}" method="POST">
-                @csrf
-                <input type="date" name="tgl_kirim" class="form-control" id="tgl_kirim{{ $item->id_pemesanan }}" required>
-                <button type="submit" class="btn btn-primary mt-2">Pilih Tanggal</button>
-              </form>
-            </td>
-            <td>
-                <form action="{{ route('transaksi.konfirmasi', $item->id_pemesanan) }}" method="POST">
-                    @csrf
-                    <select name="id_kurir" class="form-select" required>
-                        <option value="">-- Pilih Kurir --</option>
-                        @foreach($kurirList as $kurir)
-                            <option value="{{ $kurir->id_pegawai }}">{{ $kurir->nama_pegawai }}</option>
-                        @endforeach
-                    </select>
-                    <button type="submit" class="btn btn-success mt-2">Tugaskan</button>
-                </form>
-            </td>
-          </tr>
-        @endforeach
-
-      </tbody>
-    </table>
-    @foreach ($pemesanan as $item)
-        <!-- Modal Detail -->
-        <div class="modal fade" id="modalDetail{{ $item->id_pemesanan }}" tabindex="-1" aria-labelledby="modalLabel{{ $item->id_pemesanan }}" aria-hidden="true">
-          <div class="modal-dialog modal-lg">
-            <div class="modal-content bg-light text-dark">
-              <div class="modal-header">
-                <h5 class="modal-title" id="modalLabel{{ $item->id_pemesanan }}">Detail Barang - Pemesanan {{ $item->id_pemesanan }}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-              </div>
-              <div class="modal-body">
-                <table class="table table-bordered table-striped">
-                  <thead>
-                    <tr>
-                      <th>Nama Barang</th>
-                      <th>Harga</th>
-                      <th>Berat</th>
-                      <th>Foto 1</th>
-                      <th>Foto 2</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @foreach ($item->detailPemesanans as $detail)
-                      <tr>
-                        <td>{{ $detail->barang->nama_barang ?? '-' }}</td>
-                        <td>Rp{{ number_format($detail->harga, 0, ',', '.') }}</td>
-                        <td>{{ $detail->barang->berat_barang ?? '-' }}</td>
-                        <td>
-                          @if($detail->barang->foto_barang)
-                            <a href="{{ asset('image/' . $detail->barang->foto_barang) }}" target="_blank">
-                              <img src="{{ asset('image/' . $detail->barang->foto_barang) }}" width="60">
-                            </a>
-                          @else
-                            <span class="text-muted">-</span>
-                          @endif
-                        </td>
-                        <td>
-                          @if($detail->barang->foto_barang2)
-                            <a href="{{ asset('image/' . $detail->barang->foto_barang2) }}" target="_blank">
-                              <img src="{{ asset('image/' . $detail->barang->foto_barang2) }}" width="60">
-                            </a>
-                          @else
-                            <span class="text-muted">-</span>
-                          @endif
-                        </td>
-                      </tr>
-                    @endforeach
-
-                    @if (session('success'))
-                    <script>
-                      Swal.fire({
-                        icon: 'success',
-                        title: 'Berhasil!',
-                        text: '{{ session('success') }}',
-                        timer: 2000,
-                        showConfirmButton: false
-                      });
-                    </script>
-                    @endif
-
-                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-                    </body>
-                    </html>
-
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
+    <section class="rm-workspace-card">
+        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-3">
+            <div><h2 class="h5 fw-bold mb-1">Daftar Pengiriman</h2><p class="small rm-text-muted mb-0">Atur tanggal lebih dulu, kemudian pilih kurir.</p></div>
+            <div class="input-group rm-dispatch-search"><span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span><input id="dispatchSearch" class="form-control border-start-0" type="search" placeholder="Cari pesanan atau pembeli…" aria-label="Cari pesanan pengiriman"></div>
         </div>
-        @endforeach
-  </div>
-</div>
 
+        @if ($pemesanan->isEmpty())
+            <div class="rm-empty py-5"><i class="bi bi-truck d-block"></i><h2 class="h5 fw-bold">Tidak ada pengiriman tertunda</h2><p class="mb-0">Pesanan dengan pembayaran valid akan muncul di sini.</p></div>
+        @else
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead><tr><th>Pesanan</th><th>Pembeli</th><th>Tanggal pesanan</th><th>Jadwal</th><th>Rincian</th><th class="text-end">Tugaskan kurir</th></tr></thead>
+                    <tbody id="dispatchRows">
+                        @foreach ($pemesanan as $order)
+                            <tr data-search="{{ \Illuminate\Support\Str::lower($order->id_pemesanan . ' ' . ($order->pembeli->nama_pembeli ?? '') . ' ' . $order->id_pembeli) }}">
+                                <td><strong>{{ $order->id_pemesanan }}</strong><div class="small rm-text-muted">{{ $order->detailPemesanans->count() }} barang</div></td>
+                                <td><strong>{{ $order->pembeli->nama_pembeli ?? 'Pembeli' }}</strong><div class="small rm-text-muted">{{ $order->id_pembeli }}</div></td>
+                                <td>{{ $order->tgl_pesan?->translatedFormat('d M Y') ?? '—' }}</td>
+                                <td>
+                                    @if ($order->tgl_kirim)
+                                        <span class="rm-scheduled-date"><i class="bi bi-calendar-check me-1"></i>{{ \Carbon\Carbon::parse($order->tgl_kirim)->translatedFormat('d M Y') }}</span>
+                                    @else
+                                        <form action="{{ route('transaksi.jadwalkan', $order->id_pemesanan) }}" method="POST" class="rm-date-form">
+                                            @csrf
+                                            <input type="date" name="tgl_kirim" class="form-control form-control-sm" min="{{ now()->toDateString() }}" required aria-label="Tanggal pengiriman">
+                                            <button type="submit" class="btn rm-btn-outline btn-sm mt-1 w-100">Jadwalkan</button>
+                                        </form>
+                                    @endif
+                                </td>
+                                <td><button type="button" class="btn btn-outline-secondary btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#detail-{{ \Illuminate\Support\Str::slug($order->id_pemesanan) }}"><i class="bi bi-eye me-1"></i>Lihat</button></td>
+                                <td class="text-end">
+                                    @if ($order->tgl_kirim)
+                                        <form action="{{ route('transaksi.konfirmasi', $order->id_pemesanan) }}" method="POST" class="rm-assign-form d-inline-grid gap-1">
+                                            @csrf
+                                            <select name="id_kurir" class="form-select form-select-sm" required aria-label="Pilih kurir"><option value="">Pilih kurir</option>@foreach ($kurirList as $kurir)<option value="{{ $kurir->id_pegawai }}">{{ $kurir->nama_pegawai }}</option>@endforeach</select>
+                                            <button type="submit" class="btn rm-btn-primary btn-sm"><i class="bi bi-person-check me-1"></i>Tugaskan</button>
+                                        </form>
+                                    @else
+                                        <span class="small rm-text-muted">Jadwalkan tanggal dahulu</span>
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @endif
+    </section>
 
-<script>
-  document.getElementById('logoutBtn')?.addEventListener('click', function () {
-      Swal.fire({
-        title: 'Yakin ingin logout?',
-        text: 'Kamu akan keluar dari sistem.',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Ya, logout',
-        cancelButtonText: 'Batal'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          fetch("{{ route('logout') }}", {
-            method: 'POST',
-            headers: {
-              'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            }
-          }).then(() => {
-            Swal.fire({
-              icon: 'success',
-              title: 'Logout berhasil',
-              text: 'Kamu telah keluar dari sistem.',
-              timer: 1500,
-              showConfirmButton: false
-            }).then(() => {
-              window.location.href = '/login';
+    @foreach ($pemesanan as $order)
+        <div class="modal fade" id="detail-{{ \Illuminate\Support\Str::slug($order->id_pemesanan) }}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable"><div class="modal-content rm-warehouse-modal">
+                <div class="modal-header"><div><h2 class="modal-title h5 fw-bold">Rincian {{ $order->id_pemesanan }}</h2><p class="small rm-text-muted mb-0">{{ $order->pembeli->nama_pembeli ?? 'Pembeli' }}</p></div><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button></div>
+                <div class="modal-body"><div class="d-grid gap-2">
+                    @foreach ($order->detailPemesanans as $detail)
+                        @php $item = $detail->barang; $photo = trim((string) ($item->foto_barang ?? '')); $image = ($photo && file_exists(public_path('image/' . ltrim($photo, '/')))) ? asset('image/' . ltrim($photo, '/')) : asset('image/placeholder.svg'); @endphp
+                        <div class="rm-order-detail-item"><img src="{{ $image }}" alt="{{ $item->nama_barang ?? 'Barang' }}"><div><strong>{{ $item->nama_barang ?? 'Barang' }}</strong><div class="small rm-text-muted">{{ $item->kategori ?? '—' }}</div></div><strong>Rp {{ number_format($detail->harga, 0, ',', '.') }}</strong></div>
+                    @endforeach
+                </div></div>
+            </div></div>
+        </div>
+    @endforeach
+@endsection
+
+@push('styles')
+    <style>
+        .rm-dispatch-search{max-width:350px}.rm-dispatch-search .input-group-text{border-radius:var(--rm-radius-pill) 0 0 var(--rm-radius-pill)}.rm-dispatch-search .form-control{border-radius:0 var(--rm-radius-pill) var(--rm-radius-pill) 0}
+        .rm-date-form{width:145px}.rm-date-form .form-control{min-width:0}.rm-assign-form{min-width:145px}
+        .rm-scheduled-date{display:inline-flex;align-items:center;padding:.35rem .6rem;border-radius:var(--rm-radius-pill);background:var(--rm-success-soft);color:var(--rm-success);font-size:.76rem;font-weight:700;white-space:nowrap}
+        .rm-warehouse-modal{border:1px solid var(--rm-line);border-radius:var(--rm-radius-lg);overflow:hidden}.rm-warehouse-modal .modal-header{border-color:var(--rm-line);padding:1rem 1.25rem}
+        .rm-order-detail-item{display:grid;grid-template-columns:58px minmax(0,1fr) auto;align-items:center;gap:.75rem;padding:.6rem;border:1px solid var(--rm-line);border-radius:var(--rm-radius-sm);background:#fff}.rm-order-detail-item img{width:58px;height:58px;object-fit:contain;padding:.2rem;border-radius:.55rem;background:var(--rm-primary-soft-2)}
+        @media(max-width:575.98px){.rm-dispatch-search{max-width:none}.rm-date-form,.rm-assign-form{width:130px;min-width:130px}.rm-order-detail-item{grid-template-columns:48px minmax(0,1fr)}.rm-order-detail-item img{width:48px;height:48px}.rm-order-detail-item>strong{grid-column:2}}
+    </style>
+@endpush
+
+@push('scripts')
+    <script>
+        document.getElementById('dispatchSearch')?.addEventListener('input', function () {
+            const value = this.value.trim().toLocaleLowerCase('id-ID');
+            document.querySelectorAll('#dispatchRows tr[data-search]').forEach(row => row.hidden = !row.dataset.search.includes(value));
+        });
+
+        document.querySelectorAll('.rm-assign-form').forEach(form => form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            Swal.fire({ title: 'Tugaskan kurir?', text: 'Pesanan akan masuk ke daftar pengiriman kurir.', icon: 'question', showCancelButton: true, confirmButtonText: 'Tugaskan', cancelButtonText: 'Batal', confirmButtonColor: '#1e5b5a' }).then(result => {
+                if (result.isConfirmed) HTMLFormElement.prototype.submit.call(form);
             });
-          });
-        }
-      });
-    });
-
-    document.addEventListener('DOMContentLoaded', function () {
-      // Loop through each row
-      @foreach ($pemesanan as $item)
-        let tglPesan = new Date("{{ $item->tgl_pesan->format('Y-m-d H:i:s') }}");
-        let tglKirimInput = document.getElementById("tgl_kirim{{ $item->id_pemesanan }}");
-
-        // If tgl_pesan is after 4 PM, set the date input to the next day
-        if (tglPesan.getHours() >= 16) {
-          let nextDay = new Date(tglPesan);
-          nextDay.setDate(tglPesan.getDate() + 1); // Next day
-          let nextDayStr = nextDay.toISOString().split('T')[0]; // Format as YYYY-MM-DD
-          tglKirimInput.value = nextDayStr;
-        }
-      @endforeach
-    });
-</script>
-
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-</body>
-</html>
+        }));
+    </script>
+@endpush

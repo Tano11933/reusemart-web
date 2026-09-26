@@ -1,567 +1,206 @@
-<!DOCTYPE html>
-<html lang="id">
+@extends('layouts.workspace')
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Customer Service - Diskusi Produk CS</title>
-    <link rel="icon" href="{{ asset('images/BOOKHIVE_LOGOONLY.png') }}">
+@section('title', 'Diskusi Produk — ReuseMart')
+@section('page-title', 'Diskusi Produk')
 
-    <!-- External CSS and JS Libraries -->
-    <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" />
-
-    <style>
-        /* Sidebar Styles */
-        * {
-            box-sizing: border-box;
-            font-family: 'Segoe UI', sans-serif;
-        }
-
-        html,
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #f8f8f8;
-        }
-
-        .sidebar {
-            width: 220px;
-            height: 100vh;
-            position: fixed;
-            background: linear-gradient(to bottom, #365a64, #f0e6dd);
-            padding: 35px 0;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo-wrapper {
-            margin-bottom: 40px;
-            text-align: center;
-        }
-
-        .logo-wrapper img {
-            max-width: 60px;
-            height: auto;
-            pointer-events: none;
-            user-select: none;
-        }
-
-        .menu {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .menu a {
-            width: 80%;
-            text-align: center;
-            padding: 10px;
-            font-weight: bold;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            transition: all 0.2s ease-in-out;
-        }
-
-        .menu a:hover,
-        .menu a.active {
-            background-color: white;
-            color: #2c3e65;
-        }
-
-        .logout-wrapper {
-            text-align: center;
-            margin-bottom: 10px;
-        }
-
-        .logout-btn {
-            padding: 12px 24px;
-            background-color: #365a64;
-            border: none;
-            color: white;
-            font-size: 14px;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .logout-btn:hover {
-            background-color: #2c2c2c;
-        }
-
-        /* Main Content */
-        .main {
-            margin-left: 220px;
-            padding: 30px;
-            min-height: 100vh;
-        }
-
-        h3 {
-            margin-top: 0;
-            margin-bottom: 20px;
-            font-weight: 700;
-            color: #1f2937;
-        }
-
-        /* Product Card */
-        .product-card {
-            background: #eef1f5;
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 25px;
-            box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
-        }
-
-        .product-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .product-image img {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-        }
-
-        .product-info {
-            flex: 1;
-        }
-
-        .product-info h5 {
-            margin: 0 0 5px 0;
-        }
-
-        .product-info p {
-            margin: 2px 0;
-            color: #333;
-        }
-
-        .latest-comment {
-            font-style: italic;
-            color: #555;
-            margin-top: 8px;
-        }
-
-        .btn-thread-toggle {
-            margin-top: 10px;
-            background-color: #1e40af;
-            color: white;
-            border: none;
-            padding: 8px 18px;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-
-        .btn-thread-toggle:hover {
-            background-color: #1e3a8a;
-        }
-
-        /* Thread comments section */
-        .thread-comments {
-            margin-top: 15px;
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgb(0 0 0 / 0.1);
-            display: none;
-            flex-direction: column;
-        }
-
-        .comments-container {
-            max-height: 250px;
-            overflow-y: auto;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 10px;
-            background: #f9f9f9;
-        }
-
-        /* Styling for CS vs Pembeli comments */
-        .comment-cs {
-            background-color: #d0e7ff;
-            border-radius: 8px;
-            padding: 8px 12px;
-            margin-bottom: 8px;
-        }
-
-        .comment-pembeli {
-            background-color: #f0f0f0;
-            border-radius: 8px;
-            padding: 8px 12px;
-            margin-bottom: 8px;
-        }
-
-        .comment {
-            border-bottom: 1px solid #ddd;
-            padding: 8px 0;
-            position: relative;
-        }
-
-        .comment:last-child {
-            border-bottom: none;
-        }
-
-        .comment .user {
-            font-weight: 700;
-            color: #1e40af;
-        }
-
-        .comment .time {
-            font-size: 0.8rem;
-            color: #777;
-            margin-bottom: 5px;
-        }
-
-        .comment .text {
-            font-size: 1rem;
-            white-space: pre-wrap;
-        }
-
-        .btn-delete {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            background: transparent;
-            border: none;
-            color: #e74c3c;
-            cursor: pointer;
-            font-size: 0.9rem;
-            padding: 2px 6px;
-            border-radius: 5px;
-            transition: all 0.2s ease;
-        }
-
-        .btn-delete:hover {
-            color: white;
-            background-color: #c0392b;
-        }
-
-        form textarea {
-            width: 100%;
-            border-radius: 8px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            resize: vertical;
-            font-size: 1rem;
-        }
-
-        form button {
-            margin-top: 10px;
-            background-color: #1e40af;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        form button:hover {
-            background-color: #1e3a8a;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .sidebar {
-                position: relative;
-                width: 100%;
-                height: auto;
-                padding: 10px 0;
-            }
-
-            .main {
-                margin-left: 0;
-                padding: 15px;
-            }
-        }
-    </style>
-    <link rel="stylesheet" href="{{ asset('css/reusemart.css') }}">
-</head>
-
-<body class="rm-body rm-legacy-workspace">
-    <div class="sidebar">
-        <div>
-            <div class="logo-wrapper">
-                <img src="{{ asset('image/white.png') }}" alt="Logo" />
-            </div>
-            <div class="menu">
-                <a href="{{ url('/pegawai/cs') }}" class="{{ request()->is('pegawai/cs*') ? 'active' : '' }}">Data Penitip</a>
-                <a href="{{ url('/diskusi-produk-cs') }}" class="{{ request()->is('diskusi-produk-cs*') ? 'active' : '' }}">Diskusi Produk CS</a>
-                <a href="{{ url('/verifikasi-pembayaran-cs') }}" class="{{ request()->is('verifikasi-pembayaran-cs*') ? 'active' : '' }}">Verifikasi Bukti Pembayaran</a>
-                <a href="{{ url('/tukar-poin-cs') }}" class="{{ request()->is('tukar-poin-cs*') ? 'active' : '' }}">Klaim Merchandise</a>
-            </div>
-        </div>
-        <div class="logout-wrapper">
-            <button id="logoutBtn" class="logout-btn">Log out</button>
-        </div>
+@section('content')
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3 mb-4">
+        <div><h1 class="rm-page-title">Diskusi Produk</h1><p class="rm-page-sub">Bantu pembeli mendapatkan informasi sebelum membeli.</p></div>
+        <span class="rm-chip"><i class="bi bi-chat-dots"></i>{{ $barang->count() }} barang tersedia</span>
     </div>
 
-    <div class="main">
-        <h3>Diskusi Produk Customer Service</h3>
-
-        @foreach ($barang as $item)
-        <div class="product-card" data-id="{{ $item->id_barang }}">
-            <div class="product-header">
-                <div class="product-image">
-                    <img src="{{ asset($item->foto_barang ? 'image/' . $item->foto_barang : 'image/default-product.png') }}" alt="{{ $item->nama_barang }}" />
-                </div>
-                <div class="product-info">
-                    <h5>{{ $item->nama_barang }}</h5>
-                    <p>Harga: Rp {{ number_format($item->harga_barang, 0, ',', '.') }}</p>
-                    @if ($item->latestKomentar)
-                    <p class="latest-comment">
-                        Komentar terbaru: "{{ $item->latestKomentar->komentar }}" -
-                        <strong>
-                            {{ $item->latestKomentar->pembeli?->nama_pembeli ?? $item->latestKomentar->pegawai?->nama_pegawai ?? 'Anonim' }}
-                        </strong>
-                    </p>
-                    @else
-                    <p class="latest-comment">Belum ada komentar</p>
-                    @endif
-                    <button class="btn-thread-toggle" data-id="{{ $item->id_barang }}">Balas Komentar</button>
-                </div>
-            </div>
-
-            <div class="thread-comments" id="thread-{{ $item->id_barang }}">
-                <h5>Semua Komentar untuk {{ $item->nama_barang }}</h5>
-                <div class="comments-container">
-                    <p>Memuat komentar...</p>
-                </div>
-                <form class="add-comment-form" data-id="{{ $item->id_barang }}">
-                    @csrf
-                    <input type="hidden" name="id_pembeli" value="{{ session('id_pembeli') }}">
-                    <textarea name="komentar" rows="3" placeholder="Tambah komentar..." required></textarea>
-                    <button type="submit">Kirim Komentar</button>
-                </form>
-
-            </div>
-        </div>
-        @endforeach
+    <div class="input-group rm-discussion-search mb-3">
+        <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
+        <input type="search" id="productSearch" class="form-control border-start-0" placeholder="Cari nama atau kategori barang…" aria-label="Cari barang">
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.getElementById('logoutBtn')?.addEventListener('click', function () {
-        Swal.fire({
-            title: 'Yakin ingin logout?',
-            text: 'Kamu akan keluar dari sistem.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Ya, logout',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed) {
-            fetch("{{ route('logout') }}", {
-                method: 'POST',
-                headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                }
-            }).then(() => {
-                Swal.fire({
-                icon: 'success',
-                title: 'Logout berhasil',
-                text: 'Kamu telah keluar dari sistem.',
-                timer: 1500,
-                showConfirmButton: false
-                }).then(() => {
-                window.location.href = '/login';
-                });
-            });
-            }
-        });
-        });
+    <div class="rm-cs-product-list" id="productList">
+        @forelse ($barang as $item)
+            @php
+                $photo = trim((string) $item->foto_barang);
+                $image = ($photo !== '' && file_exists(public_path('image/' . ltrim($photo, '/')))) ? asset('image/' . ltrim($photo, '/')) : asset('image/placeholder.svg');
+            @endphp
+            <article class="rm-cs-product-card" data-search="{{ \Illuminate\Support\Str::lower($item->nama_barang . ' ' . $item->kategori) }}" data-id="{{ $item->id_barang }}">
+                <div class="rm-cs-product-summary">
+                    <img src="{{ $image }}" alt="{{ $item->nama_barang }}" loading="lazy" onerror="this.onerror=null;this.src='{{ asset('image/placeholder.svg') }}'">
+                    <div class="rm-cs-product-info">
+                        <h2 class="h6 fw-bold mb-1">{{ $item->nama_barang }}</h2>
+                        <p class="small rm-text-muted mb-1">{{ $item->kategori }}</p>
+                        <strong>Rp {{ number_format($item->harga_barang, 0, ',', '.') }}</strong>
+                        <p class="rm-cs-latest mb-0">
+                            @if ($item->latestKomentar)
+                                <span>Komentar terbaru:</span> {{ $item->latestKomentar->komentar }}
+                                <small>— {{ $item->latestKomentar->pembeli?->nama_pembeli ?? $item->latestKomentar->pegawai?->nama_pegawai ?? 'Anonim' }}</small>
+                            @else
+                                <span>Belum ada komentar</span>
+                            @endif
+                        </p>
+                    </div>
+                    <button type="button" class="btn rm-btn-outline rm-toggle-thread" aria-expanded="false" data-id="{{ $item->id_barang }}">
+                        <i class="bi bi-chat-square-text me-1"></i><span>Lihat Diskusi</span>
+                    </button>
+                </div>
 
-        const toggleButtons = document.querySelectorAll('.btn-thread-toggle');
-
-        toggleButtons.forEach(btn => {
-            const idBarang = btn.dataset.id;
-            const threadDiv = document.getElementById('thread-' + idBarang);
-            const container = threadDiv.querySelector('.comments-container');
-
-            // Load komentar langsung saat halaman load, thread komentar disembunyikan
-            loadComments(idBarang, container);
-            threadDiv.style.display = 'none';
-
-            btn.addEventListener('click', function () {
-                if (threadDiv.style.display === 'flex' || threadDiv.style.display === 'block') {
-                    threadDiv.style.display = 'none';
-                } else {
-                    threadDiv.style.display = 'block';
-                }
-            });
-        });
-
-        function loadComments(idBarang, container) {
-            container.innerHTML = 'Memuat komentar...';
-
-            fetch(`/diskusi-produk-cs/barang/${idBarang}`)
-                .then(res => res.json())
-                .then(data => {
-                    if (data.length === 0) {
-                        container.innerHTML = '<p>Belum ada komentar.</p>';
-                        return;
-                    }
-                    let html = '';
-                    // ascending supaya komentar lama atas
-                    data.sort((a, b) => new Date(a.tgl_komentar) - new Date(b.tgl_komentar));
-                    data.forEach(item => {
-                        const userName = item.pembeli?.nama_pembeli ?? item.pegawai?.nama_pegawai ?? 'Anonim';
-                        const isCS = !!item.id_pegawai; // jika komentar oleh pegawai (CS)
-                        const time = new Date(item.tgl_komentar).toLocaleString('id-ID', {
-                            dateStyle: 'medium',
-                            timeStyle: 'short'
-                        });
-                        html += `
-                        <div class="${isCS ? 'comment-cs' : 'comment-pembeli'} comment">
-                            <div class="user">${userName} ${isCS ? '<small>(Customer Service)</small>' : ''}</div>
-                            <div class="time">${time}</div>
-                            <div class="text">${item.komentar}</div>
-                            ${canDeleteComment(item) ? `<button class="btn-delete" data-id="${item.id_diskusi}" title="Hapus komentar">Hapus</button>` : ''}
+                <section class="rm-cs-thread d-none" id="thread-{{ $item->id_barang }}" aria-label="Diskusi untuk {{ $item->nama_barang }}">
+                    <div class="rm-cs-thread-heading">
+                        <div><h3 class="h6 fw-bold mb-1">Diskusi Produk</h3><p class="small rm-text-muted mb-0">Komentar pembeli dan balasan customer service.</p></div>
+                        <span class="rm-chip rm-thread-count">Memuat…</span>
+                    </div>
+                    <div class="rm-cs-comments" data-loaded="false"><div class="rm-empty py-3"><span class="spinner-border spinner-border-sm"></span><p class="mb-0 mt-2">Memuat komentar…</p></div></div>
+                    <form class="rm-cs-reply-form" data-id="{{ $item->id_barang }}" data-store-url="{{ route('diskusi.store.cs') }}">
+                        @csrf
+                        <input type="hidden" name="id_barang" value="{{ $item->id_barang }}">
+                        <label class="form-label fw-semibold" for="reply-{{ $item->id_barang }}">Balas sebagai Customer Service</label>
+                        <div class="d-flex flex-column flex-sm-row gap-2">
+                            <textarea class="form-control" id="reply-{{ $item->id_barang }}" name="komentar" rows="2" maxlength="1000" placeholder="Tulis jawaban yang membantu…" required></textarea>
+                            <button type="submit" class="btn rm-btn-primary align-self-sm-end"><i class="bi bi-send me-1"></i>Kirim</button>
                         </div>
-                    `;
-                    });
-                    container.innerHTML = html;
+                    </form>
+                </section>
+            </article>
+        @empty
+            <div class="rm-empty"><i class="bi bi-box-seam d-block"></i><p class="mb-0">Belum ada barang tersedia untuk didiskusikan.</p></div>
+        @endforelse
+    </div>
+@endsection
 
-                    container.querySelectorAll('.btn-delete').forEach(btn => {
-                        btn.addEventListener('click', function () {
-                            const idDiskusi = this.dataset.id;
-                            Swal.fire({
-                                title: 'Yakin ingin menghapus komentar ini?',
-                                text: "Tindakan ini tidak bisa dibatalkan.",
-                                icon: 'warning',
-                                showCancelButton: true,
-                                confirmButtonColor: '#d33',
-                                cancelButtonColor: '#6c757d',
-                                confirmButtonText: 'Ya, hapus!',
-                                cancelButtonText: 'Batal'
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    deleteComment(idDiskusi, container);
-                                }
-                            });
-                        });
-                    });
-                })
-                .catch(() => container.innerHTML = '<p>Gagal memuat komentar.</p>');
-        }
+@push('styles')
+    <style>
+        .rm-discussion-search { max-width:480px; }
+        .rm-discussion-search .input-group-text { border-radius:var(--rm-radius-pill) 0 0 var(--rm-radius-pill); }
+        .rm-discussion-search .form-control { border-radius:0 var(--rm-radius-pill) var(--rm-radius-pill) 0; }
+        .rm-cs-product-list { display:grid;gap:1rem; }
+        .rm-cs-product-card { overflow:hidden;border:1px solid var(--rm-line);border-radius:var(--rm-radius-lg);background:#fff;box-shadow:var(--rm-shadow-xs);transition:border-color var(--rm-fast),box-shadow var(--rm-fast); }
+        .rm-cs-product-card:hover { border-color:var(--rm-line-strong);box-shadow:var(--rm-shadow-sm); }
+        .rm-cs-product-summary { display:grid;grid-template-columns:96px minmax(0,1fr) auto;align-items:center;gap:1rem;padding:1rem 1.15rem; }
+        .rm-cs-product-summary>img { width:96px;height:76px;object-fit:contain;padding:.2rem;border-radius:.7rem;background:var(--rm-primary-soft-2); }
+        .rm-cs-product-info { min-width:0; }
+        .rm-cs-product-info>strong { color:var(--rm-primary);font-size:.9rem; }
+        .rm-cs-latest { overflow:hidden;color:var(--rm-muted);font-size:.78rem;text-overflow:ellipsis;white-space:nowrap;margin-top:.3rem; }
+        .rm-cs-latest span { color:var(--rm-ink-soft);font-weight:600; }
+        .rm-cs-latest small { color:var(--rm-muted); }
+        .rm-cs-thread { padding:1rem 1.15rem 1.15rem;border-top:1px solid var(--rm-line);background:var(--rm-bg-soft); }
+        .rm-cs-thread-heading { display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:.8rem; }
+        .rm-cs-comments { display:grid;gap:.55rem;max-height:360px;overflow:auto;padding:.8rem;border:1px solid var(--rm-line);border-radius:var(--rm-radius);background:#fff; }
+        .rm-cs-comment { position:relative;padding:.7rem .85rem;border:1px solid var(--rm-line);border-radius:.8rem;background:var(--rm-bg-soft);overflow-wrap:anywhere; }
+        .rm-cs-comment.is-staff { border-color:#c9e2de;background:var(--rm-primary-soft-2); }
+        .rm-cs-comment-head { display:flex;justify-content:space-between;gap:.7rem;color:var(--rm-primary-dark);font-size:.78rem;font-weight:700; }
+        .rm-cs-comment-head time { color:var(--rm-muted);font-size:.7rem;font-weight:400;white-space:nowrap; }
+        .rm-cs-comment-text { margin:.35rem 0 0;white-space:pre-wrap;color:var(--rm-ink); }
+        .rm-cs-comment-delete { position:absolute;right:.6rem;bottom:.45rem;border:0;background:transparent;color:var(--rm-danger);font-size:.72rem; }
+        .rm-cs-reply-form { margin-top:.9rem; }
+        @media(max-width:575.98px){.rm-cs-product-summary{grid-template-columns:64px minmax(0,1fr);gap:.75rem;padding:.8rem}.rm-cs-product-summary>img{width:64px;height:64px}.rm-toggle-thread{grid-column:1/-1}.rm-cs-latest{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}.rm-cs-thread{padding:.85rem}.rm-cs-comment-head{flex-direction:column;gap:.1rem}}
+    </style>
+@endpush
 
-        function canDeleteComment(comment) {
-            // Sesuaikan logika akses user
-            return true;
-        }
+@push('scripts')
+    <script>
+        function addComment(container, comment, isStaff, currentEmployeeId) {
+            const wrapper = document.createElement('article');
+            wrapper.className = 'rm-cs-comment' + (isStaff ? ' is-staff' : '');
 
-        function deleteComment(idDiskusi, container) {
-            fetch(`/diskusi-produk-cs/${idDiskusi}`, {
-                method: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.message) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Komentar Dihapus',
-                        text: data.message,
-                        confirmButtonColor: '#1E5B5A',
-                        showConfirmButton: false,
-                        timer: 1800,
-                        timerProgressBar: true,
-                        position: 'center'
-                    });
-                }
-                const idBarang = container.closest('.thread-comments').id.split('-')[1];
-                loadComments(idBarang, container);
-            })
-            .catch(() => alert('Gagal menghapus komentar.'));
-        }
+            const head = document.createElement('div');
+            head.className = 'rm-cs-comment-head';
+            const author = document.createElement('span');
+            author.textContent = (isStaff ? (comment.pegawai?.nama_pegawai || comment.nama || 'Customer Service') : (comment.pembeli?.nama_pembeli || comment.nama || 'Pembeli')) + (isStaff ? ' · CS' : '');
+            const time = document.createElement('time');
+            time.textContent = comment.tgl_komentar ? new Date(comment.tgl_komentar).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }) : '';
+            head.append(author, time);
 
-       // Submit komentar baru
-document.querySelectorAll('.add-comment-form').forEach(form => {
-    form.addEventListener('submit', function (e) {
-        e.preventDefault();
-        const idBarang = this.dataset.id;
-        const komentar = this.querySelector('textarea').value.trim();
-        if (!komentar) return alert('Komentar tidak boleh kosong.');
+            const text = document.createElement('p');
+            text.className = 'rm-cs-comment-text';
+            text.textContent = comment.komentar || '';
+            wrapper.append(head, text);
 
-        const formData = new FormData(this);
-        formData.append('id_barang', idBarang);
-
-        fetch("{{ route('diskusi.store.cs') }}", {
-            method: 'POST',
-            body: formData
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-                const container = document.getElementById('thread-' + idBarang).querySelector('.comments-container');
-
-                // Format tanggal dari server (tgl_komentar disimpan selamanya)
-                const tanggalServer = new Date(data.tgl_komentar);
-                const formattedTime = new Intl.DateTimeFormat('id-ID', {
-                    day: '2-digit',
-                    month: 'long',
-                    year: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    hour12: false
-                }).format(tanggalServer);
-
-                const div = document.createElement('div');
-                div.className = (data.isCS ? 'comment-cs' : 'comment-pembeli') + ' comment';
-                div.innerHTML = `
-                    <div class="user">${data.nama} ${data.isCS ? '<small>(Customer Service)</small>' : ''}</div>
-                    <div class="time">${formattedTime}</div>
-                    <div class="text">${data.komentar}</div>
-                `;
-                container.appendChild(div);
-
-                // Update komentar terbaru di card
-                const latestCommentParagraph = document.querySelector(`.product-card[data-id="${idBarang}"] .latest-comment`);
-                if (latestCommentParagraph) {
-                    latestCommentParagraph.innerHTML = `Komentar terbaru: "${data.komentar}" - <strong>${data.nama}</strong>`;
-                }
-
-                // Kosongkan dan scroll
-                form.querySelector('textarea').value = '';
-                container.scrollTop = container.scrollHeight;
-
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Komentar Ditambahkan!',
-                    text: 'Komentar Anda berhasil terkirim.',
-                    confirmButtonColor: '#1E5B5A',
-                    showConfirmButton: false,
-                    timer: 1800,
-                    timerProgressBar: true,
-                });
+            if (isStaff && String(comment.id_pegawai || currentEmployeeId) === String(currentEmployeeId)) {
+                const remove = document.createElement('button');
+                remove.type = 'button';
+                remove.className = 'rm-cs-comment-delete';
+                remove.textContent = 'Hapus';
+                remove.dataset.id = comment.id_diskusi;
+                wrapper.append(remove);
             }
-        })
-        .catch(() => alert('Terjadi kesalahan jaringan.'));
-    });
-});
 
+            container.append(wrapper);
+        }
 
+        async function loadThread(id) {
+            const thread = document.getElementById('thread-' + id);
+            const container = thread.querySelector('.rm-cs-comments');
+            if (container.dataset.loaded === 'true') return;
+
+            try {
+                const response = await fetch(`/diskusi-produk-cs/barang/${encodeURIComponent(id)}`, { headers: { 'Accept': 'application/json' } });
+                if (!response.ok) throw new Error('Komentar gagal dimuat.');
+                const comments = await response.json();
+                container.replaceChildren();
+
+                if (!comments.length) {
+                    const empty = document.createElement('div');
+                    empty.className = 'text-center small rm-text-muted py-3';
+                    empty.textContent = 'Belum ada komentar untuk barang ini.';
+                    container.append(empty);
+                } else {
+                    comments.forEach(comment => addComment(container, comment, Boolean(comment.id_pegawai), @json(session('id_pegawai'))));
+                }
+
+                thread.querySelector('.rm-thread-count').innerHTML = '<i class="bi bi-chat-dots"></i>' + comments.length + ' komentar';
+                container.dataset.loaded = 'true';
+                container.scrollTop = container.scrollHeight;
+            } catch (error) {
+                container.textContent = error.message;
+            }
+        }
+
+        document.querySelectorAll('.rm-toggle-thread').forEach(button => button.addEventListener('click', async function () {
+            const thread = document.getElementById('thread-' + this.dataset.id);
+            const open = thread.classList.toggle('d-none') === false;
+            this.setAttribute('aria-expanded', String(open));
+            this.querySelector('span').textContent = open ? 'Sembunyikan Diskusi' : 'Lihat Diskusi';
+            if (open) await loadThread(this.dataset.id);
+        }));
+
+        document.querySelectorAll('.rm-cs-reply-form').forEach(form => form.addEventListener('submit', async function (event) {
+            event.preventDefault();
+            const button = form.querySelector('button[type="submit"]');
+            button.disabled = true;
+            try {
+                const response = await fetch(form.dataset.storeUrl, { method: 'POST', headers: { 'Accept': 'application/json' }, body: new FormData(form) });
+                const result = await response.json();
+                if (!response.ok || !result.success) throw new Error(result.message || 'Komentar gagal dikirim.');
+
+                const container = document.getElementById('thread-' + form.dataset.id).querySelector('.rm-cs-comments');
+                container.querySelector('.text-center')?.remove();
+                addComment(container, result, true, @json(session('id_pegawai')));
+                container.scrollTop = container.scrollHeight;
+                form.querySelector('textarea').value = '';
+                document.getElementById('thread-' + form.dataset.id).querySelector('.rm-thread-count').innerHTML = '<i class="bi bi-chat-dots"></i>' + container.querySelectorAll('.rm-cs-comment').length + ' komentar';
+                const latest = document.querySelector(`.rm-cs-product-card[data-id="${CSS.escape(form.dataset.id)}"] .rm-cs-latest`);
+                if (latest) latest.textContent = `Komentar terbaru: ${result.komentar} — ${result.nama}`;
+            } catch (error) {
+                Swal.fire({ icon: 'error', title: 'Tidak terkirim', text: error.message });
+            } finally { button.disabled = false; }
+        }));
+
+        document.getElementById('productSearch').addEventListener('input', function () {
+            const value = this.value.trim().toLocaleLowerCase('id-ID');
+            document.querySelectorAll('.rm-cs-product-card[data-search]').forEach(card => card.hidden = !card.dataset.search.includes(value));
+        });
+
+        document.getElementById('productList').addEventListener('click', async function (event) {
+            const button = event.target.closest('.rm-cs-comment-delete');
+            if (!button) return;
+            const confirmation = await Swal.fire({ title: 'Hapus komentar?', text: 'Komentar ini akan dihapus dari diskusi.', icon: 'warning', showCancelButton: true, confirmButtonText: 'Hapus', cancelButtonText: 'Batal', confirmButtonColor: '#c0392b' });
+            if (!confirmation.isConfirmed) return;
+
+            try {
+                const response = await fetch(`/diskusi-produk-cs/${encodeURIComponent(button.dataset.id)}`, { method: 'DELETE', headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': @json(csrf_token()) } });
+                const result = await response.json();
+                if (!response.ok) throw new Error(result.message || 'Komentar gagal dihapus.');
+                const thread = button.closest('.rm-cs-thread');
+                button.closest('.rm-cs-comment').remove();
+                thread.querySelector('.rm-thread-count').innerHTML = '<i class="bi bi-chat-dots"></i>' + thread.querySelectorAll('.rm-cs-comment').length + ' komentar';
+            } catch (error) { Swal.fire({ icon: 'error', title: 'Tidak dapat menghapus', text: error.message }); }
+        });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-</body>
-
-</html>
+@endpush
