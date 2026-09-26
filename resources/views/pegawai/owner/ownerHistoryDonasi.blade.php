@@ -1,320 +1,154 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <title>Owner - Daftar Organisasi & Donasi</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      font-family: 'Segoe UI', sans-serif;
-    }
-    body, html {
-      margin: 0; padding: 0;
-      background-color: #f8f8f8;
-      height: 100vh;
-      color: #2c3e65;
-    }
-    .sidebar {
-      width: 220px;
-      height: 100vh;
-      position: fixed;
-      background: linear-gradient(to bottom, #365a64, #f0e6dd);
-      padding: 35px 0;
-      color: white;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .logo-wrapper {
-      margin-bottom: 40px;
-      text-align: center;
-      font-weight: 700;
-      font-size: 28px;
-      user-select: none;
-      color: white;
-    }
-    .menu {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-    }
-    .menu a {
-      width: 80%;
-      text-align: center;
-      padding: 10px;
-      font-weight: bold;
-      color: white;
-      text-decoration: none;
-      border-radius: 8px;
-      transition: all 0.2s ease-in-out;
-    }
-    .menu a:hover,
-    .menu a.active {
-      background-color: white;
-      color: #2c3e65;
-    }
-    .logout-wrapper {
-      text-align: center;
-      margin-bottom: 10px;
-    }
-    .logout-btn {
-      padding: 12px 24px;
-      background-color: #365a64;
-      border: none;
-      color: white;
-      font-size: 14px;
-      font-weight: bold;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    .logout-btn:hover {
-      background-color: #2c2c2c;
-    }
-    .main {
-      margin-left: 220px;
-      padding: 30px;
-    }
-    .card {
-      background-color: #fdf3e7;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-    h3 {
-      margin-top: 0;
-      margin-bottom: 20px;
-      font-weight: 700;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 15px;
-      font-size: 14px;
-      table-layout: auto;
-    }
-    th, td {
-      border: 1px solid #ddd;
-      padding: 10px 12px;
-      text-align: left;
-      vertical-align: middle;
-    }
-    thead tr {
-      background-color: #365a64;
-      color: white;
-      font-weight: 700;
-    }
-    tbody tr:nth-child(even) {
-      background-color: #f0f0f0;
-    }
-    .btn-lihat {
-      background-color: #2a7ae2;
-      border: none;
-      padding: 6px 14px;
-      border-radius: 6px;
-      color: white;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      font-size: 14px;
-    }
-    .btn-lihat:hover {
-      background-color: #1d5ec8;
-    }
-    /* Modal styles */
-    #modalDonasi {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5);
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-    }
-    #modalDonasi .modal-content {
-      background: #fdf3e7;
-      padding: 20px;
-      border-radius: 8px;
-      width: 80%;
-      max-height: 80vh;
-      overflow-y: auto;
-      position: relative;
-    }
-    #modalDonasi .close-btn {
-      position: absolute;
-      top: 10px; right: 15px;
-      background: #ccc;
-      border: none;
-      border-radius: 50%;
-      width: 30px; height: 30px;
-      font-weight: bold;
-      font-size: 18px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-    #modalDonasi .close-btn:hover {
-      background: #bbb;
-    }
-    .logo-wrapper {
-            margin-bottom: 40px;
-            text-align: center;
-        }
+@extends('layouts.workspace')
 
-        .logo-wrapper img {
-            max-width: 60px;
-            height: auto;
-            pointer-events: none;
-            user-select: none;
-        }
-  </style>
-</head>
-<body>
-  <div class="sidebar">
-    <div>
-      <div class="logo-wrapper">
-        <img src="{{ asset('image/white.png') }}" alt="Logo">
-      </div>
-      <div class="menu">
-            <a href="{{ route('owner.requestRDonasi') }}" class="{{ request()->routeIs('owner.requestRDonasi') ? 'active' : '' }}">Data Request Donasi</a>
-            <a href="{{ route('owner.ownerHistoryDonasi') }}" class="{{ request()->routeIs('owner.ownerHistoryDonasi') ? 'active' : '' }}">History Donasi</a>
-            <a href="{{ route('owner.laporanPenjualanBulanan') }}" class="{{ request()->routeIs('owner.laporanPenjualanBulanan') ? 'active' : '' }}">Laporan Penjualan</a>
-            <a href="{{ route('owner.laporanKomisiBulanan') }}" class="{{ request()->routeIs('owner.laporanKomisiBulanan') ? 'active' : '' }}">Laporan Komisi Bulanan</a>
-            <a href="{{ route('owner.laporanStokGudang') }}" class="{{ request()->routeIs('owner.laporanStokGudang') ? 'active' : '' }}">Laporan Stok Gudang</a>
-            <a href="{{ route('owner.laporanPenjualanKategori') }}" class="{{ request()->routeIs('owner.laporanPenjualanKategori') ? 'active' : '' }}">Laporan Penjualan Kategori</a>
-            <a href="{{ route('owner.laporanBarangExpired') }}" class="{{ request()->routeIs('owner.laporanBarangExpired') ? 'active' : '' }}">Barang Expired Penitipan</a>
-            <a href="{{ route('donasi.laporan') }}" class="{{ request()->routeIs('donasi.laporan') ? 'active' : '' }}">Laporan Donasi Barang</a>
-            <a href="{{ route('requestdonasi.laporan') }}" class="{{ request()->routeIs('requestdonasi.laporan') ? 'active' : '' }}">Laporan Request Donasi Barang</a>
-            <a href="{{ route('transaksi.penitip.laporan') }}" class="{{ request()->routeIs('transaksi.penitip.laporan') ? 'active' : '' }}">Laporan Transaksi Penitip</a>
+@section('title', 'Riwayat Donasi — ReuseMart')
+@section('page-title', 'Riwayat Donasi')
+
+@section('content')
+    <div class="mb-4">
+        <h1 class="rm-page-title">Riwayat Donasi</h1>
+        <p class="rm-page-sub">Lihat organisasi penerima dan barang yang sudah disalurkan.</p>
+    </div>
+
+    <section class="rm-workspace-card">
+        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-3">
+            <div>
+                <h2 class="h5 fw-bold mb-1">Organisasi Penerima</h2>
+                <p class="small rm-text-muted mb-0">{{ $organisasi->count() }} organisasi memiliki catatan donasi.</p>
+            </div>
+            <div class="input-group rm-workspace-search">
+                <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
+                <input type="search" id="organizationSearch" class="form-control border-start-0" placeholder="Cari organisasi…" aria-label="Cari organisasi">
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Organisasi</th>
+                        <th>ID</th>
+                        <th>Alamat</th>
+                        <th class="text-end">Riwayat</th>
+                    </tr>
+                </thead>
+                <tbody id="organizationRows">
+                    @forelse ($organisasi as $org)
+                        <tr data-search="{{ \Illuminate\Support\Str::lower($org->nama_organisasi . ' ' . $org->id_organisasi) }}">
+                            <td><strong>{{ $org->nama_organisasi }}</strong></td>
+                            <td><span class="rm-chip">{{ $org->id_organisasi }}</span></td>
+                            <td>{{ $org->alamat_organisasi ?: '—' }}</td>
+                            <td class="text-end">
+                                <button type="button" class="btn rm-btn-outline btn-sm js-show-donations"
+                                        data-org-id="{{ $org->id_organisasi }}" data-org-name="{{ $org->nama_organisasi }}">
+                                    <i class="bi bi-eye me-1"></i>Lihat Donasi
+                                </button>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr><td colspan="4"><div class="rm-empty py-4"><i class="bi bi-building d-block"></i><p class="mb-0">Belum ada organisasi penerima donasi.</p></div></td></tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <div class="modal fade" id="donationHistoryModal" tabindex="-1" aria-labelledby="donationHistoryTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content rm-workspace-modal">
+                <div class="modal-header">
+                    <div>
+                        <h2 class="modal-title h5 fw-bold" id="donationHistoryTitle">Riwayat Donasi</h2>
+                        <p class="small rm-text-muted mb-0" id="donationHistoryOrganization"></p>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead><tr><th>Barang</th><th>ID Donasi</th><th>Tanggal</th><th>Penerima</th></tr></thead>
+                            <tbody id="donationHistoryRows"><tr><td colspan="4" class="text-center rm-text-muted">Pilih organisasi untuk melihat donasi.</td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="logout-wrapper">
-      <button id="logoutBtn" class="logout-btn">Log out</button>
-    </div>
-  </div>
+@endsection
 
-  <div class="main">
-    <div class="card">
-      <h3>Daftar Organisasi</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>ID Organisasi</th>
-            <th>Nama Organisasi</th>
-            <th>Alamat Organisasi</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-            @foreach($organisasi as $org)
-            <tr>
-            <td>{{ $org->id_organisasi }}</td>
-            <td>{{ $org->nama_organisasi }}</td>
-            <td>{{ $org->alamat_organisasi }}</td>
-            <td>
-                <button class="btn-lihat" onclick="showDonasiModal('{{ $org->id_organisasi }}')">Lihat</button>
-            </td>
-            </tr>
-            @endforeach
-        </tbody>
+@push('styles')
+    <style>
+        .rm-workspace-search { max-width: 320px; }
+        .rm-workspace-search .input-group-text { border-radius: var(--rm-radius-pill) 0 0 var(--rm-radius-pill); }
+        .rm-workspace-search .form-control { border-radius: 0 var(--rm-radius-pill) var(--rm-radius-pill) 0; }
+        .rm-workspace-modal { border: 1px solid var(--rm-line); border-radius: var(--rm-radius-lg); overflow: hidden; }
+        .rm-workspace-modal .modal-header { border-color: var(--rm-line); padding: 1rem 1.25rem; }
+        @media (max-width: 575.98px) { .rm-workspace-search { max-width: none; } }
+    </style>
+@endpush
 
-      </table>
-    </div>
-  </div>
+@push('scripts')
+    <script>
+        const historyModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('donationHistoryModal'));
+        const historyBody = document.getElementById('donationHistoryRows');
 
-  <div id="modalDonasi">
-    <div class="modal-content">
-      <button class="close-btn" onclick="closeDonasiModal()">&times;</button>
-      <h3>Donasi untuk Organisasi <span id="modalOrgName"></span></h3>
-      <table id="donasiTable">
-        <thead>
-          <tr>
-            <th>ID Donasi</th>
-            <th>Nama Barang</th>
-            <th>Tanggal Donasi</th>
-            <th>Nama Penerima</th>
-          </tr>
-        </thead>
-        <tbody id="donasiTableBody">
-          <tr><td colspan="4" style="text-align:center;">Memuat data...</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <script>
-    document.getElementById('logoutBtn')?.addEventListener('click', function () {
-      Swal.fire({
-        title: 'Yakin ingin logout?',
-        text: 'Kamu akan keluar dari sistem.',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Ya, logout',
-        cancelButtonText: 'Batal'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          fetch("{{ route('logout') }}", {
-            method: 'POST',
-            headers: {
-              'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            }
-          }).then(() => {
-            Swal.fire({
-              icon: 'success',
-              title: 'Logout berhasil',
-              text: 'Kamu telah keluar dari sistem.',
-              timer: 1500,
-              showConfirmButton: false
-            }).then(() => {
-              window.location.href = '/login';
-            });
-          });
+        function cell(row, value) {
+            const td = document.createElement('td');
+            td.textContent = value ?? '—';
+            row.append(td);
         }
-      });
-    });
-    function showDonasiModal(id_organisasi) {
-      const modal = document.getElementById('modalDonasi');
-      const body = document.getElementById('donasiTableBody');
-      const orgNameSpan = document.getElementById('modalOrgName');
 
-      body.innerHTML = '<tr><td colspan="4" style="text-align:center;">Memuat data...</td></tr>';
-      orgNameSpan.textContent = id_organisasi;
+        document.querySelectorAll('.js-show-donations').forEach(button => {
+            button.addEventListener('click', async function () {
+                const orgId = this.dataset.orgId;
+                document.getElementById('donationHistoryOrganization').textContent = this.dataset.orgName;
+                historyBody.innerHTML = '<tr><td colspan="4" class="text-center"><span class="spinner-border spinner-border-sm" role="status"></span> Memuat riwayat…</td></tr>';
+                historyModal.show();
 
-      modal.style.display = 'flex';
+                try {
+                    const response = await fetch(`/api/donasi/by-organisasi/${encodeURIComponent(orgId)}`, {
+                        headers: { 'Accept': 'application/json' },
+                    });
+                    const payload = await response.json();
+                    if (!response.ok || !payload.success) throw new Error(payload.message || 'Riwayat donasi gagal dimuat.');
 
-      fetch(`/api/donasi/by-organisasi/${id_organisasi}`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.success && data.data.length > 0) {
-            let rows = '';
-            data.data.forEach(donasi => {
-              rows += `
-                <tr>
-                  <td>${donasi.id_donasi}</td>
-                  <td>${donasi.nama_barang_request}</td>
-                  <td>${new Date(donasi.tgl_donasi).toLocaleDateString('id-ID')}</td>
-                  <td>${donasi.nama_penerima}</td>
-                </tr>`;
+                    historyBody.replaceChildren();
+                    if (!payload.data?.length) {
+                        const tr = document.createElement('tr');
+                        const td = document.createElement('td');
+                        td.colSpan = 4;
+                        td.className = 'text-center rm-text-muted py-4';
+                        td.textContent = 'Belum ada donasi untuk organisasi ini.';
+                        tr.append(td);
+                        historyBody.append(tr);
+                        return;
+                    }
+
+                    payload.data.forEach(item => {
+                        const tr = document.createElement('tr');
+                        cell(tr, item.nama_barang_request);
+                        cell(tr, item.id_donasi);
+                        cell(tr, item.tgl_donasi ? new Date(item.tgl_donasi).toLocaleDateString('id-ID') : '—');
+                        cell(tr, item.nama_penerima);
+                        historyBody.append(tr);
+                    });
+                } catch (error) {
+                    historyBody.replaceChildren();
+                    const tr = document.createElement('tr');
+                    const td = document.createElement('td');
+                    td.colSpan = 4;
+                    td.className = 'text-center text-danger py-4';
+                    td.textContent = error.message;
+                    tr.append(td);
+                    historyBody.append(tr);
+                }
             });
-            body.innerHTML = rows;
-          } else {
-            body.innerHTML = '<tr><td colspan="4" style="text-align:center;">Tidak ada data donasi.</td></tr>';
-          }
-        })
-        .catch(() => {
-          body.innerHTML = '<tr><td colspan="4" style="text-align:center;">Gagal memuat data.</td></tr>';
         });
-    }
 
-    function closeDonasiModal() {
-      document.getElementById('modalDonasi').style.display = 'none';
-    }
-  </script>
-</body>
-</html>
+        document.getElementById('organizationSearch').addEventListener('input', function () {
+            const term = this.value.trim().toLocaleLowerCase('id-ID');
+            document.querySelectorAll('#organizationRows tr[data-search]').forEach(row => {
+                row.hidden = !row.dataset.search.includes(term);
+            });
+        });
+    </script>
+@endpush

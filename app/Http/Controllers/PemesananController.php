@@ -493,8 +493,7 @@ class PemesananController extends Controller
             'id_pemesanan'        => $idPemesanan,
             'id_pembeli'          => $userId,
             'tgl_pesan'           => now(),
-            'status'              => 'diproses', // status awal
-            'status_pembayaran'   => 'menunggu verifikasi',
+            'status'              => 'menunggu pembayaran',
             'jenis_pengantaran'   => $jenisPengantaran,
             'total_harga_pesanan' => $totalHargaBarang,
             'total_ongkir'        => $ongkir,

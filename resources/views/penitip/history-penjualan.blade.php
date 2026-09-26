@@ -1,113 +1,71 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>History Penjualan</title>
-  <link rel="icon" href="{{ asset('images/BOOKHIVE_LOGOONLY.png') }}">
+@extends('layouts.partner')
 
-  <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
-  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+@section('title', 'Riwayat Penjualan — ReuseMart')
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+@section('content')
+    @php $totalPenjualan = $transactions->sum(fn ($detail) => $detail->harga ?? 0); @endphp
+    <section class="container py-4 py-lg-5">
+        <nav class="rm-breadcrumb small mb-3" aria-label="Breadcrumb"><a href="{{ route('penitip.barangTitipan') }}">Barang Titipan</a><span class="mx-1">/</span><span class="rm-text-muted">Riwayat Penjualan</span></nav>
 
-  <style>
-    body { font-family: 'Inter', sans-serif; }
-    .navbar { background-color: #1E5B5A; }
-    .navbar-brand { font-weight: bold; font-size: 20px; }
-    .welcome-message { margin-top: 40px; text-align: center; font-size: 28px; font-weight: 600; color: #1E5B5A; }
-    .table-container { margin-top: 50px; }
-    .btn-custom { background-color: #1E5B5A; color: white; }
-    td, th { text-align: center; vertical-align: middle; }
-  </style>
-</head>
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3 mb-4">
+            <div><h1 class="rm-page-title">Riwayat Penjualan</h1><p class="rm-page-sub">Barang titipan yang sudah berhasil terjual.</p></div>
+            <div class="rm-sales-summary"><small>Total penjualan tercatat</small><strong>Rp {{ number_format($totalPenjualan, 0, ',', '.') }}</strong></div>
+        </div>
 
-<body>
-  <!-- Navbar without the "History Penjualan" button -->
-  <nav class="navbar navbar-expand-lg navbar-dark sticky-top px-4">
-      <a class="navbar-brand text-white" href="#">
-          <img src="{{ asset('image/white.png') }}" alt="R/M Logo" style="max-width: 50px; height: auto;">
-      </a>
-      <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-          <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
-          <div class="d-flex align-items-center gap-3">
-              <a href="{{ route('penitip.profil_penitip') }}" class="btn btn-profile">Profile</a>
-          </div>
-      </div>
-  </nav>
+        @if ($transactions->isEmpty())
+            <div class="rm-empty"><i class="bi bi-graph-down d-block"></i><h2 class="h5 fw-bold">Belum ada penjualan</h2><p class="mb-0">Transaksi yang selesai akan tampil di sini.</p></div>
+        @else
+            <section class="rm-partner-panel">
+                <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-3">
+                    <div><h2 class="h5 fw-bold mb-1">Barang Terjual</h2><p class="small rm-text-muted mb-0">{{ $transactions->count() }} item terjual</p></div>
+                    <div class="input-group rm-sales-search"><span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span><input id="salesSearch" type="search" class="form-control border-start-0" placeholder="Cari barang atau pesanan…" aria-label="Cari penjualan"></div>
+                </div>
 
-  <div class="container">
-    <div class="welcome-message" id="welcomeMessage">Memuat data penitip...</div>
+                <div class="table-responsive">
+                    <table class="table align-middle">
+                        <thead><tr><th>Barang</th><th>Pesanan</th><th>Tanggal</th><th>Nilai penjualan</th><th></th></tr></thead>
+                        <tbody id="salesRows">
+                            @foreach ($transactions as $detail)
+                                @php
+                                    $item = $detail->barang;
+                                    $order = $detail->pemesanan;
+                                    $foto = trim((string) ($item->foto_barang ?? ''));
+                                    $img = ($foto !== '' && file_exists(public_path('image/' . ltrim($foto, '/')))) ? asset('image/' . ltrim($foto, '/')) : asset('image/placeholder.svg');
+                                @endphp
+                                <tr data-search="{{ \Illuminate\Support\Str::lower(($item->nama_barang ?? '') . ' ' . ($order->id_pemesanan ?? '')) }}">
+                                    <td><div class="d-flex align-items-center gap-3"><img class="rm-sales-thumb" src="{{ $img }}" alt="{{ $item->nama_barang ?? 'Barang' }}" onerror="this.onerror=null;this.src='{{ asset('image/placeholder.svg') }}'"><div><strong>{{ $item->nama_barang ?? 'Barang tidak tersedia' }}</strong><div class="small rm-text-muted">{{ $item->kategori ?? '—' }}</div></div></div></td>
+                                    <td>{{ $order->id_pemesanan ?? '—' }}</td>
+                                    <td>{{ $order?->tgl_pesan?->translatedFormat('d M Y') ?? '—' }}</td>
+                                    <td class="fw-bold" style="color:var(--rm-primary)">Rp {{ number_format($detail->harga ?? 0, 0, ',', '.') }}</td>
+                                    <td class="text-end"><a href="{{ $item ? route('penitip.detail_barang', ['id' => $item->id_barang]) : '#' }}" class="btn rm-btn-outline btn-sm" @disabled(!$item)>Detail</a></td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        @endif
+    </section>
+@endsection
 
-    <div class="table-container">
-      <h4 class="text-center">History Penjualan</h4>
-      <div id="transactions-table" class="mt-4 text-center">
-        <p>Memuat data transaksi...</p>
-      </div>
-    </div>
-  </div>
+@push('styles')
+    <style>
+        .rm-sales-summary { display:grid;padding:.75rem 1rem;border:1px solid var(--rm-line);border-radius:var(--rm-radius);background:#fff;box-shadow:var(--rm-shadow-xs); }
+        .rm-sales-summary small { color:var(--rm-muted);font-size:.74rem; }
+        .rm-sales-summary strong { color:var(--rm-primary-dark);font-size:1.18rem; }
+        .rm-sales-search { max-width:300px; }
+        .rm-sales-search .input-group-text { border-radius:var(--rm-radius-pill) 0 0 var(--rm-radius-pill); }
+        .rm-sales-search .form-control { border-radius:0 var(--rm-radius-pill) var(--rm-radius-pill) 0; }
+        .rm-sales-thumb { width:58px;height:58px;object-fit:contain;padding:.2rem;border-radius:.65rem;background:var(--rm-primary-soft-2); }
+        @media(max-width:575.98px){.rm-sales-search{max-width:none}}
+    </style>
+@endpush
 
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script>
-    AOS.init();
-
-    const userId = localStorage.getItem('id_user');
-
-    if (!userId) {
-      document.getElementById('transactions-table').innerHTML = '<p>Pengguna tidak teridentifikasi.</p>';
-    } else {
-      $.ajax({
-        url: `/penitip/${userId}/history-penjualan`,
-        method: 'GET',
-        success: function(response) {
-          console.log(response);
-          if (response.success) {
-            const penitip = response.penitip;
-            const transactions = response.transactions;
-
-            document.getElementById('welcomeMessage').innerHTML = `Riwayat Penjualan<br><strong>${penitip.nama_penitip}</strong>`;
-
-            if (transactions.length > 0) {
-              let tableHtml = `
-                <table class="table table-bordered mt-3">
-                  <thead class="table-secondary">
-                    <tr>
-                      <th>Nama Barang</th>
-                      <th>Harga</th>
-                      <th>ID Pemesanan</th>
-                      <th>Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-              `;
-
-              transactions.forEach(item => {
-                tableHtml += `
-                  <tr>
-                    <td>${item.barang?.nama_barang || '-'}</td>
-                    <td>Rp ${Number(item.barang?.harga_barang || 0).toLocaleString('id-ID')}</td>
-                    <td>${item.id_pemesanan || '-'}</td>
-                    <td>${item.barang?.status || '-'}</td>
-                  </tr>`;
-              });
-              tableHtml += `</tbody></table>`;
-              document.getElementById('transactions-table').innerHTML = tableHtml;
-            } else {
-              document.getElementById('transactions-table').innerHTML = '<p>Tidak ada transaksi ditemukan untuk penitip ini.</p>';
-            }
-          } else {
-            document.getElementById('transactions-table').innerHTML = '<p>Gagal memuat data penitip.</p>';
-          }
-        },
-        error: function() {
-          document.getElementById('transactions-table').innerHTML = '<p>Gagal memuat data penitip dan transaksi.</p>';
-        }
-      });
-    }
-  </script>
-</body>
-</html>
+@push('scripts')
+    <script>
+        document.getElementById('salesSearch')?.addEventListener('input', function () {
+            const query = this.value.trim().toLocaleLowerCase('id-ID');
+            document.querySelectorAll('#salesRows tr[data-search]').forEach(row => row.hidden = !row.dataset.search.includes(query));
+        });
+    </script>
+@endpush

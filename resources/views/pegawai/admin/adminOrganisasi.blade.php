@@ -255,8 +255,9 @@
       cursor: not-allowed;
     }
   </style>
+    <link rel="stylesheet" href="{{ asset('css/reusemart.css') }}">
 </head>
-<body>
+<body class="rm-body rm-legacy-workspace">
   <div class="sidebar">
     <div>
       <div class="logo-wrapper">

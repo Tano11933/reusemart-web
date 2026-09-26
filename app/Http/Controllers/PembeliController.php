@@ -218,80 +218,39 @@ class PembeliController extends Controller
 
     public function batalTransaksiValid(Request $request, $id = null)
     {
+        $idPembeli = session('id_pembeli') ?? (session('role') === 'pembeli' ? session('user_id') : null);
+        if (!$idPembeli) {
+            return redirect()->route('login')->with('error', 'Silakan masuk untuk melihat transaksi.');
+        }
+
         if ($request->isMethod('post') && $id) {
-            $status = $request->input('status'); // 'disiapkan' atau 'batal'
+            $pemesanan = Pemesanan::with('detailPemesanans.barang')
+                ->where('id_pembeli', $idPembeli)
+                ->where('id_pemesanan', $id)
+                ->firstOrFail();
 
-            if (!in_array($status, ['dibatalkan pembeli'])) {
-                return redirect()->back()->with('error', 'Status validasi tidak valid.');
+            if ($pemesanan->status !== 'disiapkan' || $pemesanan->status_pembayaran !== 'valid') {
+                return redirect()->back()->with('error', 'Pesanan ini tidak dapat dibatalkan dari halaman ini.');
             }
 
-            $pemesanan = Pemesanan::with('pembeli', 'detailPemesanans.barang')->findOrFail($id);
-            $user = $pemesanan->pembeli;
-
-            if ($status === 'dibatalkan pembeli') {
-                $pemesanan->status = 'dibatalkan pembeli';
-                $pemesanan->status_pembayaran = 'valid';
-
-                // Tambahkan poin ke user hanya saat pembayaran valid
-                $totalPoin = $pemesanan->poin_pesanan ?? 0;
-                foreach ($pemesanan->detailPemesanans as $detail) {
-                    $barang = $detail->barang;
-                    if ($barang) {
-                        $barang->status = 'tersedia';
-                        $barang->save();
-                    }
+            $pemesanan->status = 'dibatalkan pembeli';
+            foreach ($pemesanan->detailPemesanans as $detail) {
+                if ($detail->barang) {
+                    $detail->barang->status = 'tersedia';
+                    $detail->barang->save();
                 }
-                $konversiPoin = $pemesanan->total_harga/10000;
-                
-                // if ($totalPoin > 0) {
-                //     $user->poin += $totalPoin;
-                //     $user->save();
-                // }
-
-                // if ($pemesanan->jenis_pengantaran === 'kurir') {
-                //     $tglPembayaran = $pemesanan->tgl_pembayaran;
-
-                //     if ($tglPembayaran) {
-                //         $jamPembayaran = Carbon::parse($tglPembayaran)->format('H:i:s');
-                //         $batasJam = '16:00:00';
-
-                //         if ($jamPembayaran < $batasJam) {
-                //             // Pengiriman hari yang sama dengan tgl_pesan
-                //             $pemesanan->tgl_kirim = $pemesanan->tgl_pesan;
-                //             $pemesanan->tgl_ambil = null;
-                //         } else {
-                //             // Pengiriman hari berikutnya dari tgl_pembayaran, jam mulai 00:00
-                //             $pemesanan->tgl_kirim = Carbon::parse($tglPembayaran)->addDay()->startOfDay();
-                //             $pemesanan->tgl_ambil = null;
-                //         }
-                //     }
-                // } elseif ($pemesanan->jenis_pengantaran === 'diambil') {
-                //     $pemesanan->tgl_kirim = null;
-                //     $pemesanan->tgl_ambil = null;
-                // }
             }
-
-                // Kembalikan status barang ke 'tersedia'
-                // foreach ($pemesanan->detailPemesanans as $detail) {
-                //     $barang = $detail->barang;
-                //     if ($barang) {
-                //         $barang->status = 'tersedia';
-                //         $barang->save();
-                //     }
-                // }
-
-                // Jangan tambahkan poin saat batal!
 
             $pemesanan->save();
 
-            // TODO: Kirim notifikasi ke pembeli, penitip, dan kurir jika perlu
-
-            return redirect()->back()->with('success', "Status pemesanan {$pemesanan->id_pemesanan} berhasil diubah menjadi {$status}.");
+            return redirect()->back()->with('success', "Pesanan {$pemesanan->id_pemesanan} berhasil dibatalkan.");
         }
 
-        // Jika request GET dan tidak ada id, tamilkan list pemesanan yang perlu verifikasi
         $pemesananList = Pemesanan::with('pembeli')
+                            ->where('id_pembeli', $idPembeli)
                             ->where('status', 'disiapkan')
+                            ->where('status_pembayaran', 'valid')
+                            ->orderByDesc('tgl_pesan')
                             ->get();
 
         return view('pembeli.batalTransaksiValid', ['pemesanan' => $pemesananList]);

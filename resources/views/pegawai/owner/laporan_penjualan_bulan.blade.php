@@ -57,8 +57,9 @@
       .logo-wrapper, .logout-wrapper { display: none; }
     }
   </style>
+    <link rel="stylesheet" href="{{ asset('css/reusemart.css') }}">
 </head>
-<body>
+<body class="rm-body rm-legacy-workspace">
   <div class="sidebar">
     <div>
       <div class="logo-wrapper" style="display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 40px;">

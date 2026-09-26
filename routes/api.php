@@ -20,8 +20,6 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::get('/penitip/{id}/barang', [PenitipController::class, 'apiBarang']);
 
-// Pastikan import controllernya sesuai!
-Route::get('/penitips/{id}/barang-for-notif', [PenitipController::class, 'apiBarangForNotif']);
 Route::get('/pembeli/{id}', [PembeliController::class, 'apiProfile']);
 Route::get('/penitip/{id}', [PenitipController::class, 'apiProfile']);
 Route::get('/pegawai/{id}', [PegawaiController::class, 'apiProfile']);

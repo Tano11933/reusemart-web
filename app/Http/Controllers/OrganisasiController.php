@@ -9,6 +9,23 @@ use App\Models\Organisasi;
 
 class OrganisasiController extends Controller
 {
+    public function dashboard()
+    {
+        $idOrganisasi = session('id_organisasi') ?? (session('role') === 'organisasi' ? session('user_id') : null);
+
+        if (!$idOrganisasi || session('role') !== 'organisasi') {
+            return redirect()->route('login')->with('error', 'Silakan masuk sebagai organisasi.');
+        }
+
+        $organisasi = Organisasi::where('id_organisasi', $idOrganisasi)->firstOrFail();
+        $requests = DB::table('request_donasi')
+            ->where('id_organisasi', $idOrganisasi)
+            ->orderByDesc('tgl_request_donasi')
+            ->get();
+
+        return view('organisasi.index_organisasi', compact('organisasi', 'requests'));
+    }
+
     public function store(Request $request)
     {
         \Log::info("Masuk controller organisasi", $request->all());

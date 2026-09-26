@@ -1,310 +1,110 @@
-<!DOCTYPE html>
-<html lang="id">
+@extends('layouts.workspace')
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Verifikasi Pembayaran - Customer Service</title>
-    <link rel="icon" href="{{ asset('images/BOOKHIVE_LOGOONLY.png') }}">
-    <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" />
+@section('title', 'Verifikasi Pembayaran — ReuseMart')
+@section('page-title', 'Verifikasi Pembayaran')
 
-    <style>
-        /* Sidebar Styles */
-        * {
-            box-sizing: border-box;
-            font-family: 'Segoe UI', sans-serif;
-        }
-
-        html,
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #f8f8f8;
-        }
-
-        .sidebar {
-            width: 220px;
-            height: 100vh;
-            position: fixed;
-            background: linear-gradient(to bottom, #365a64, #f0e6dd);
-            padding: 35px 0;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo-wrapper {
-            margin-bottom: 40px;
-            text-align: center;
-        }
-
-        .logo-wrapper img {
-            max-width: 60px;
-            height: auto;
-            pointer-events: none;
-            user-select: none;
-        }
-
-        .menu {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .menu a {
-            width: 80%;
-            text-align: center;
-            padding: 10px;
-            font-weight: bold;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            transition: all 0.2s ease-in-out;
-        }
-
-        .menu a:hover,
-        .menu a.active {
-            background-color: white;
-            color: #2c3e65;
-        }
-
-        .logout-wrapper {
-            text-align: center;
-            margin-bottom: 10px;
-        }
-
-        .logout-btn {
-            padding: 12px 24px;
-            background-color: #365a64;
-            border: none;
-            color: white;
-            font-size: 14px;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .logout-btn:hover {
-            background-color: #2c2c2c;
-        }
-
-        /* Main Content */
-        .main {
-            margin-left: 220px;
-            padding: 30px;
-            min-height: 100vh;
-        }
-
-        h3 {
-            margin-top: 0;
-            margin-bottom: 20px;
-            font-weight: 700;
-            color: #1f2937;
-        }
-
-        /* Table Styles */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 10px rgb(0 0 0 / 0.1);
-        }
-
-        thead {
-            background: linear-gradient(to right, #365a64, #f0e6dd);
-            color: white;
-            font-weight: 600;
-        }
-
-        th,
-        td {
-            padding: 12px 15px;
-            text-align: center;
-            border-bottom: 1px solid #ddd;
-        }
-
-        tbody tr:hover {
-            background-color: #f1f9f8;
-        }
-
-        img.bukti-img {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-        }
-
-        form {
-            display: inline-block;
-            margin: 0 5px;
-        }
-
-        button.btn-validate,
-        button.btn-invalidate {
-            padding: 8px 15px;
-            border-radius: 8px;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            color: white;
-        }
-
-        button.btn-validate {
-            background-color: #1E5B5A;
-        }
-
-        button.btn-validate:hover {
-            background-color: #3B9085;
-        }
-
-        button.btn-invalidate {
-            background-color: #e74c3c;
-        }
-
-        button.btn-invalidate:hover {
-            background-color: #c0392b;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .sidebar {
-                position: relative;
-                width: 100%;
-                height: auto;
-                padding: 10px 0;
-            }
-
-            .main {
-                margin-left: 0;
-                padding: 15px;
-            }
-        }
-    </style>
-</head>
-
-<body>
-    <div class="sidebar">
+@section('content')
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3 mb-4">
         <div>
-            <div class="logo-wrapper">
-                <img src="{{ asset('image/white.png') }}" alt="Logo" />
-            </div>
-            <div class="menu">
-                <a href="{{ url('/pegawai/cs') }}" class="{{ request()->is('pegawai/cs*') ? 'active' : '' }}">Data Penitip</a>
-                <a href="{{ url('/diskusi-produk-cs') }}" class="{{ request()->is('diskusi-produk-cs*') ? 'active' : '' }}">Diskusi Produk CS</a>
-                <a href="{{ url('/verifikasi-pembayaran-cs') }}" class="{{ request()->is('verifikasi-pembayaran-cs*') ? 'active' : '' }}">Verifikasi Bukti Pembayaran</a>
-                <a href="{{ url('/tukar-poin-cs') }}" class="{{ request()->is('tukar-poin-cs*') ? 'active' : '' }}">Klaim Merchandise</a>
-            </div>
+            <h1 class="rm-page-title">Verifikasi Pembayaran</h1>
+            <p class="rm-page-sub">Periksa bukti transfer sebelum pesanan disiapkan.</p>
         </div>
-        <div class="logout-wrapper">
-            <button id="logoutBtn" class="logout-btn">Log out</button>
-        </div>
+        <span class="rm-chip"><i class="bi bi-hourglass-split"></i>{{ $pemesanan->count() }} menunggu pemeriksaan</span>
     </div>
 
-    <div class="main">
-        <h3>Verifikasi Bukti Pembayaran</h3>
+    <section class="rm-workspace-card">
+        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-3">
+            <div>
+                <h2 class="h5 fw-bold mb-1">Pesanan Menunggu Verifikasi</h2>
+                <p class="small rm-text-muted mb-0">Gunakan pratinjau untuk memeriksa bukti pembayaran.</p>
+            </div>
+            <div class="input-group rm-verification-search">
+                <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
+                <input type="search" id="verificationSearch" class="form-control border-start-0" placeholder="Cari nomor pesanan atau pembeli…" aria-label="Cari pesanan">
+            </div>
+        </div>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>ID Pemesanan</th>
-                    <th>ID Pembeli</th>
-                    <th>Nama Pembeli</th>
-                    <th>Tanggal Pesan</th>
-                    <th>Total Harga</th>
-                    <th>Status</th>
-                    <th>Bukti Transfer</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse ($pemesanan as $item)
-                    <tr>
-                        <td>{{ $item->id_pemesanan }}</td>
-                        <td>{{ $item->id_pembeli }}</td>
-                        <td>{{ $item->pembeli->nama_pembeli ?? '-' }}</td>
-                        <td>{{ $item->tgl_pesan->format('d-m-Y H:i') }}</td>
-                        <td>Rp {{ number_format($item->total_harga, 0, ',', '.') }}</td>
-                        <td>{{ ucfirst($item->status) }}</td>
-                        <td>
-                            @if ($item->bukti_transfer)
-                                <img src="{{ asset('storage/' . $item->bukti_transfer) }}" alt="Bukti Transfer" class="bukti-img" />
-                            @else
-                                -
-                            @endif
-                        </td>
-                        <td>
-                            <form action="{{ route('verifikasi-pembayaran.validasi', ['id' => $item->id_pemesanan]) }}" method="POST">
-                                @csrf
-                                <input type="hidden" name="status" value="disiapkan">
-                                <button type="submit" class="btn-validate">Valid</button>
-                            </form>
-                            <form action="{{ route('verifikasi-pembayaran.validasi', ['id' => $item->id_pemesanan]) }}" method="POST">
-                                @csrf
-                                <input type="hidden" name="status" value="batal">
-                                <button type="submit" class="btn-invalidate">Tidak Valid</button>
-                            </form>
+        @if ($pemesanan->isEmpty())
+            <div class="rm-empty py-5">
+                <i class="bi bi-check2-circle d-block"></i>
+                <h2 class="h5 fw-bold">Semua pembayaran sudah diperiksa</h2>
+                <p class="mb-0">Pesanan baru akan muncul di sini setelah pembeli mengirimkan bukti pembayaran.</p>
+            </div>
+        @else
+            <div class="table-responsive">
+                <table class="table align-middle">
+                    <thead>
+                        <tr>
+                            <th>Pesanan</th>
+                            <th>Pembeli</th>
+                            <th>Tanggal</th>
+                            <th>Total</th>
+                            <th>Bukti Transfer</th>
+                            <th class="text-end">Keputusan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($pemesanan as $item)
+                            <tr>
+                                <td><strong>{{ $item->id_pemesanan }}</strong></td>
+                                <td>
+                                    <strong>{{ $item->pembeli->nama_pembeli ?? 'Pembeli' }}</strong>
+                                    <div class="small rm-text-muted">{{ $item->id_pembeli }}</div>
+                                </td>
+                                <td>{{ $item->tgl_pesan?->translatedFormat('d M Y') ?? '—' }}</td>
+                                <td class="fw-semibold">Rp {{ number_format($item->total_harga ?? 0, 0, ',', '.') }}</td>
+                                <td>
+                                    @if ($item->bukti_transfer)
+                                        <a href="{{ asset('storage/' . $item->bukti_transfer) }}" target="_blank" rel="noopener" class="btn rm-btn-outline btn-sm">
+                                            <i class="bi bi-image me-1"></i>Lihat Bukti
+                                        </a>
+                                    @else
+                                        <span class="small rm-text-muted">Belum diunggah</span>
+                                    @endif
+                                </td>
+                                <td class="text-end">
+                                    <div class="d-inline-flex flex-wrap justify-content-end gap-2">
+                                        <form action="{{ route('verifikasi-pembayaran.validasi', ['id' => $item->id_pemesanan]) }}" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="status" value="disiapkan">
+                                            <button type="submit" class="btn rm-btn-primary btn-sm" @disabled(!$item->bukti_transfer)>
+                                                <i class="bi bi-check2 me-1"></i>Valid
+                                            </button>
+                                        </form>
+                                        <form action="{{ route('verifikasi-pembayaran.validasi', ['id' => $item->id_pemesanan]) }}" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="status" value="batal">
+                                            <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill" @disabled(!$item->bukti_transfer)>
+                                                <i class="bi bi-x-lg me-1"></i>Tolak
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @endif
+    </section>
+@endsection
 
+@push('styles')
+    <style>
+        .rm-verification-search { max-width: 360px; }
+        .rm-verification-search .input-group-text { border-radius: var(--rm-radius-pill) 0 0 var(--rm-radius-pill); }
+        .rm-verification-search .form-control { border-radius: 0 var(--rm-radius-pill) var(--rm-radius-pill) 0; }
+        @media (max-width: 575.98px) { .rm-verification-search { max-width: none; } }
+    </style>
+@endpush
 
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="8">Tidak ada data pemesanan yang perlu diverifikasi.</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+@push('scripts')
     <script>
-        document.getElementById('logoutBtn')?.addEventListener('click', function () {
-      Swal.fire({
-        title: 'Yakin ingin logout?',
-        text: 'Kamu akan keluar dari sistem.',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Ya, logout',
-        cancelButtonText: 'Batal'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          fetch("{{ route('logout') }}", {
-            method: 'POST',
-            headers: {
-              'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            }
-          }).then(() => {
-            Swal.fire({
-              icon: 'success',
-              title: 'Logout berhasil',
-              text: 'Kamu telah keluar dari sistem.',
-              timer: 1500,
-              showConfirmButton: false
-            }).then(() => {
-              window.location.href = '/login';
+        document.getElementById('verificationSearch')?.addEventListener('input', function () {
+            const value = this.value.trim().toLocaleLowerCase('id-ID');
+            document.querySelectorAll('.rm-workspace-content tbody tr').forEach(row => {
+                row.hidden = !row.textContent.toLocaleLowerCase('id-ID').includes(value);
             });
-          });
-        }
-      });
-    });
+        });
     </script>
-</body>
-
-</html>
+@endpush

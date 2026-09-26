@@ -181,23 +181,33 @@ class PenitipController extends Controller
 
     }
 
-    public function penitipTitipan()
+    public function penitipTitipan(Request $request)
     {
-        $id_penitip = session('id_penitip');
+        $id_penitip = session('id_penitip') ?? (session('role') === 'penitip' ? session('user_id') : null);
         if (!$id_penitip) {
-            return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu.');
+            return redirect()->route('login')->with('error', 'Silakan masuk untuk melihat barang titipan.');
         }
 
-        $penitip = Penitip::find($id_penitip); // ✅ ambil data penitip
-        $barang = DB::table('barang')->where('id_penitip', $id_penitip)->get();
+        $penitip = Penitip::findOrFail($id_penitip);
+        $barang = Barang::with('penitip')->where('id_penitip', $id_penitip);
 
-        return view('penitip.penitipTitipan', compact('barang', 'penitip')); // ✅ kirim ke Blade
+        if ($request->filled('query')) {
+            $query = trim($request->input('query'));
+            $barang->where(function ($builder) use ($query) {
+                $builder->where('nama_barang', 'like', "%{$query}%")
+                    ->orWhere('kategori', 'like', "%{$query}%");
+            });
+        }
+
+        $barang = $barang->orderByDesc('tgl_titip')->get();
+
+        return view('penitip.penitipTitipan', compact('barang', 'penitip'));
     }
 
 
     public function detailBarangPenitip($id)
     {
-        $id_penitip = session('id_penitip');
+        $id_penitip = session('id_penitip') ?? (session('role') === 'penitip' ? session('user_id') : null);
 
         if (!$id_penitip) {
             return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu.');
@@ -247,7 +257,7 @@ class PenitipController extends Controller
 
     public function profil()
     {
-        $id_penitip = session('id_penitip');
+        $id_penitip = session('id_penitip') ?? (session('role') === 'penitip' ? session('user_id') : null);
         
         if (!$id_penitip) {
             return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu.');
@@ -260,6 +270,28 @@ class PenitipController extends Controller
         }
 
         return view('penitip.profil_penitip', compact('penitip'));
+    }
+
+    public function historyPenjualanPage()
+    {
+        $idPenitip = session('id_penitip') ?? (session('role') === 'penitip' ? session('user_id') : null);
+        if (!$idPenitip) {
+            return redirect()->route('login')->with('error', 'Silakan masuk untuk melihat riwayat penjualan.');
+        }
+
+        $penitip = Penitip::findOrFail($idPenitip);
+        $transactions = DetailPemesanan::with(['barang', 'pemesanan'])
+            ->whereHas('barang', function ($query) use ($idPenitip) {
+                $query->where('id_penitip', $idPenitip);
+            })
+            ->whereHas('pemesanan', function ($query) {
+                $query->where('status', 'transaksi selesai');
+            })
+            ->get()
+            ->sortByDesc(fn ($detail) => $detail->pemesanan?->tgl_pesan)
+            ->values();
+
+        return view('penitip.history-penjualan', compact('penitip', 'transactions'));
     }
 
     public function apiBarang($id)

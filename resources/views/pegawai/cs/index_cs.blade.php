@@ -261,9 +261,10 @@
             background-color: #2c3e65;
         }
     </style>
+    <link rel="stylesheet" href="{{ asset('css/reusemart.css') }}">
 </head>
 
-<body>
+<body class="rm-body rm-legacy-workspace">
     <div class="sidebar">
         <div>
             <div class="logo-wrapper">
@@ -439,6 +440,8 @@
     </div>
 
     <script>
+        const apiBase = @json(url('/api'));
+
         function filterTable() {
             const input = document.getElementById("searchInput").value.toLowerCase();
             const rows = document.querySelectorAll("tbody tr");
@@ -479,7 +482,7 @@
                 tgl_lahir: document.getElementById('edit_tgl_lahir').value
             };
 
-            fetch(`http://127.0.0.1:8000/api/penitip/${id}`, {
+            fetch(`${apiBase}/penitip/${encodeURIComponent(id)}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -527,7 +530,7 @@
                 cancelButtonText: 'Batal'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    fetch(`http://127.0.0.1:8000/api/penitip/${id}`, {
+                    fetch(`${apiBase}/penitip/${encodeURIComponent(id)}`, {
                         method: 'DELETE',
                     })
                     .then(res => res.json())
@@ -574,7 +577,7 @@
                 confirmButtonText: 'Ya, hapus!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    fetch(`http://127.0.0.1:8000/api/penitip/${id}`, {
+                    fetch(`${apiBase}/penitip/${encodeURIComponent(id)}`, {
                         method: 'DELETE',
                     })
                     .then(res => res.json())
@@ -618,7 +621,7 @@
             const nikPenitip = document.getElementById('add_nik').value;
 
             // Check if the NIK already exists in the database
-            fetch(`http://127.0.0.1:8000/api/penitip/check-nik/${nikPenitip}`, {
+            fetch(`${apiBase}/penitip/check-nik/${encodeURIComponent(nikPenitip)}`, {
                 method: 'GET',
             })
             .then(res => res.json())
@@ -643,7 +646,7 @@
                     formData.append('tgl_lahir', document.getElementById('add_tgl_lahir').value);
                     formData.append('foto_ktp', document.getElementById('add_foto_ktp').files[0]);
 
-                    fetch('http://127.0.0.1:8000/api/penitip', {
+                    fetch(`${apiBase}/penitip`, {
                         method: 'POST',
                         body: formData
                     })

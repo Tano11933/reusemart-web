@@ -370,14 +370,14 @@
                     editButton.dataset.action = 'edit';
                     editButton.dataset.id = address.id_alamat;
                     editButton.setAttribute('aria-label', 'Edit alamat ' + address.label_alamat);
-                    editButton.innerHTML = '<i class="bi bi-pencil"></i><span class="d-none d-sm-inline ms-1">Edit</span>';
+                    editButton.innerHTML = '<i class="bi bi-pencil"></i><span class="ms-1">Edit</span>';
                     const deleteButton = document.createElement('button');
                     deleteButton.type = 'button';
                     deleteButton.className = 'btn btn-outline-danger btn-sm rounded-pill';
                     deleteButton.dataset.action = 'delete';
                     deleteButton.dataset.id = address.id_alamat;
                     deleteButton.setAttribute('aria-label', 'Hapus alamat ' + address.label_alamat);
-                    deleteButton.innerHTML = '<i class="bi bi-trash"></i><span class="d-none d-sm-inline ms-1">Hapus</span>';
+                    deleteButton.innerHTML = '<i class="bi bi-trash"></i><span class="ms-1">Hapus</span>';
                     actions.append(editButton, deleteButton);
                     top.append(heading, actions);
 

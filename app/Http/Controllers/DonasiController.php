@@ -10,6 +10,13 @@ use Illuminate\Support\Str;
 
 class DonasiController extends Controller
 {
+    private function ensureOwnerAccess(): void
+    {
+        $pegawai = DB::table('pegawai')->where('id_pegawai', session('id_pegawai'))->first();
+
+        abort_unless($pegawai && $pegawai->id_jabatan === 'J6', 403, 'Akses hanya untuk owner.');
+    }
+
     public function index()
     {
         $organisasi = DB::table('organisasi')->get();  
@@ -18,6 +25,8 @@ class DonasiController extends Controller
 
     public function donasi(Request $request, $id)
     {
+        $this->ensureOwnerAccess();
+
         $request->validate([
             'id_barang' => 'required|exists:barang,id_barang',
             'nama_penerima' => 'required|string|max:255',
@@ -67,6 +76,8 @@ class DonasiController extends Controller
 
     public function ownerHistoryDonasi()
     {
+        $this->ensureOwnerAccess();
+
         $organisasiIds = DB::table('donasi')
             ->distinct()
             ->pluck('id_organisasi');

@@ -1,225 +1,76 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>ReuseMart - Profile Penitip</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-        .navbar {
-            background-color: #1E5B5A;
-        }
-        .navbar-brand {
-            font-weight: bold;
-            font-size: 20px;
-        }
-        .btn-beli {
-            background-color: #1E5B5A;
-            color: white;
-            font-weight: 600;
-            border-radius: 30px;
-            padding: 10px 20px;
-            transition: background-color 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-        }
-        .btn-beli:hover {
-            background-color: #7697A0;
-            color: black;
-            text-decoration: none;
-        }
-        .container {
-            margin-top: 70px;
-            max-width: 600px;
-        }
-        .card {
-            background-color: #fff;
-            border: none;
-            border-radius: 15px;
-            box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
-            padding: 30px;
-        }
-        .profile-section {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .profile-icon {
-            width: 80px;
-            height: 80px;
-            background-color: #1E5B5A;
-            color: white;
-            font-size: 40px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 50%;
-        }
-        .profile-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #333;
-            margin-left: 20px;
-        }
-        .form-label {
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: #555;
-        }
-        .form-control {
-            border-radius: 10px;
-            font-size: 0.9rem;
-            background-color: #f3f3f3;
-            border: 1px solid #ddd;
-            padding: 10px;
-        }
-        .form-control[readonly] {
-            background-color: #f9f9f9;
-            color: #999;
-        }
-        .form-control:focus {
-            box-shadow: 0 0 10px rgba(30, 91, 90, 0.5);
-            border-color: #1E5B5A;
-        }
-        .info-row {
-            display: flex;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-        .info-label {
-            min-width: 130px;
-            font-weight: 600;
-            color: #555;
-        }
-        .info-value {
-            font-weight: 700;
-            color: #1E5B5A;
-        }
-    </style>
-</head>
-<body>
+@extends('layouts.partner')
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark sticky-top px-4">
-    <a class="navbar-brand text-white" href="#">
-        <img src="{{ asset('image/white.png') }}" alt="R/M Logo" style="max-width: 50px; height: auto;">
-    </a>
-    <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link text-white {{ request()->routeIs('penitip.barangTitipan') ? 'active' : '' }}" href="{{ route('penitip.barangTitipan') }}">
-                    Barang Titipan Saya
-                </a>
-            </li>
-        </ul>
-    </div>
-</nav>
+@section('title', 'Profil Penitip — ReuseMart')
 
-    <!-- Profile Container -->
-    <div class="container d-flex justify-content-center my-5">
-        <div class="card shadow p-4">
-            <div class="profile-section">
-                <div class="profile-icon">
-                    <i class="fas fa-user"></i>
-                </div>
-                <div class="profile-title">
-                    Profil Penitip
-                </div>
+@section('content')
+    <section class="container py-4 py-lg-5">
+        <nav class="rm-breadcrumb small mb-3" aria-label="Breadcrumb">
+            <a href="{{ route('penitip.barangTitipan') }}">Barang Titipan</a>
+            <span class="mx-1">/</span><span class="rm-text-muted">Profil</span>
+        </nav>
+
+        <div class="mb-4"><h1 class="rm-page-title">Profil Penitip</h1><p class="rm-page-sub">Informasi akun dan ringkasan saldo penitipan.</p></div>
+
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <section class="rm-consignor-profile-card">
+                    <span class="rm-profile-avatar"><i class="bi bi-person-fill"></i></span>
+                    <h2 class="h4 fw-bold mt-3 mb-1">{{ $penitip->nama_penitip }}</h2>
+                    <p class="rm-text-muted mb-3">{{ $penitip->email }}</p>
+                    <div class="rm-consignor-rating">
+                        <i class="bi bi-star-fill"></i>
+                        <strong>{{ is_null($penitip->rating) ? '—' : number_format($penitip->rating, 1) }}</strong>
+                        <span>/ 5 rating</span>
+                    </div>
+                    <a href="{{ route('penitip.barangTitipan') }}" class="btn rm-btn-primary w-100 mt-3"><i class="bi bi-box-seam me-1"></i>Lihat Barang Titipan</a>
+                </section>
             </div>
-            
-            <form>
-                <div class="mb-3">
-                    <label for="nama_penitip" class="form-label">Nama Lengkap</label>
-                    <input type="text" class="form-control" id="nama_penitip" value="{{ $penitip->nama_penitip }}" readonly>
-                </div>
-                <div class="mb-3">
-                    <label for="id_penitip" class="form-label">ID Penitip</label>
-                    <input type="text" class="form-control" id="id_penitip" value="{{ $penitip->id_penitip }}" readonly>
-                </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" value="{{ $penitip->email }}" readonly>
-                </div>
-                <div class="mb-3">
-                    <label for="nomor_telepon" class="form-label">Nomor Telepon</label>
-                    <input type="text" class="form-control" id="nomor_telepon" value="{{ $penitip->nomor_telepon }}" readonly>
-                </div>
-                <div class="mb-3">
-                    <label for="nik_penitip" class="form-label">NIK</label>
-                    <input type="text" class="form-control" id="nik_penitip" value="{{ $penitip->nik_penitip }}" readonly>
-                </div>
-                <div class="mb-3">
-                    <label for="jenis_kelamin" class="form-label">Jenis Kelamin</label>
-                    <input type="text" class="form-control" id="jenis_kelamin" value="{{ $penitip->jenis_kelamin }}" readonly>
-                </div>
-                <div class="mb-3">
-                    <label for="tgl_lahir" class="form-label">Tanggal Lahir</label>
-                    <input type="text" class="form-control" id="tgl_lahir" value="{{ \Carbon\Carbon::parse($penitip->tgl_lahir)->format('d F Y') }}" readonly>
-                </div>
 
-                <div class="info-row">
-                    <div class="info-label">Saldo:</div>
-                    <div class="info-value">Rp {{ number_format($penitip->saldo ?? 0, 0, ',', '.') }}</div>
-                </div>
-                <div class="info-row">
-                    <div class="info-label">Poin:</div>
-                    <div class="info-value">{{ $penitip->poin ?? 0 }} pts</div>
-                </div>
+            <div class="col-lg-8">
+                <section class="rm-partner-panel">
+                    <div class="d-flex justify-content-between align-items-start gap-3 mb-4">
+                        <div><h2 class="h5 fw-bold mb-1">Informasi Akun</h2><p class="small rm-text-muted mb-0">Data yang tersimpan pada profil penitip.</p></div>
+                        <span class="badge rounded-pill text-bg-success"><i class="bi bi-patch-check-fill me-1"></i>Penitip</span>
+                    </div>
 
-                <div class="text-center mt-4">
-                    <a href="{{ route('penitip.barangTitipan') }}" class="btn btn-beli">Kembali ke Beranda</a>
+                    <dl class="rm-partner-details">
+                        <div><dt>ID Penitip</dt><dd>{{ $penitip->id_penitip }}</dd></div>
+                        <div><dt>Nama lengkap</dt><dd>{{ $penitip->nama_penitip }}</dd></div>
+                        <div><dt>Email</dt><dd>{{ $penitip->email }}</dd></div>
+                        <div><dt>Nomor telepon</dt><dd>{{ $penitip->nomor_telepon ?: 'Belum diisi' }}</dd></div>
+                        <div><dt>NIK</dt><dd>{{ $penitip->nik_penitip ?: 'Belum diisi' }}</dd></div>
+                        <div><dt>Jenis kelamin</dt><dd>{{ $penitip->jenis_kelamin ?: 'Belum diisi' }}</dd></div>
+                        <div><dt>Tanggal lahir</dt><dd>{{ $penitip->tgl_lahir ? \Carbon\Carbon::parse($penitip->tgl_lahir)->translatedFormat('d F Y') : 'Belum diisi' }}</dd></div>
+                    </dl>
+                </section>
+
+                <div class="row g-3 mt-1">
+                    <div class="col-sm-6"><section class="rm-balance-card"><span><i class="bi bi-wallet2"></i></span><div><small>Saldo penitipan</small><strong>Rp {{ number_format($penitip->saldo ?? 0, 0, ',', '.') }}</strong></div></section></div>
+                    <div class="col-sm-6"><section class="rm-balance-card points"><span><i class="bi bi-stars"></i></span><div><small>Poin</small><strong>{{ number_format($penitip->poin ?? 0, 0, ',', '.') }} poin</strong></div></section></div>
                 </div>
-            </form>
-            <div class="text-center mt-3">
-                <form id="logoutForm" method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="button" onclick="confirmLogout()" class="btn btn-outline-danger rounded-pill px-4">
-                        <i class="bi bi-box-arrow-right me-1"></i> Logout
-                    </button>
-                </form>
             </div>
         </div>
-    </div>
+    </section>
+@endsection
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        function confirmLogout() {
-        Swal.fire({
-            title: 'Yakin ingin logout?',
-            text: 'Anda akan keluar dari akun.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Logout',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                document.getElementById('logoutForm').submit();
-            }
-        });
-    }
-
-    @if(session('logout_success'))
-    Swal.fire({
-        icon: 'success',
-        title: 'Berhasil Logout',
-        text: '{{ session("logout_success") }}',
-        timer: 2000,
-        showConfirmButton: false
-    });
-    @endif
-</script>
-</body>
-</html>
+@push('styles')
+    <style>
+        .rm-consignor-profile-card,.rm-partner-panel { border:1px solid var(--rm-line);border-radius:var(--rm-radius-lg);background:#fff;box-shadow:var(--rm-shadow-xs);padding:1.5rem; }
+        .rm-consignor-profile-card { text-align:center;padding:2rem 1.5rem; }
+        .rm-profile-avatar { width:84px;height:84px;display:inline-flex;align-items:center;justify-content:center;border:4px solid #fff;border-radius:50%;background:var(--rm-primary-soft);color:var(--rm-primary);box-shadow:0 0 0 1px var(--rm-line),var(--rm-shadow-sm);font-size:2.4rem; }
+        .rm-consignor-rating { display:inline-flex;align-items:center;gap:.35rem;padding:.4rem .8rem;border:1px solid #f2dfb4;border-radius:var(--rm-radius-pill);background:var(--rm-warning-soft);color:#835f14;font-size:.85rem; }
+        .rm-consignor-rating i { color:var(--rm-gold); }
+        .rm-consignor-rating span { color:var(--rm-muted);font-size:.75rem; }
+        .rm-partner-details { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin:0;border-top:1px solid var(--rm-line); }
+        .rm-partner-details>div { padding:.85rem .65rem;border-bottom:1px solid var(--rm-line); }
+        .rm-partner-details dt { color:var(--rm-muted);font-size:.76rem;margin-bottom:.2rem; }
+        .rm-partner-details dd { color:var(--rm-ink);font-weight:600;margin:0;overflow-wrap:anywhere; }
+        .rm-balance-card { display:flex;align-items:center;gap:.8rem;height:100%;padding:1rem;border:1px solid var(--rm-line);border-radius:var(--rm-radius);background:#fff; }
+        .rm-balance-card>span { width:42px;height:42px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--rm-primary-soft);color:var(--rm-primary);font-size:1.15rem; }
+        .rm-balance-card.points>span { background:var(--rm-warning-soft);color:#835f14; }
+        .rm-balance-card small,.rm-balance-card strong { display:block; }
+        .rm-balance-card small { color:var(--rm-muted);font-size:.75rem; }
+        .rm-balance-card strong { color:var(--rm-ink);font-size:1rem; }
+        @media(max-width:575.98px){.rm-partner-details{grid-template-columns:1fr}.rm-partner-details>div{padding-left:0;padding-right:0}}
+    </style>
+@endpush

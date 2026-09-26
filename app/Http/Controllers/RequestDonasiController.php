@@ -10,6 +10,84 @@ use Illuminate\Support\Str;
 
 class RequestDonasiController extends Controller
 {
+    private function currentOrganizationId(): ?string
+    {
+        if (session('role') !== 'organisasi') {
+            return null;
+        }
+
+        return session('id_organisasi') ?? session('user_id');
+    }
+
+    public function storeForCurrentOrganization(Request $request)
+    {
+        $idOrganisasi = $this->currentOrganizationId();
+        if (!$idOrganisasi) {
+            return response()->json(['success' => false, 'message' => 'Silakan masuk sebagai organisasi.'], 403);
+        }
+
+        $validated = $request->validate([
+            'nama_barang_request' => 'required|string|max:255',
+            'tgl_request_donasi' => 'required|date',
+        ]);
+
+        $lastId = DB::table('request_donasi')
+            ->selectRaw("MAX(CAST(SUBSTRING(id_request_donasi, 2) AS UNSIGNED)) as max_id")
+            ->value('max_id');
+        $newId = 'R' . (($lastId ?? 0) + 1);
+
+        DB::table('request_donasi')->insert([
+            'id_request_donasi' => $newId,
+            'nama_barang_request' => $validated['nama_barang_request'],
+            'tgl_request_donasi' => $validated['tgl_request_donasi'],
+            'id_organisasi' => $idOrganisasi,
+            'status_req' => 'menunggu donasi',
+        ]);
+
+        return response()->json(['success' => true, 'message' => 'Request donasi berhasil dikirim.', 'id_request_donasi' => $newId]);
+    }
+
+    public function updateForCurrentOrganization(Request $request, $id)
+    {
+        $idOrganisasi = $this->currentOrganizationId();
+        if (!$idOrganisasi) {
+            return response()->json(['success' => false, 'message' => 'Silakan masuk sebagai organisasi.'], 403);
+        }
+
+        $validated = $request->validate(['nama_barang_request' => 'required|string|max:255']);
+        $updated = DB::table('request_donasi')
+            ->where('id_request_donasi', $id)
+            ->where('id_organisasi', $idOrganisasi)
+            ->where('status_req', '!=', 'dapat donasi')
+            ->update(['nama_barang_request' => $validated['nama_barang_request']]);
+
+        if (!$updated) {
+            return response()->json(['success' => false, 'message' => 'Request tidak ditemukan atau sudah dipenuhi.'], 404);
+        }
+
+        return response()->json(['success' => true, 'message' => 'Request donasi berhasil diperbarui.']);
+    }
+
+    public function destroyForCurrentOrganization($id)
+    {
+        $idOrganisasi = $this->currentOrganizationId();
+        if (!$idOrganisasi) {
+            return response()->json(['success' => false, 'message' => 'Silakan masuk sebagai organisasi.'], 403);
+        }
+
+        $deleted = DB::table('request_donasi')
+            ->where('id_request_donasi', $id)
+            ->where('id_organisasi', $idOrganisasi)
+            ->where('status_req', '!=', 'dapat donasi')
+            ->delete();
+
+        if (!$deleted) {
+            return response()->json(['success' => false, 'message' => 'Request tidak ditemukan atau sudah dipenuhi.'], 404);
+        }
+
+        return response()->json(['success' => true, 'message' => 'Request donasi berhasil dihapus.']);
+    }
+
     public function index($idOrganisasi)
     {
         $cekOrganisasi = DB::table('organisasi')->where('id_organisasi', $idOrganisasi)->exists();

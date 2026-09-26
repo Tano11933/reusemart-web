@@ -50,12 +50,13 @@ Route::get('/register', function () {
     return view('auth.register');
 })->name('register');
 
-Route::get('/organisasi/index_organisasi', function () {
-    return view('organisasi.index_organisasi');
-});
+Route::get('/organisasi/index_organisasi', [OrganisasiController::class, 'dashboard'])->name('organisasi.dashboard');
+Route::post('/organisasi/request-donasi', [RequestDonasiController::class, 'storeForCurrentOrganization'])->name('organisasi.requestDonasi.store');
+Route::put('/organisasi/request-donasi/{id}', [RequestDonasiController::class, 'updateForCurrentOrganization'])->name('organisasi.requestDonasi.update');
+Route::delete('/organisasi/request-donasi/{id}', [RequestDonasiController::class, 'destroyForCurrentOrganization'])->name('organisasi.requestDonasi.destroy');
 
 Route::get('/organisasi/request_donasi', function () {
-    return view('organisasi.request_donasi');
+    return redirect()->route('organisasi.dashboard');
 });
 
 // Route::post('/register/pembeli', [PembeliController::class, 'store'])->name('register.pembeli');
@@ -76,9 +77,7 @@ Route::get('/pembeli/{id}/history-data', [PembeliController::class, 'getPembeliH
 Route::get('/pembeli/history', [PembeliController::class, 'showHistoryPage'])->name('pembeli.history');
 Route::get('/pembeli-history', [PembeliController::class, 'showHistoryPage']);
 
-Route::get('/penitip/history-penjualan', function () {
-    return view('penitip.history-penjualan');
-})->name('penitip.history-penjualan');
+Route::get('/penitip/history-penjualan', [PenitipController::class, 'historyPenjualanPage'])->name('penitip.history-penjualan');
 
 Route::get('/api/penitip/check-nik/{nik}', [PenitipController::class, 'checkNIK']);
 
@@ -168,8 +167,6 @@ Route::post('/pegawai/transaksi-dikirim/{id}', [PemesananController::class, 'kon
 Route::post('/transaksi/konfirmasi/{id}', [PemesananController::class, 'konfirmasiPengiriman'])->name('transaksi.konfirmasi');
 
 Route::post('/pemesanan/diambil/{id}', [PemesananController::class, 'tandaiDiambil'])->name('pemesanan.diambil');
-
-Route::post('/pemesanan/kirim-notifikasi/{id}', [PemesananController::class, 'kirimNotifikasiPembeli'])->name('pemesanan.kirimNotifikasi');
 
 Route::get('/pegawai/nota-pemesanan', [PemesananController::class, 'notaPemesanan'])->name('nota.pemesanan');
 Route::get('/pegawai/nota-pemesanan/download/{id}', [PemesananController::class, 'downloadNota'])->name('nota.download');

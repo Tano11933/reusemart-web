@@ -46,8 +46,9 @@
         .modal-footer .btn:hover { background-color: #2c3e65; }
         @media (max-width:900px) {.sidebar { position: static; width: 100%; min-height: auto; flex-direction: row; padding: 10px;}.main { margin-left: 0; padding: 14px 0 0 0;}.logo-wrapper, .logout-wrapper { display: none; }}
     </style>
+    <link rel="stylesheet" href="{{ asset('css/reusemart.css') }}">
 </head>
-<body>
+<body class="rm-body rm-legacy-workspace">
 <div class="sidebar">
     <div>
         <div class="logo-wrapper">

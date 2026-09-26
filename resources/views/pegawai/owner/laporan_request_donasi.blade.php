@@ -120,8 +120,9 @@
       background-color: #1d5ec8;
     }
   </style>
+    <link rel="stylesheet" href="{{ asset('css/reusemart.css') }}">
 </head>
-<body>
+<body class="rm-body rm-legacy-workspace">
 
 <div class="sidebar">
     <div>

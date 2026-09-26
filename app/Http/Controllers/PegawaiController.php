@@ -418,6 +418,7 @@ class PegawaiController extends Controller
         // Jika request GET dan tidak ada id, tampilkan list pemesanan yang perlu verifikasi
         $pemesananList = Pemesanan::with('pembeli')
                             ->where('status', 'diproses')
+                            ->whereNotNull('bukti_transfer')
                             ->get();
 
         return view('pegawai.cs.verifikasi-pembayaran-cs', ['pemesanan' => $pemesananList]);
