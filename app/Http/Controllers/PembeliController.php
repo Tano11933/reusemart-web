@@ -15,8 +15,6 @@ class PembeliController extends Controller
 {
     public function store(Request $request)
     {
-        \Log::info("Masuk controller pembeli", $request->all());
-
         $request->merge([
             'nama_pembeli' => $request->nama,
         ]);

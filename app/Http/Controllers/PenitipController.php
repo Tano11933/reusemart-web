@@ -18,14 +18,12 @@ class PenitipController extends Controller
     public function store(Request $request)
     {
         try {
-            \Log::info("Request diterima:", $request->all());
-
             $request->validate([
                 'nama_penitip'   => 'required|string|max:255',
                 'email'          => 'required|email|unique:penitip',
                 'password'       => 'required|min:8',
                 'nomor_telepon'  => 'required|string|max:20',
-                'nik_penitip'    => 'required|string|max:50',
+                'nik_penitip'    => 'required|string|max:50|unique:penitip,nik_penitip',
                 'jenis_kelamin'  => 'required|in:Pria,Wanita',
                 'tgl_lahir'      => 'required|date',
                 'foto_ktp'       => 'required|image|mimes:jpeg,png,jpg|max:2048',
@@ -105,14 +103,12 @@ class PenitipController extends Controller
 
     public function updatePenitip(Request $request, $idPenitip)
     {
-        \Log::info("Update Penitip", $request->all());
-
         // Validate incoming request data
         $validated = $request->validate([
             'nama_penitip'   => 'required|string|max:255',
-            'email'          => 'required|email',
+            'email'          => 'required|email|unique:penitip,email,' . $idPenitip . ',id_penitip',
             'nomor_telepon'  => 'required|string|max:20',
-            'nik_penitip'    => 'required|string|max:50',  // This field is now validated as required
+            'nik_penitip'    => 'required|string|max:50|unique:penitip,nik_penitip,' . $idPenitip . ',id_penitip',
             'jenis_kelamin'  => 'required|in:Pria,Wanita',  // This field is now validated as required
             'tgl_lahir'      => 'required|date',  // This field is now validated as required
         ]);

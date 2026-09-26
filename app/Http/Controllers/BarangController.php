@@ -327,8 +327,6 @@ class BarangController extends Controller
     public function store(Request $request)
 {
     try {
-        Log::info('Masuk ke fungsi store() dengan data:', $request->all());
-
         $request->validate([
             'nama_barang' => 'required|string|max:255',
             'deskripsi' => 'required|string',

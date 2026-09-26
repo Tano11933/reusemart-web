@@ -28,8 +28,6 @@ class OrganisasiController extends Controller
 
     public function store(Request $request)
     {
-        \Log::info("Masuk controller organisasi", $request->all());
-
         $request->merge([   
             'nama_organisasi' => $request->nama,
             'alamat_organisasi' => $request->alamat,
