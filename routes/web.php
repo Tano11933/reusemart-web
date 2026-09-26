@@ -232,6 +232,10 @@ Route::prefix('verifikasi-pembayaran-cs')->group(function () {
     Route::post('/validasi/{id}', [PegawaiController::class, 'verifikasiPembayaran'])->name('verifikasi-pembayaran.validasi');
 });
 
+Route::prefix('batalTransaksiValid')->group(function () {
+    Route::get('/', [PembeliController::class, 'batalTransaksiValid'])->name('batalTransaksiValid');
+    Route::post('/batal/{id}', [PembeliController::class, 'batalTransaksiValid'])->name('transaksi-valid.batal');
+});
 
 
 Route::get('/pegawai/gudang/laporan-penitip/{id}', [PenitipController::class, 'cetakLaporanPenitip'])->name('pegawai.laporanPenitip');

@@ -139,6 +139,7 @@
             <a href="{{ route('cart.index') }}"><i class="bi bi-cart text-white fs-5"></i></a>
             @isset($pembeli)
                 <a class="btn btn-profile" href="{{ route('pembeli-profile', ['id' => $pembeli->id_pembeli]) }}">Profile</a>
+                <a class="btn btn-profile" href="{{ route('batalTransaksiValid', ['id' => $pembeli->id_pembeli]) }}">Transaksi</a>
             @endisset
         </div>
     </div>
