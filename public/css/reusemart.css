@@ -547,3 +547,108 @@ a {
         max-width: 150px;
     }
 }
+
+/* ---------- Halaman auth (login/register) ---------- */
+.rm-auth {
+    display: grid;
+    grid-template-columns: minmax(320px, 42%) 1fr;
+    min-height: 100vh;
+}
+
+.rm-auth-brand {
+    background: linear-gradient(165deg, var(--rm-primary-dark) 0%, var(--rm-primary) 60%, #2f7d7a 100%);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 2.5rem;
+}
+
+.rm-auth-brand .rm-auth-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.rm-auth-brand .rm-auth-logo img {
+    width: 46px;
+}
+
+.rm-auth-brand h2 {
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+.rm-auth-brand p {
+    color: rgba(255, 255, 255, 0.82);
+}
+
+.rm-auth-brand .rm-auth-mascot {
+    max-width: 200px;
+    filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.2));
+}
+
+.rm-auth-back {
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.rm-auth-back:hover {
+    color: #fff;
+}
+
+.rm-auth-panel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem 1.25rem;
+    background-color: var(--rm-bg);
+}
+
+.rm-auth-card {
+    width: 100%;
+    max-width: 480px;
+    background-color: var(--rm-surface);
+    border: 1px solid var(--rm-line);
+    border-radius: 1.25rem;
+    box-shadow: var(--rm-shadow-sm);
+    padding: 2rem;
+}
+
+.rm-auth-card .form-control,
+.rm-auth-card .form-select {
+    border-radius: 0.6rem;
+}
+
+.rm-auth-card .input-group-text {
+    background-color: var(--rm-bg);
+    border-right: 0;
+}
+
+.rm-auth-card .input-group .form-control {
+    border-left: 0;
+}
+
+@media (max-width: 991.98px) {
+    .rm-auth {
+        grid-template-columns: 1fr;
+    }
+
+    .rm-auth-brand {
+        padding: 1.5rem;
+        gap: 1rem;
+    }
+
+    .rm-auth-brand .rm-auth-mascot {
+        display: none;
+    }
+
+    .rm-auth-brand h2 {
+        font-size: 1.4rem;
+    }
+}
