@@ -1,541 +1,123 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <title>Admin - Data Jabatan</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      font-family: 'Segoe UI', sans-serif;
-    }
+@extends('layouts.workspace')
 
-    html, body {
-      margin: 0;
-      padding: 0;
-      background-color: #f8f8f8;
-    }
+@section('title', 'Data Merchandise — ReuseMart')
+@section('page-title', 'Data Merchandise')
 
-    .sidebar {
-      width: 220px;
-      height: 100vh;
-      position: fixed;
-      background: linear-gradient(to bottom, #365a64, #f0e6dd);
-      padding: 35px 0;
-      color: white;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo-wrapper {
-      margin-bottom: 40px;
-      text-align: center;
-    }
-
-    .logo-wrapper img {
-      max-width: 60px;
-      height: auto;
-      pointer-events: none;
-      user-select: none;
-    }
-
-    .menu {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .menu a {
-      width: 80%;
-      text-align: center;
-      padding: 10px;
-      font-weight: bold;
-      color: white;
-      text-decoration: none;
-      border-radius: 8px;
-      transition: all 0.2s ease-in-out;
-    }
-
-    .menu a:hover,
-    .menu a.active {
-      background-color: white;
-      color: #2c3e65;
-    }
-
-    .logout-wrapper {
-      text-align: center;
-      margin-bottom: 10px;
-    }
-
-    .logout-btn {
-      padding: 12px 24px;
-      background-color: #365a64;
-      border: none;
-      color: white;
-      font-size: 14px;
-      font-weight: bold;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    .logout-btn:hover {
-      background-color: #2c2c2c;
-    }
-
-    .main {
-      margin-left: 220px;
-      padding: 30px;
-    }
-
-    .card {
-      background-color: #fdf3e7;
-      padding: 10px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-
-    h3 {
-      margin-top: 0;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 15px;
-      table-layout: auto;
-      font-size: 13px;
-    }
-
-    th, td {
-      border: 1px solid #ddd;
-      padding: 8px 10px;
-      text-align: left;
-      color: white;
-      line-height: 1.2;
-    }
-
-    thead tr {
-      background-color: #365a64;
-    }
-
-    tbody tr {
-      background-color: #7697A0;
-      transition: background-color 0.2s ease;
-    }
-
-    .btn-danger, .btn-primary {
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: bold;
-      padding: 4px 8px;
-      font-size: 12px;
-      min-width: 60px;
-      text-align: center;
-    }
-
-    .btn-danger {
-      background-color: #e74c3c;
-      color: white;
-    }
-
-    .btn-primary {
-      background-color: #1c5980;
-      color: white;
-    }
-
-    .btn-danger:hover {
-      background-color: #c0392b;
-    }
-
-    .btn-primary:hover {
-      background-color: #2980b9;
-    }
-
-    .action-cell {
-      display: flex;
-      flex-direction: row;
-      gap: 6px;
-      justify-content: center;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.4);
-      justify-content: center;
-      align-items: center;
-    }
-
-    .modal-content {
-      background: #7697A0;
-      padding: 20px;
-      border-radius: 10px;
-      width: 400px;
-      position: relative;
-      color: #fdf3e7;
-    }
-
-    .modal-content input, .modal-content textarea,
-    .modal-content select {
-      width: 100%;
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      margin-top: 4px;
-      margin-bottom: 12px;
-    }
-
-    select {
-      appearance: none;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      background-color: #fff;
-      border: 1.5px solid #b4b4f7;
-      border-radius: 6px;
-      padding: 10px;
-      font-size: 14px;
-      width: 100%;
-      background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg viewBox='0 0 140 140' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='20,50 70,100 120,50' stroke='%23555' stroke-width='20' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 10px center;
-      background-size: 16px;
-      margin-bottom: 20px;
-    }
-
-    .modal-buttons {
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      margin-top: 16px;
-    }
-
-    .btn-modal {
-      padding: 8px 16px;
-      font-size: 14px;
-      font-weight: bold;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
-      transition: background-color 0.2s ease;
-    }
-
-    .btn-modal.btn-primary {
-      background-color: #2c3e65;
-      color: white;
-    }
-
-    .btn-modal.btn-primary:hover {
-      background-color: #1e2d4f;
-    }
-
-    .btn-modal.btn-secondary {
-      background-color: #e0e0e0;
-      color: #1e2d4f;
-    }
-
-    .btn-modal.btn-secondary:hover {
-      background-color: #cacaca;
-    }
-    
-    .btn-disabled {
-      background-color: #bdc3c7 !important;
-      cursor: not-allowed;
-    }
-  </style>
-    <link rel="stylesheet" href="{{ asset('css/reusemart.css') }}">
-</head>
-<body class="rm-body rm-legacy-workspace">
-  <div class="sidebar">
-    <div>
-      <div class="logo-wrapper">
-        <img src="{{ asset('image/white.png') }}" alt="Logo">
-      </div>
-      <div class="menu">
-        <a href="{{ url('/pegawai/admin') }}" class="{{ request()->is('pegawai*') ? 'active' : '' }}">Data Pegawai</a>
-        <a href="{{ url('/jabatan') }}" class="{{ request()->is('jabatan*') ? 'active' : '' }}">Data Jabatan</a>
-        <a href="{{ url('/organisasi') }}" class="{{ request()->is('organisasi*') ? 'active' : '' }}">Data Organisasi</a>
-        <a href="{{ url('/merchandise') }}" class="{{ request()->is('merchandise*') ? 'active' : '' }}">Data Merchandise</a>
-      </div>
+@section('content')
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3 mb-4">
+        <div><h1 class="rm-page-title">Data Merchandise</h1><p class="rm-page-sub">Kelola stok hadiah yang dapat ditukar dengan poin.</p></div>
+        <span class="rm-chip"><i class="bi bi-gift"></i>{{ $merchandise->count() }} merchandise</span>
     </div>
-    <div class="logout-wrapper">
-      <button id="logoutBtn" class="logout-btn">Log out</button>
-    </div>
-  </div>
 
-  <div class="main">
-    <div class="card">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <h3>Data Merchandise</h3>
-          <button class="btn-primary" onclick="openAddModal()">+ Tambah Merchandise</button>
-        </div>
-
-        <div>
-          <input type="text" id="searchInput" placeholder="Cari merchandise..." onkeyup="filterTable()" 
-                style="padding: 6px; border-radius: 6px; border: 1px solid #ccc; width: 40%;">
-        </div>
-
-        <div id="addModal" class="modal">
-        <div class="modal-content">
-            <h3>Tambah Merchandise</h3>
-            <form method="POST" action="{{ route('merchandise.store') }}" enctype="multipart/form-data">
-            @csrf
-            <label>Nama Merchandise:</label>
-            <input type="text" name="nama_merch" required>
-
-            <label>Stok:</label>
-            <input type="number" name="stok" required>
-
-            <label>Harga Poin:</label>
-            <input type="number" name="harga_poin" required>
-
-            <label>Gambar Merchandise:</label>
-            <input type="file" name="gambar_merch" accept="image/*" required>
-
-
-            <div class="modal-buttons">
-                <button type="submit" class="btn-modal btn-primary">Simpan</button>
-                <button type="button" class="btn-modal btn-secondary" onclick="closeAddModal()">Batal</button>
+    <section class="rm-workspace-card">
+        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-3">
+            <div><h2 class="h5 fw-bold mb-1">Katalog Hadiah</h2><p class="small rm-text-muted mb-0">Perbarui jumlah stok dan biaya poin.</p></div>
+            <div class="d-flex flex-column flex-sm-row gap-2">
+                <div class="input-group rm-admin-search"><span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span><input type="search" id="merchandiseSearch" class="form-control border-start-0" placeholder="Cari merchandise…" aria-label="Cari merchandise"></div>
+                <button type="button" class="btn rm-btn-primary text-nowrap" data-bs-toggle="modal" data-bs-target="#addMerchandiseModal"><i class="bi bi-plus-lg me-1"></i>Tambah</button>
             </div>
-            </form>
-        </div>
         </div>
 
-        <table>
-        <thead>
-            <tr>
-            <th>ID</th>
-            <th>Nama</th>
-            <th>Stok</th>
-            <th>Harga Poin</th>
-            <th>Gambar</th>
-            <th>ID Pegawai</th>
-            <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($merchandise as $m)
-            <tr>
-            <td>{{ $m->id_merch }}</td>
-            <td>{{ $m->nama_merch }}</td>
-            <td>{{ $m->stok }}</td>
-            <td>{{ $m->harga_poin }}</td>
-            <td>
-              <img src="{{ asset('storage/merchandise/' . $m->gambar_merch) }}" 
-                  alt="{{ $m->nama_merch }}" 
-                  style="max-width: 70px; border-radius: 6px;">
-            </td>
-
-            <td>{{ $m->id_pegawai }}</td>
-            <td class="action-cell" style="padding: 35px;">
-                <form method="POST" action="{{ url('/merchandise/' . $m->id_merch) }}">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn-danger">Hapus</button>
-                </form>
-                <button class="btn-primary"
-                onclick="openEditModal('{{ $m->id_merch }}', '{{ $m->nama_merch }}', '{{ $m->stok }}', '{{ $m->harga_poin }}', '{{ $m->id_pegawai }}')">
-                Ubah
-                </button>
-            </td>
-            </tr>
-            @endforeach
-        </tbody>
-        </table>
-    </div>
-    </div>
-
-    <div id="editModal" class="modal">
-    <div class="modal-content">
-        <h3>Edit Merchandise</h3>
-        <form method="POST" id="editForm" enctype="multipart/form-data">
-        @csrf
-        @method('PUT')
-        <input type="hidden" id="edit-id_merch">
-
-        <label>Nama Merchandise:</label>
-        <input type="text" name="nama_merch" id="edit-nama_merch" required>
-
-        <label>Stok:</label>
-        <input type="number" name="stok" id="edit-stok" required>
-
-        <label>Harga Poin:</label>
-        <input type="number" name="harga_poin" id="edit-harga_poin" required>
-
-        <label>Gambar Merchandise:</label>
-        <input type="file" name="gambar_merch" id="edit-gambar_merch" accept="image/*">
-        <img id="preview-image" src="" alt="Preview Gambar" style="margin-top:10px; max-width:100%; display:none; border-radius:6px;">
-
-        <input type="hidden" name="id_pegawai" id="edit-id_pegawai">
-
-
-        <div class="modal-buttons">
-            <button type="submit" class="btn-modal btn-primary">Simpan</button>
-            <button type="button" class="btn-modal btn-secondary" onclick="closeModal()">Batal</button>
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead><tr><th>Hadiah</th><th>Stok</th><th>Harga Poin</th><th class="text-end">Aksi</th></tr></thead>
+                <tbody id="merchandiseRows">
+                    @forelse ($merchandise as $item)
+                        @php
+                            $photo = trim((string) $item->gambar_merch);
+                            $image = ($photo !== '' && file_exists(public_path('storage/merchandise/' . $photo))) ? asset('storage/merchandise/' . $photo) : asset('image/placeholder.svg');
+                        @endphp
+                        <tr data-search="{{ \Illuminate\Support\Str::lower($item->id_merch . ' ' . $item->nama_merch) }}">
+                            <td><div class="d-flex align-items-center gap-3"><img class="rm-merch-thumb" src="{{ $image }}" alt="{{ $item->nama_merch }}" onerror="this.onerror=null;this.src='{{ asset('image/placeholder.svg') }}'"><div><strong>{{ $item->nama_merch }}</strong><div class="small rm-text-muted">{{ $item->id_merch }}</div></div></div></td>
+                            <td><span class="rm-stock-pill {{ $item->stok > 0 ? 'has-stock' : 'out-of-stock' }}">{{ $item->stok > 0 ? $item->stok . ' tersedia' : 'Habis' }}</span></td>
+                            <td class="fw-semibold">{{ number_format($item->harga_poin, 0, ',', '.') }} poin</td>
+                            <td class="text-end"><div class="d-inline-flex gap-2"><button type="button" class="btn btn-outline-secondary btn-sm rounded-pill js-edit-merchandise" data-id="{{ $item->id_merch }}" data-name="{{ $item->nama_merch }}" data-stock="{{ $item->stok }}" data-points="{{ $item->harga_poin }}" data-image="{{ $image }}"><i class="bi bi-pencil me-1"></i>Edit</button><form action="{{ route('merchandise.destroy', $item->id_merch) }}" method="POST" class="js-delete-merchandise">@csrf @method('DELETE')<button type="submit" class="btn btn-outline-danger btn-sm rounded-pill"><i class="bi bi-trash me-1"></i>Hapus</button></form></div></td>
+                        </tr>
+                    @empty
+                        <tr><td colspan="4"><div class="rm-empty py-4"><i class="bi bi-gift d-block"></i><p class="mb-0">Belum ada merchandise.</p></div></td></tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
-        </form>
-    </div>
+    </section>
+
+    <div class="modal fade" id="addMerchandiseModal" tabindex="-1" aria-labelledby="addMerchandiseTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered"><form action="{{ route('merchandise.store') }}" method="POST" enctype="multipart/form-data" class="modal-content rm-admin-modal">
+            @csrf
+            <div class="modal-header"><div><h2 class="modal-title h5 fw-bold" id="addMerchandiseTitle">Tambah Merchandise</h2><p class="small rm-text-muted mb-0">Masukkan hadiah baru ke katalog.</p></div><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button></div>
+            <div class="modal-body">
+                <div class="mb-3"><label for="add_merch_name" class="form-label fw-semibold">Nama hadiah</label><input id="add_merch_name" name="nama_merch" class="form-control" maxlength="255" required></div>
+                <div class="row g-3 mb-3"><div class="col-6"><label for="add_merch_stock" class="form-label fw-semibold">Stok</label><input type="number" id="add_merch_stock" name="stok" class="form-control" min="0" required></div><div class="col-6"><label for="add_merch_points" class="form-label fw-semibold">Harga poin</label><input type="number" id="add_merch_points" name="harga_poin" class="form-control" min="0" required></div></div>
+                <div><label for="add_merch_image" class="form-label fw-semibold">Foto hadiah</label><input type="file" id="add_merch_image" name="gambar_merch" class="form-control" accept="image/jpeg,image/png" required><div class="form-text">JPG atau PNG, maksimal 2 MB.</div></div>
+            </div>
+            <div class="modal-footer"><button type="button" class="btn rm-btn-outline" data-bs-dismiss="modal">Batal</button><button type="submit" class="btn rm-btn-primary">Simpan Hadiah</button></div>
+        </form></div>
     </div>
 
+    <div class="modal fade" id="editMerchandiseModal" tabindex="-1" aria-labelledby="editMerchandiseTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered"><form id="editMerchandiseForm" class="modal-content rm-admin-modal" enctype="multipart/form-data">
+            <div class="modal-header"><div><h2 class="modal-title h5 fw-bold" id="editMerchandiseTitle">Edit Merchandise</h2><p class="small rm-text-muted mb-0">Ubah stok, harga poin, atau foto.</p></div><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button></div>
+            <div class="modal-body">
+                <input type="hidden" id="edit_merch_id">
+                <div class="d-flex align-items-center gap-3 mb-3"><img id="edit_merch_preview" class="rm-merch-thumb" src="" alt="Pratinjau merchandise"><span class="small rm-text-muted">Foto saat ini</span></div>
+                <div class="mb-3"><label for="edit_merch_name" class="form-label fw-semibold">Nama hadiah</label><input id="edit_merch_name" name="nama_merch" class="form-control" maxlength="255" required></div>
+                <div class="row g-3 mb-3"><div class="col-6"><label for="edit_merch_stock" class="form-label fw-semibold">Stok</label><input type="number" id="edit_merch_stock" name="stok" class="form-control" min="0" required></div><div class="col-6"><label for="edit_merch_points" class="form-label fw-semibold">Harga poin</label><input type="number" id="edit_merch_points" name="harga_poin" class="form-control" min="0" required></div></div>
+                <div><label for="edit_merch_image" class="form-label fw-semibold">Ganti foto (opsional)</label><input type="file" id="edit_merch_image" name="gambar_merch" class="form-control" accept="image/jpeg,image/png"></div>
+            </div>
+            <div class="modal-footer"><button type="button" class="btn rm-btn-outline" data-bs-dismiss="modal">Batal</button><button type="submit" class="btn rm-btn-primary">Simpan Perubahan</button></div>
+        </form></div>
+    </div>
+@endsection
+
+@push('styles')
+    <style>
+        .rm-admin-search{max-width:270px}.rm-admin-search .input-group-text{border-radius:var(--rm-radius-pill) 0 0 var(--rm-radius-pill)}.rm-admin-search .form-control{border-radius:0 var(--rm-radius-pill) var(--rm-radius-pill) 0}
+        .rm-admin-modal{border:1px solid var(--rm-line);border-radius:var(--rm-radius-lg);overflow:hidden}.rm-admin-modal .modal-header,.rm-admin-modal .modal-footer{border-color:var(--rm-line);padding:1rem 1.25rem}.rm-admin-modal .modal-body{padding:1.25rem}
+        .rm-merch-thumb{width:58px;height:58px;object-fit:contain;padding:.2rem;border-radius:.65rem;background:var(--rm-primary-soft-2)}
+        .rm-stock-pill{display:inline-flex;padding:.32rem .65rem;border-radius:var(--rm-radius-pill);font-size:.74rem;font-weight:700;white-space:nowrap}.rm-stock-pill.has-stock{background:var(--rm-success-soft);color:var(--rm-success)}.rm-stock-pill.out-of-stock{background:var(--rm-danger-soft);color:var(--rm-danger)}
+        @media(max-width:575.98px){.rm-admin-search{max-width:none}}
+    </style>
+@endpush
+
+@push('scripts')
     <script>
-      document.getElementById('editForm').addEventListener('submit', function (e) {
-        e.preventDefault();
+        const editMerchModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('editMerchandiseModal'));
+        document.querySelectorAll('.js-edit-merchandise').forEach(button => button.addEventListener('click', function () {
+            document.getElementById('edit_merch_id').value = this.dataset.id;
+            document.getElementById('edit_merch_name').value = this.dataset.name;
+            document.getElementById('edit_merch_stock').value = this.dataset.stock;
+            document.getElementById('edit_merch_points').value = this.dataset.points;
+            document.getElementById('edit_merch_preview').src = this.dataset.image;
+            editMerchModal.show();
+        }));
 
-        const id = document.getElementById('edit-id_merch').value;
-        const form = e.target;
-        const formData = new FormData(form);
-
-        fetch(`/merchandise/${id}`, {
-          method: 'POST', // HARUS POST karena browser tidak bisa kirim PUT dengan FormData langsung
-          headers: {
-            'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
-            'X-HTTP-Method-Override': 'PUT' // Laravel akan mengenali ini sebagai PUT
-          },
-          body: formData
-        })
-        .then(res => {
-          if (res.ok) {
-            Swal.fire({
-              icon: 'success',
-              title: 'Berhasil Diperbarui',
-              text: 'Data merchandise berhasil diubah.',
-              timer: 1500,
-              showConfirmButton: false
-            });
-            setTimeout(() => location.reload(), 1500);
-          } else {
-            return res.json().then(err => {
-              Swal.fire({
-                icon: 'error',
-                title: 'Gagal Mengubah',
-                text: JSON.stringify(err)
-              });
-            });
-          }
-        })
-        .catch(err => {
-          Swal.fire({
-            icon: 'error',
-            title: 'Kesalahan',
-            text: err.message
-          });
+        document.getElementById('editMerchandiseForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+            const id = document.getElementById('edit_merch_id').value;
+            const payload = new FormData(this);
+            payload.append('_method', 'PUT');
+            try {
+                const response = await fetch(@json(url('/merchandise')) + '/' + encodeURIComponent(id), {
+                    method: 'POST',
+                    headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': @json(csrf_token()) },
+                    body: payload,
+                });
+                const result = await response.json();
+                if (!response.ok) throw new Error(result.message || 'Gagal memperbarui merchandise.');
+                location.reload();
+            } catch (error) { Swal.fire({ icon: 'error', title: 'Tidak dapat menyimpan', text: error.message }); }
         });
-      });
 
-    function openAddModal() {
-      document.getElementById('addModal').style.display = 'flex';
-    }
-
-    function closeAddModal() {
-      document.getElementById('addModal').style.display = 'none';
-    }
-
-    function openEditModal(id, nama, stok, harga, pegawai) {
-      document.getElementById('edit-id_merch').value = id;
-      document.getElementById('edit-nama_merch').value = nama;
-      document.getElementById('edit-stok').value = stok;
-      document.getElementById('edit-harga_poin').value = harga;
-      document.getElementById('edit-id_pegawai').value = pegawai;
-      document.getElementById('editModal').style.display = 'flex';
-
-      // Reset preview
-      const preview = document.getElementById('preview-image');
-      preview.style.display = 'none';
-      preview.src = '';
-
-      // Optional: Load existing image if you have a path
-      // preview.src = `/storage/merchandise/${id}.jpg`;
-      // preview.style.display = 'block';
-    }
-
-    // document.getElementById('edit-gambar_merch')?.addEventListener('change', function () {
-    //   const file = this.files[0];
-    //   const preview = document.getElementById('preview-image');
-    //   if (file) {
-    //     const reader = new FileReader();
-    //     reader.onload = function (e) {
-    //       preview.src = e.target.result;
-    //       preview.style.display = 'block';
-    //     };
-    //     reader.readAsDataURL(file);
-    //   }
-    // });
-
-
-    function closeModal() {
-      document.getElementById('editModal').style.display = 'none';
-    }
-
-    document.querySelectorAll('form[action*="/merchandise/"]').forEach(form => {
-      form.addEventListener('submit', function (e) {
-        e.preventDefault();
-        Swal.fire({
-          title: 'Yakin ingin menghapus?',
-          text: 'Data tidak dapat dikembalikan!',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#d33',
-          cancelButtonColor: '#3085d6',
-          confirmButtonText: 'Ya, hapus!'
-        }).then((result) => {
-          if (result.isConfirmed) {
-            fetch(this.action, {
-              method: 'POST',
-              headers: {
-                'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
-              },
-              body: new URLSearchParams(new FormData(this))
-            }).then(() => {
-              Swal.fire({
-                icon: 'success',
-                title: 'Terhapus!',
-                text: 'Data merchandise berhasil dihapus.',
-                timer: 1500,
-                showConfirmButton: false
-              });
-              setTimeout(() => location.reload(), 1500);
+        document.querySelectorAll('.js-delete-merchandise').forEach(form => form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            Swal.fire({ title: 'Hapus merchandise?', text: 'Barang ini tidak lagi dapat ditukar.', icon: 'warning', showCancelButton: true, confirmButtonText: 'Hapus', cancelButtonText: 'Batal', confirmButtonColor: '#c0392b' }).then(result => {
+                if (result.isConfirmed) HTMLFormElement.prototype.submit.call(form);
             });
-          }
+        }));
+
+        document.getElementById('merchandiseSearch').addEventListener('input', function () {
+            const query = this.value.trim().toLocaleLowerCase('id-ID');
+            document.querySelectorAll('#merchandiseRows tr[data-search]').forEach(row => row.hidden = !row.dataset.search.includes(query));
         });
-      });
-    });
-
-    const addForm = document.querySelector('form[action*="merchandise.store"]');
-    if (addForm) {
-      addForm.addEventListener('submit', function () {
-        setTimeout(() => {
-          Swal.fire({
-            icon: 'success',
-            title: 'Berhasil Ditambahkan',
-            text: 'Data merchandise berhasil disimpan.',
-            timer: 1500,
-            showConfirmButton: false
-          });
-        }, 200);
-      });
-    }
-
-    function filterTable() {
-      const input = document.getElementById("searchInput").value.toLowerCase();
-      const rows = document.querySelectorAll("tbody tr");
-      rows.forEach(row => {
-        const namaCell = row.querySelectorAll("td")[1];
-        const nama = namaCell.textContent.trim().toLowerCase();
-        row.style.display = nama.startsWith(input) ? "" : "none";
-      });
-    }
-  </script>
-</body>
-</html>
+    </script>
+@endpush

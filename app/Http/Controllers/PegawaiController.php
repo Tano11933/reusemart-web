@@ -75,8 +75,10 @@ class PegawaiController extends Controller
 
     public function adminPegawai()
     {
-        $pegawai = Pegawai::all();
-        return view('pegawai.admin.adminPegawai', compact('pegawai'));
+        $pegawai = Pegawai::with('jabatan')->orderBy('id_pegawai')->get();
+        $jabatan = \App\Models\Jabatan::orderBy('nama_jabatan')->get();
+
+        return view('pegawai.admin.adminPegawai', compact('pegawai', 'jabatan'));
     }
 
     public function destroy($id)
@@ -91,16 +93,23 @@ class PegawaiController extends Controller
     {
         $pegawai = Pegawai::findOrFail($id);
 
-        if ($request->has('alamat')) {
-            $pegawai->alamat = $request->input('alamat');
+        $validated = $request->validate([
+            'alamat' => 'sometimes|nullable|string|max:255',
+            'email' => 'sometimes|required|email|unique:pegawai,email,' . $pegawai->id_pegawai . ',id_pegawai',
+            'nomor_telepon' => 'sometimes|nullable|string|max:20',
+            'reset_password' => 'sometimes|boolean',
+        ]);
+
+        if (array_key_exists('alamat', $validated)) {
+            $pegawai->alamat = $validated['alamat'];
         }
 
-        if ($request->has('email')) {
-            $pegawai->email = $request->input('email');
+        if (array_key_exists('email', $validated)) {
+            $pegawai->email = $validated['email'];
         }
 
-        if ($request->has('nomor_telepon')) {
-            $pegawai->nomor_telepon = $request->input('nomor_telepon');
+        if (array_key_exists('nomor_telepon', $validated)) {
+            $pegawai->nomor_telepon = $validated['nomor_telepon'];
         }
 
         if ($request->boolean('reset_password')) {

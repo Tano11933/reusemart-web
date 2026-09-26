@@ -1,502 +1,114 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admin - Data Jabatan</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      font-family: 'Segoe UI', sans-serif;
-    }
+@extends('layouts.workspace')
 
-    html, body {
-      margin: 0;
-      padding: 0;
-      background-color: #f8f8f8;
-    }
+@section('title', 'Data Jabatan — ReuseMart')
+@section('page-title', 'Data Jabatan')
 
-    .sidebar {
-      width: 220px;
-      height: 100vh;
-      position: fixed;
-      background: linear-gradient(to bottom, #365a64, #f0e6dd);
-      padding: 35px 0;
-      color: white;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo-wrapper {
-      margin-bottom: 40px;
-      text-align: center;
-    }
-
-    .logo-wrapper img {
-      max-width: 60px;
-      height: auto;
-      pointer-events: none;
-      user-select: none;
-    }
-
-    .menu {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .menu a {
-      width: 80%;
-      text-align: center;
-      padding: 10px;
-      font-weight: bold;
-      color: white;
-      text-decoration: none;
-      border-radius: 8px;
-      transition: all 0.2s ease-in-out;
-    }
-
-    .menu a:hover,
-    .menu a.active {
-      background-color: white;
-      color: #2c3e65;
-    }
-
-    .logout-wrapper {
-      text-align: center;
-      margin-bottom: 10px;
-    }
-
-    .logout-btn {
-      padding: 12px 24px;
-      background-color: #365a64;
-      border: none;
-      color: white;
-      font-size: 14px;
-      font-weight: bold;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    .logout-btn:hover {
-      background-color: #2c2c2c;
-    }
-
-    .main {
-      margin-left: 220px;
-      padding: 30px;
-    }
-
-    .card {
-      background-color: #fdf3e7;
-      padding: 10px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-
-    h3 {
-      margin-top: 0;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 15px;
-      table-layout: auto;
-      font-size: 13px;
-    }
-
-    th, td {
-      border: 1px solid #ddd;
-      padding: 8px 10px;
-      text-align: left;
-      color: white;
-      line-height: 1.2;
-    }
-
-    thead tr {
-      background-color: #365a64;
-    }
-
-    tbody tr {
-      background-color: #7697A0;
-      transition: background-color 0.2s ease;
-    }
-
-    .btn-danger, .btn-primary {
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: bold;
-      padding: 4px 8px;
-      font-size: 12px;
-      min-width: 60px;
-      text-align: center;
-    }
-
-    .btn-danger {
-      background-color: #e74c3c;
-      color: white;
-    }
-
-    .btn-primary {
-      background-color: #1c5980;
-      color: white;
-    }
-
-    .btn-danger:hover {
-      background-color: #c0392b;
-    }
-
-    .btn-primary:hover {
-      background-color: #2980b9;
-    }
-
-    .action-cell {
-      display: flex;
-      flex-direction: row;
-      gap: 6px;
-      justify-content: center;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.4);
-      justify-content: center;
-      align-items: center;
-    }
-
-    .modal-content {
-      background: #7697A0;
-      padding: 20px;
-      border-radius: 10px;
-      width: 400px;
-      position: relative;
-      color: #fdf3e7;
-    }
-
-    .modal-content input, .modal-content textarea,
-    .modal-content select {
-      width: 100%;
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      margin-top: 4px;
-      margin-bottom: 12px;
-    }
-
-    select {
-      appearance: none;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      background-color: #fff;
-      border: 1.5px solid #b4b4f7;
-      border-radius: 6px;
-      padding: 10px;
-      font-size: 14px;
-      width: 100%;
-      background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg viewBox='0 0 140 140' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='20,50 70,100 120,50' stroke='%23555' stroke-width='20' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 10px center;
-      background-size: 16px;
-      margin-bottom: 20px;
-    }
-
-    .modal-buttons {
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      margin-top: 16px;
-    }
-
-    .btn-modal {
-      padding: 8px 16px;
-      font-size: 14px;
-      font-weight: bold;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
-      transition: background-color 0.2s ease;
-    }
-
-    .btn-modal.btn-primary {
-      background-color: #2c3e65;
-      color: white;
-    }
-
-    .btn-modal.btn-primary:hover {
-      background-color: #1e2d4f;
-    }
-
-    .btn-modal.btn-secondary {
-      background-color: #e0e0e0;
-      color: #1e2d4f;
-    }
-
-    .btn-modal.btn-secondary:hover {
-      background-color: #cacaca;
-    }
-    
-    .btn-disabled {
-      background-color: #bdc3c7 !important;
-      cursor: not-allowed;
-    }
-  </style>
-    <link rel="stylesheet" href="{{ asset('css/reusemart.css') }}">
-</head>
-<body class="rm-body rm-legacy-workspace">
-  <div class="sidebar">
-    <div>
-      <div class="logo-wrapper">
-        <img src="{{ asset('image/white.png') }}" alt="Logo">
-      </div>
-      <div class="menu">
-        <a href="{{ url('/pegawai/admin') }}" class="{{ request()->is('pegawai*') ? 'active' : '' }}">Data Pegawai</a>
-        <a href="{{ url('/jabatan') }}" class="{{ request()->is('jabatan*') ? 'active' : '' }}">Data Jabatan</a>
-        <a href="{{ url('/organisasi') }}" class="{{ request()->is('organisasi*') ? 'active' : '' }}">Data Organisasi</a>
-        <a href="{{ url('/merchandise') }}" class="{{ request()->is('merchandise*') ? 'active' : '' }}">Data Merchandise</a>
-      </div>
+@section('content')
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3 mb-4">
+        <div><h1 class="rm-page-title">Data Jabatan</h1><p class="rm-page-sub">Kelola daftar jabatan dan peran kerja di ReuseMart.</p></div>
+        <span class="rm-chip"><i class="bi bi-person-gear"></i>{{ $jabatan->count() }} jabatan</span>
     </div>
-    <div class="logout-wrapper">
-      <button id="logoutBtn" class="logout-btn">Log out</button>
-    </div>
-  </div>
 
-  <div class="main">
-    <div class="card">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h3>Data Jabatan</h3>
-        <button class="btn-primary" onclick="openAddModal()">+ Tambah Jabatan</button>
-      </div>
-      <div>
-          <input type="text" id="searchInput" placeholder="Cari jabatan..." onkeyup="filterTable()" 
-            style="padding: 6px; border-radius: 6px; border: 1px solid #ccc; width: 40%;">
-      </div>
-      <div id="addModal" class="modal">
-        <div class="modal-content">
-          <h3>Tambah Jabatan</h3>
-          <form method="POST" action="{{ route('jabatan.store') }}">
-            @csrf
-            <label>Nama Jabatan:</label>
-            <input type="text" name="nama_jabatan" placeholder="Nama Jabatan" required>
-
-            <div class="modal-buttons">
-              <button type="submit" class="btn-modal btn-primary">Simpan</button>
-              <button type="button" class="btn-modal btn-secondary" onclick="closeAddModal()">Batal</button>
+    <section class="rm-workspace-card">
+        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-3">
+            <div><h2 class="h5 fw-bold mb-1">Daftar Jabatan</h2><p class="small rm-text-muted mb-0">Nama jabatan dipakai untuk menentukan menu kerja pegawai.</p></div>
+            <div class="d-flex flex-column flex-sm-row gap-2">
+                <div class="input-group rm-admin-search"><span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span><input id="jabatanSearch" class="form-control border-start-0" type="search" placeholder="Cari jabatan…" aria-label="Cari jabatan"></div>
+                <button type="button" class="btn rm-btn-primary text-nowrap" data-bs-toggle="modal" data-bs-target="#addJabatanModal"><i class="bi bi-plus-lg me-1"></i>Tambah Jabatan</button>
             </div>
-          </form>
         </div>
-      </div>
 
-      <table>
-        <thead>
-          <tr>
-            <th>ID Jabatan</th>
-            <th>Nama Jabatan</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          @foreach ($jabatan as $jab)
-          <tr>
-            <td>{{ $jab->id_jabatan }}</td>
-            <td>{{ $jab->nama_jabatan }}</td>
-            <td class="action-cell">
-              <form method="POST" action="{{ url('/jabatan/' . $jab->id_jabatan) }}">
-                @csrf
-                @method('DELETE')
-                <button type="button" class="btn-danger" onclick="confirmDelete('{{ $jab->id_jabatan }}')">Hapus</button>
-              </form>
-              <button class="btn-primary"
-                onclick="openEditModal('{{ $jab->id_jabatan }}', '{{ $jab->nama_jabatan }}')">
-                Ubah
-              </button>
-            </td>
-          </tr>
-          @endforeach
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <div id="editModal" class="modal">
-    <div class="modal-content">
-      <h3>Edit Jabatan</h3>
-      <form method="POST" id="editForm">
-        @csrf
-        @method('PUT')
-        <input type="hidden" name="id_jabatan" id="edit-id_jabatan">
-        <label>Nama Jabatan:</label>
-        <input type="text" name="nama_jabatan" id="edit-nama_jabatan" placeholder="Nama Jabatan" required>
-        <div class="modal-buttons">
-          <button type="submit" class="btn-modal btn-primary">Simpan</button>
-          <button type="button" class="btn-modal btn-secondary" onclick="closeModal()">Batal</button>
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead><tr><th>ID Jabatan</th><th>Nama Jabatan</th><th class="text-end">Aksi</th></tr></thead>
+                <tbody id="jabatanRows">
+                    @forelse ($jabatan as $item)
+                        <tr data-search="{{ \Illuminate\Support\Str::lower($item->id_jabatan . ' ' . $item->nama_jabatan) }}">
+                            <td><span class="rm-chip">{{ $item->id_jabatan }}</span></td>
+                            <td class="fw-semibold">{{ $item->nama_jabatan }}</td>
+                            <td class="text-end">
+                                <div class="d-inline-flex gap-2">
+                                    <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill js-edit-jabatan" data-id="{{ $item->id_jabatan }}" data-name="{{ $item->nama_jabatan }}"><i class="bi bi-pencil me-1"></i>Edit</button>
+                                    <form action="{{ route('jabatan.destroy', $item->id_jabatan) }}" method="POST" class="js-delete-jabatan-form">
+                                        @csrf @method('DELETE')
+                                        <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill"><i class="bi bi-trash me-1"></i>Hapus</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr><td colspan="3"><div class="rm-empty py-4"><i class="bi bi-person-gear d-block"></i><p class="mb-0">Belum ada data jabatan.</p></div></td></tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
-      </form>
+    </section>
+
+    <div class="modal fade" id="addJabatanModal" tabindex="-1" aria-labelledby="addJabatanTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered"><form action="{{ route('jabatan.store') }}" method="POST" class="modal-content rm-admin-modal">
+            @csrf
+            <div class="modal-header"><div><h2 class="modal-title h5 fw-bold" id="addJabatanTitle">Tambah Jabatan</h2><p class="small rm-text-muted mb-0">Tambahkan nama peran baru.</p></div><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button></div>
+            <div class="modal-body"><label for="nama_jabatan" class="form-label fw-semibold">Nama Jabatan</label><input type="text" class="form-control" id="nama_jabatan" name="nama_jabatan" maxlength="255" required></div>
+            <div class="modal-footer"><button type="button" class="btn rm-btn-outline" data-bs-dismiss="modal">Batal</button><button type="submit" class="btn rm-btn-primary">Simpan</button></div>
+        </form></div>
     </div>
-  </div>
 
-<!-- ... seluruh HTML tetap seperti sebelumnya ... -->
+    <div class="modal fade" id="editJabatanModal" tabindex="-1" aria-labelledby="editJabatanTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered"><form id="editJabatanForm" class="modal-content rm-admin-modal">
+            <div class="modal-header"><div><h2 class="modal-title h5 fw-bold" id="editJabatanTitle">Edit Jabatan</h2><p class="small rm-text-muted mb-0">Perbarui nama jabatan.</p></div><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button></div>
+            <div class="modal-body"><input type="hidden" id="edit_jabatan_id"><label for="edit_nama_jabatan" class="form-label fw-semibold">Nama Jabatan</label><input type="text" class="form-control" id="edit_nama_jabatan" maxlength="255" required></div>
+            <div class="modal-footer"><button type="button" class="btn rm-btn-outline" data-bs-dismiss="modal">Batal</button><button type="submit" class="btn rm-btn-primary">Simpan Perubahan</button></div>
+        </form></div>
+    </div>
+@endsection
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@push('styles')
+    <style>
+        .rm-admin-search{max-width:280px}.rm-admin-search .input-group-text{border-radius:var(--rm-radius-pill) 0 0 var(--rm-radius-pill)}.rm-admin-search .form-control{border-radius:0 var(--rm-radius-pill) var(--rm-radius-pill) 0}
+        .rm-admin-modal{border:1px solid var(--rm-line);border-radius:var(--rm-radius-lg);overflow:hidden}.rm-admin-modal .modal-header,.rm-admin-modal .modal-footer{border-color:var(--rm-line);padding:1rem 1.25rem}.rm-admin-modal .modal-body{padding:1.25rem}
+        @media(max-width:575.98px){.rm-admin-search{max-width:none}}
+    </style>
+@endpush
 
-<script>
-  document.getElementById('logoutBtn')?.addEventListener('click', function () {
-        Swal.fire({
-            title: 'Yakin ingin logout?',
-            text: 'Kamu akan keluar dari sistem.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Ya, logout',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed) {
-            fetch("{{ route('logout') }}", {
-                method: 'POST',
-                headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                }
-            }).then(() => {
-                Swal.fire({
-                icon: 'success',
-                title: 'Logout berhasil',
-                text: 'Kamu telah keluar dari sistem.',
-                timer: 1500,
-                showConfirmButton: false
-                }).then(() => {
-                window.location.href = '/login';
+@push('scripts')
+    <script>
+        const editJabatanModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('editJabatanModal'));
+        const editJabatanForm = document.getElementById('editJabatanForm');
+        const jabatanBaseUrl = @json(url('/jabatan'));
+
+        document.querySelectorAll('.js-edit-jabatan').forEach(button => button.addEventListener('click', function () {
+            document.getElementById('edit_jabatan_id').value = this.dataset.id;
+            document.getElementById('edit_nama_jabatan').value = this.dataset.name;
+            editJabatanModal.show();
+        }));
+
+        editJabatanForm.addEventListener('submit', async function (event) {
+            event.preventDefault();
+            const id = document.getElementById('edit_jabatan_id').value;
+            try {
+                const response = await fetch(`${jabatanBaseUrl}/${encodeURIComponent(id)}`, {
+                    method: 'PUT',
+                    headers: { 'Accept': 'application/json', 'Content-Type': 'application/json', 'X-CSRF-TOKEN': @json(csrf_token()) },
+                    body: JSON.stringify({ nama_jabatan: document.getElementById('edit_nama_jabatan').value }),
                 });
-            });
+                const result = await response.json();
+                if (!response.ok) throw new Error(result.message || 'Gagal memperbarui jabatan.');
+                location.reload();
+            } catch (error) {
+                Swal.fire({ icon: 'error', title: 'Tidak dapat menyimpan', text: error.message });
             }
         });
-        });
 
-  function openAddModal() {
-    document.getElementById('addModal').style.display = 'flex';
-  }
-  function closeAddModal() {
-    document.getElementById('addModal').style.display = 'none';
-  }
-
-  function openEditModal(id_jabatan, nama_jabatan) {
-    document.getElementById('edit-id_jabatan').value = id_jabatan;
-    document.getElementById('edit-nama_jabatan').value = nama_jabatan;
-    document.getElementById('editForm').dataset.id = id_jabatan;
-    document.getElementById('editModal').style.display = 'flex';
-  }
-  function closeModal() {
-    document.getElementById('editModal').style.display = 'none';
-  }
-
-  document.getElementById('editForm').addEventListener('submit', function (e) {
-    e.preventDefault();
-    const id_jabatan = this.dataset.id;
-    const nama_jabatan = document.getElementById('edit-nama_jabatan').value;
-    const formData = { nama_jabatan };
-
-    fetch(`/jabatan/${id_jabatan}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
-      },
-      body: JSON.stringify(formData)
-    })
-    .then(res => {
-      if (res.ok) {
-        Swal.fire({
-          icon: 'success',
-          title: 'Berhasil!',
-          text: 'Data jabatan telah diperbarui.',
-          timer: 1500,
-          showConfirmButton: false
-        });
-        setTimeout(() => location.reload(), 1500);
-      } else {
-        return res.json().then(err => {
-          Swal.fire({
-            icon: 'error',
-            title: 'Gagal!',
-            text: 'Gagal memperbarui data: ' + JSON.stringify(err)
-          });
-        });
-      }
-    });
-  });
-
-  function confirmDelete(id) {
-    Swal.fire({
-      title: 'Yakin ingin menghapus?',
-      text: "Data ini akan dihapus permanen!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Ya, hapus!'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        fetch(`/jabatan/${id}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Accept': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value
-          },
-          body: new URLSearchParams({
-            _method: 'DELETE'
-          })
-        })
-        .then(res => {
-          if (res.ok) {
-            const row = document.querySelector(`button[onclick*="${id}"]`).closest('tr');
-            if (row) row.remove();
-
-            Swal.fire({
-              icon: 'success',
-              title: 'Terhapus!',
-              text: 'Data jabatan telah dihapus.',
-              timer: 1500,
-              showConfirmButton: false
+        document.querySelectorAll('.js-delete-jabatan-form').forEach(form => form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            Swal.fire({ title: 'Hapus jabatan?', text: 'Tindakan ini tidak dapat dibatalkan.', icon: 'warning', showCancelButton: true, confirmButtonText: 'Hapus', cancelButtonText: 'Batal', confirmButtonColor: '#c0392b' }).then(result => {
+                if (result.isConfirmed) HTMLFormElement.prototype.submit.call(form);
             });
-          } else {
-            return res.json().then(err => {
-              Swal.fire({
-                icon: 'error',
-                title: 'Gagal!',
-                text: 'Gagal menghapus: ' + JSON.stringify(err)
-              });
-            });
-          }
+        }));
+
+        document.getElementById('jabatanSearch').addEventListener('input', function () {
+            const value = this.value.trim().toLocaleLowerCase('id-ID');
+            document.querySelectorAll('#jabatanRows tr[data-search]').forEach(row => row.hidden = !row.dataset.search.includes(value));
         });
-      }
-    });
-  }
-
-  function filterTable() {
-    const input = document.getElementById("searchInput").value.toLowerCase();
-    const rows = document.querySelectorAll("tbody tr");
-    rows.forEach(row => {
-      const namaCell = row.querySelectorAll("td")[1];
-      const nama = namaCell.textContent.trim().toLowerCase();
-      row.style.display = nama.startsWith(input) ? "" : "none";
-    });
-  }
-</script>
-
-</body>
-</html>
+    </script>
+@endpush

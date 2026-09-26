@@ -24,11 +24,11 @@ class JabatanController extends Controller
             ->selectRaw("MAX(CAST(SUBSTRING(id_jabatan, 2) AS UNSIGNED)) as max_id")
             ->value('max_id');
 
-        $newId = 'J' . ($lastId + 1);
+        $nextId = (int) ($lastId ?? 0) + 1;
+        $newId = 'J' . $nextId;
 
-        while (\App\Models\Jabatan::where('id_jabatan', $newId)->exists()) {
-            $count++;
-            $newId = 'J' . ($count + 1);
+        while (Jabatan::where('id_jabatan', $newId)->exists()) {
+            $newId = 'J' . ++$nextId;
         }
 
         \App\Models\Jabatan::create([
@@ -43,9 +43,13 @@ class JabatanController extends Controller
 
     public function update(Request $request, $id)
     {
-        $jabatan = Jabatan::where('id_jabatan', $id)->firstOrFail(); // BENAR
+        $validated = $request->validate([
+            'nama_jabatan' => 'required|string|max:255',
+        ]);
+
+        $jabatan = Jabatan::where('id_jabatan', $id)->firstOrFail();
         $jabatan->update([
-            'nama_jabatan' => $request->nama_jabatan
+            'nama_jabatan' => $validated['nama_jabatan']
         ]);
 
         return response()->json(['message' => 'Jabatan berhasil diupdate.']);

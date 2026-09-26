@@ -94,7 +94,7 @@ Route::delete('/organisasi/{id}', [OrganisasiController::class, 'destroy'])->nam
 Route::get('/merchandise', [MerchandiseController::class, 'adminMerchandise']);
 Route::post('/merchandise', [MerchandiseController::class, 'store'])->name('merchandise.store');
 Route::put('/merchandise/{id}', [MerchandiseController::class, 'update'])->name('merchandise.update');
-Route::delete('/merchandise/{id}', [MerchandiseController::class, 'destroy']);
+Route::delete('/merchandise/{id}', [MerchandiseController::class, 'destroy'])->name('merchandise.destroy');
 
 Route::middleware('web')->group(function () {
     Route::get('/home-beli', [BarangController::class, 'homeBeli'])->name('home_beli');
