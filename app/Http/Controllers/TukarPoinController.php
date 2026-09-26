@@ -107,6 +107,10 @@ class TukarPoinController extends Controller
     {
         $filter = $request->get('filter', 'semua');
 
+        $allCount = DB::table('tukar_poin')->count();
+        $waitingCount = DB::table('tukar_poin')->where('status', 'belum diambil')->count();
+        $collectedCount = DB::table('tukar_poin')->where('status', 'sudah diambil')->count();
+
         $query = DB::table('tukar_poin')
             ->join('pembeli', 'tukar_poin.id_pembeli', '=', 'pembeli.id_pembeli')
             ->join('merchandise', 'tukar_poin.id_merch', '=', 'merchandise.id_merch')
@@ -125,7 +129,10 @@ class TukarPoinController extends Controller
 
         return view('pegawai.cs.tukar_poin', [
             'tukarPoin' => $tukarPoin,
-            'filter' => $filter
+            'filter' => $filter,
+            'allCount' => $allCount,
+            'waitingCount' => $waitingCount,
+            'collectedCount' => $collectedCount,
         ]);
     }
 
@@ -196,7 +203,7 @@ class TukarPoinController extends Controller
             ->update($updateData);
 
         if ($update) {
-            return response()->json(['success' => true, 'message' => 'Sudah diambil dan stok dikurangi.']);
+            return response()->json(['success' => true, 'message' => 'Pengambilan merchandise berhasil dikonfirmasi.']);
         } else {
             return response()->json(['success' => false, 'message' => 'Gagal update.']);
         }
