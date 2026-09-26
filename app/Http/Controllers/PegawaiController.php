@@ -154,10 +154,11 @@ class PegawaiController extends Controller
                 'deskripsi_barang' => 'required|string',
                 'kategori' => 'required|string',
                 'harga_barang' => 'required|numeric|min:0',
+                'berat_barang' => 'required|numeric|min:0',
                 'tgl_titip' => 'required|date',
-                'tgl_akhir' => 'required|date',
-                'garansi' => 'required|string',
-                'status' => 'required|string',
+                'tgl_akhir' => 'required|date|after_or_equal:tgl_titip',
+                'garansi' => 'required|boolean',
+                'status' => 'required|in:tersedia',
                 'id_penitip' => 'required|exists:penitip,id_penitip',
                 'foto_barang' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
                 'foto_barang2' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
@@ -180,14 +181,14 @@ class PegawaiController extends Controller
             $foto1Name = null;
             if ($request->hasFile('foto_barang')) {
                 $foto1 = $request->file('foto_barang');
-                $foto1Name = time() . '_1.' . $foto1->getClientOriginalExtension();
+                $foto1Name = Str::random(24) . '_1.' . $foto1->getClientOriginalExtension();
                 $foto1->move(public_path('image'), $foto1Name);
             }
 
             $foto2Name = null;
             if ($request->hasFile('foto_barang2')) {
                 $foto2 = $request->file('foto_barang2');
-                $foto2Name = time() . '_2.' . $foto2->getClientOriginalExtension();
+                $foto2Name = Str::random(24) . '_2.' . $foto2->getClientOriginalExtension();
                 $foto2->move(public_path('image'), $foto2Name);
             }
 
@@ -243,21 +244,35 @@ class PegawaiController extends Controller
     public function updateGudang(Request $request, $id)
     {
         $barang = Barang::findOrFail($id);
-        $barang->nama_barang = $request->nama_barang;
-        $barang->deskripsi_barang = $request->deskripsi_barang;
-        $barang->harga_barang = $request->harga_barang;
-        $barang->status = $request->status;
-        $barang->garansi = $request->garansi;
-        $barang->tgl_garansi = $request->tgl_garansi;
+
+        $validated = $request->validate([
+            'nama_barang' => 'required|string|max:255',
+            'deskripsi_barang' => 'required|string|max:5000',
+            'harga_barang' => 'required|numeric|min:0',
+            'berat_barang' => 'required|numeric|min:0',
+            'status' => 'required|in:tersedia,terjual,didonasikan,barang untuk donasi',
+            'garansi' => 'required|boolean',
+            'tgl_garansi' => 'nullable|date|required_if:garansi,1',
+            'foto_barang' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'foto_barang2' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        $barang->nama_barang = $validated['nama_barang'];
+        $barang->deskripsi_barang = $validated['deskripsi_barang'];
+        $barang->harga_barang = $validated['harga_barang'];
+        $barang->berat_barang = $validated['berat_barang'];
+        $barang->status = $validated['status'];
+        $barang->garansi = $validated['garansi'];
+        $barang->tgl_garansi = $validated['garansi'] ? ($validated['tgl_garansi'] ?? null) : null;
 
         if ($request->hasFile('foto_barang')) {
-            $filename = time().'_'.$request->file('foto_barang')->getClientOriginalName();
+            $filename = Str::random(32) . '.' . $request->file('foto_barang')->getClientOriginalExtension();
             $request->file('foto_barang')->move(public_path('image'), $filename);
             $barang->foto_barang = $filename;
         }
 
         if ($request->hasFile('foto_barang2')) {
-            $filename2 = time().'_'.$request->file('foto_barang2')->getClientOriginalName();
+            $filename2 = Str::random(32) . '.' . $request->file('foto_barang2')->getClientOriginalExtension();
             $request->file('foto_barang2')->move(public_path('image'), $filename2);
             $barang->foto_barang2 = $filename2;
         }
