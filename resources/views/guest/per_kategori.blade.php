@@ -18,8 +18,8 @@
                 <x-category-icon :kategori="$kategori" />
             </span>
             <div>
-                <h1 class="h3 fw-bold mb-1">{{ $kategori }}</h1>
-                <p class="rm-text-muted mb-0">{{ $barangs->count() }} barang tersedia</p>
+                <h1 class="h3 rm-page-title">{{ $kategori }}</h1>
+                <p class="rm-page-sub">{{ $barangs->count() }} barang tersedia</p>
             </div>
         </div>
 

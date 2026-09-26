@@ -4,7 +4,7 @@
 
 @section('content')
     <section class="container py-5">
-        <h1 class="h3 fw-bold mb-4"><i class="bi bi-cart3 me-2"></i>Keranjang Belanja</h1>
+        <h1 class="h3 rm-page-title mb-4"><i class="bi bi-cart3 me-2"></i>Keranjang Belanja</h1>
 
         @if (count($cartItems) === 0)
             <div class="rm-empty">

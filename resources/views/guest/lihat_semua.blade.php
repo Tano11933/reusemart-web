@@ -12,8 +12,8 @@
         </nav>
 
         <div class="mb-3">
-            <h1 class="h3 fw-bold mb-1">Semua Produk</h1>
-            <p class="rm-text-muted mb-0">
+            <h1 class="h3 rm-page-title">Semua Produk</h1>
+            <p class="rm-page-sub">
                 {{ $barang->count() }} barang ditemukan
                 @if (request('query'))
                     untuk pencarian &ldquo;{{ request('query') }}&rdquo;

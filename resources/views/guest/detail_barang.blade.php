@@ -99,7 +99,7 @@
                     </div>
                 </div>
 
-                <div class="col-lg-6">
+                <div class="col-lg-6 rm-detail-info">
                     <span class="badge rounded-pill text-bg-light border mb-2">
                         <i class="bi bi-tag me-1"></i>{{ $item->kategori }}
                     </span>
@@ -169,9 +169,30 @@
             <p class="mb-0" style="white-space: pre-line;">{{ $item->deskripsi_barang ?: 'Penitip belum menuliskan deskripsi untuk barang ini.' }}</p>
         </div>
 
+        @if ($serupa->isNotEmpty())
+            <section class="mt-5 rm-related">
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+                    <h2 class="h4 fw-bold mb-0">Barang Serupa</h2>
+                    <a href="{{ route('guest.per_kategori', ['kategori' => $item->kategori]) }}" class="btn rm-btn-outline btn-sm px-3">
+                        Lihat Kategori <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
+                </div>
+
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 justify-content-center">
+                    @foreach ($serupa as $lain)
+                        <div class="col">
+                            <x-product-card :item="$lain" />
+                        </div>
+                    @endforeach
+                </div>
+            </section>
+        @endif
+
         {{-- Diskusi terkunci untuk pengunjung --}}
         <div class="rm-locked-discussion mt-4">
-            <i class="bi bi-lock-fill fs-3 text-warning d-block mb-2"></i>
+            <span class="rm-lock-icon mb-3">
+                <i class="bi bi-lock-fill text-warning fs-4"></i>
+            </span>
             <h2 class="h6 fw-bold mb-2">Diskusi Produk Terkunci</h2>
             <p class="rm-text-muted mb-3">
                 Untuk melihat dan ikut berdiskusi tentang produk ini, silakan login terlebih dahulu.

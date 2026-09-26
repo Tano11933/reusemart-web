@@ -67,7 +67,16 @@ class BarangController extends Controller
         $item = Barang::findOrFail($id);
         $kategoris = Barang::select('kategori')->distinct()->get();
 
-        return view('guest.detail_barang', compact('item', 'kategoris'));
+        // Barang lain di kategori yang sama untuk bagian "Barang Serupa".
+        $serupa = Barang::with('penitip')
+            ->where('status', 'tersedia')
+            ->where('kategori', $item->kategori)
+            ->where('id_barang', '!=', $item->id_barang)
+            ->orderByDesc('tgl_titip')
+            ->take(4)
+            ->get();
+
+        return view('guest.detail_barang', compact('item', 'kategoris', 'serupa'));
     }
 
     public function showByCategory($kategori)
