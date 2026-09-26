@@ -14,9 +14,9 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\DonasiController;
 use App\Http\Controllers\RequestDonasiController;
 use App\Http\Controllers\DiskusiProdukController;
+use App\Http\Controllers\KlaimMerchandiseController;
 use App\Http\Controllers\PemesananController;
 use App\Http\Controllers\TukarPoinController;
-use App\Models\Pembeli;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,7 +66,6 @@ Route::post('/register/organisasi', [OrganisasiController::class, 'store'])->nam
 Route::get('/pegawai/admin', [PegawaiController::class, 'adminPegawai'])->name('pegawai.admin');
 Route::get('/pegawai/cs', [PegawaiController::class, 'index_cs'])->name('pegawai.cs');
 
-Route::get('/pegawai/home', [PegawaiController::class, 'home'])->name('pegawai.home');
 Route::post('/pegawai', [PegawaiController::class, 'store'])->name('pegawai.store');
 Route::put('/pegawai/{id}', [PegawaiController::class, 'update'])->name('pegawai.update');
 Route::delete('/pegawai/{id}', [PegawaiController::class, 'destroy'])->name('pegawai.destroy');
@@ -104,25 +103,6 @@ Route::middleware('web')->group(function () {
     Route::get('/detail-beli/{id}', [BarangController::class, 'detailBeli'])->name('detail_barang_beli');
     Route::post('/rate-barang/{id}', [BarangController::class, 'rate'])->name('barang.rate');
 
-    Route::get('/set-session', function (Request $request) {
-        $request->validate([
-            'user_id' => 'required',
-            'role' => 'required',
-            'nama' => 'required'
-        ]);
-
-        Session::put('user_id', $request->user_id);
-        Session::put('role', $request->role);
-        Session::put('nama', $request->nama);
-
-        return redirect('/home-beli');
-    })->name('set.session');
-
-    Route::get('/pembeli/profile/{id}', function ($id) {
-        $pembeli = Pembeli::where('id_pembeli', $id)->firstOrFail();
-        return view('pembeli.profil', compact('pembeli'));
-    })->name('pembeli-profile');
-
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::post('/add-to-cart/{id}', [CartController::class, 'addToCart'])->name('add_to_cart');
     Route::delete('/remove-from-cart/{id}', [CartController::class, 'removeFromCart'])->name('remove_from_cart');
@@ -131,15 +111,11 @@ Route::middleware('web')->group(function () {
     Route::get('/diskusi/barang/{id_barang}', [DiskusiProdukController::class, 'getByBarang'])->name('diskusi.by_barang');
 });
 
-Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-Route::post('/add-to-cart/{id}', [CartController::class, 'addToCart'])->name('add_to_cart');
-Route::delete('/remove-from-cart/{id}', [CartController::class, 'removeFromCart'])->name('remove_from_cart');
-
 Route::get('/pembeli/profile/{id}', [PembeliController::class, 'profile'])->name('pembeli-profile');
 
 Route::prefix('diskusi-produk-cs')->group(function () {
     Route::get('/barang/{id_barang}', [DiskusiProdukController::class, 'getByBarang'])->name('diskusi.getByBarang');
-    Route::post('/store', [DiskusiProdukController::class, 'store'])->name('diskusi.store');
+    Route::post('/store', [DiskusiProdukController::class, 'store'])->name('diskusi.store.cs');
     Route::delete('/{id_diskusi}', [DiskusiProdukController::class, 'destroy'])->name('diskusi.destroy.cs');
     Route::get('/', [DiskusiProdukController::class, 'index'])->name('diskusi.index');
 });
@@ -147,7 +123,7 @@ Route::prefix('diskusi-produk-cs')->group(function () {
 Route::get('/pegawai/home', [PegawaiController::class, 'homeGudang'])->name('pegawai.home');
 Route::post('/barang/perpanjangan/{id}', [BarangController::class, 'perpanjangan'])->name('barang.perpanjangan');
 
-Route::get('/pegawai/gudang/index_gudang', [PegawaiController::class, 'indexGudang'])->name('pegawai.gudang.index_gudang');
+Route::get('/pegawai/gudang/index_gudang', [PegawaiController::class, 'homeGudang'])->name('pegawai.gudang.index_gudang');
 
 Route::prefix('pegawai/gudang')->group(function () {
     Route::get('/', [PegawaiController::class, 'homeGudang'])->name('pegawai.gudang');
@@ -177,10 +153,6 @@ Route::get('/penitip/detail-barang/{id}', [PenitipController::class, 'detailBara
 Route::get('/penitip/{id}/history-penjualan', [PenitipController::class, 'getHistoryPenjualan']);
 
 
-Route::get('/pembeli-history', function () {
-    return view('pembeli.history-pembelian');
-});
-
 Route::post('/barang/ambil/{id}', [BarangController::class, 'ambilBarang'])->name('barang.ambil');
 
 Route::post('/barang/ambil-otomatis/{id}', [BarangController::class, 'ambilOtomatis'])->name('barang.ambil.otomatis');
@@ -191,7 +163,7 @@ Route::post('/gudang/barang-tidak-diambil/{id}', [PegawaiController::class, 'set
 
 Route::get('/pegawai/transaksi-diambil', [PemesananController::class, 'transaksiDiambil'])->name('transaksi.diambil');
 
-Route::post('/pegawai/pemesanan/{id}/diambil', [PemesananController::class, 'pemesananDiambil'])->name('pemesanan.diambil');
+Route::post('/pegawai/pemesanan/{id}/diambil', [PemesananController::class, 'pemesananDiambil'])->name('pemesanan.diambil.pegawai');
 
 Route::get('/pegawai/transaksi-dikirim', [PemesananController::class, 'transaksiDikirim'])->name('transaksi.dikirim');
 Route::post('/pegawai/transaksi-dikirim/{id}', [PemesananController::class, 'konfirmasiPengiriman'])->name('transaksi.konfirmasiPengiriman');
@@ -202,12 +174,6 @@ Route::post('/pemesanan/diambil/{id}', [PemesananController::class, 'tandaiDiamb
 Route::post('/pemesanan/kirim-notifikasi/{id}', [PemesananController::class, 'kirimNotifikasiPembeli'])->name('pemesanan.kirimNotifikasi');
 
 Route::get('/pegawai/nota-pemesanan', [PemesananController::class, 'notaPemesanan'])->name('nota.pemesanan');
-Route::get('/pegawai/nota-pemesanan/download/{id}', [PemesananController::class, 'downloadNota'])->name('nota.download');
-
-// Halaman daftar nota pemesanan
-Route::get('/pegawai/nota-pemesanan', [PemesananController::class, 'notaPemesanan'])->name('nota.pemesanan');
-
-// Download nota dalam bentuk PDF
 Route::get('/pegawai/nota-pemesanan/download/{id}', [PemesananController::class, 'downloadNota'])->name('nota.download');
 
 Route::get('/checkout', [PemesananController::class, 'index'])->name('checkout.index');
@@ -236,9 +202,6 @@ Route::prefix('batalTransaksiValid')->group(function () {
     Route::get('/', [PembeliController::class, 'batalTransaksiValid'])->name('batalTransaksiValid');
     Route::post('/batal/{id}', [PembeliController::class, 'batalTransaksiValid'])->name('transaksi-valid.batal');
 });
-
-
-Route::get('/pegawai/gudang/laporan-penitip/{id}', [PenitipController::class, 'cetakLaporanPenitip'])->name('pegawai.laporanPenitip');
 
 // Route untuk halaman laporan penjualan bulanan
 Route::get('/owner/laporan-penjualan-bulan', [PegawaiController::class, 'laporanPenjualanBulanan'])->name('owner.laporanPenjualanBulanan');

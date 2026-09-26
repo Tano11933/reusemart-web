@@ -504,7 +504,7 @@ document.querySelectorAll('.add-comment-form').forEach(form => {
         const formData = new FormData(this);
         formData.append('id_barang', idBarang);
 
-        fetch("{{ route('diskusi.store') }}", {
+        fetch("{{ route('diskusi.store.cs') }}", {
             method: 'POST',
             body: formData
         })

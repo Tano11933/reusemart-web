@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AuthController;
 
+use App\Http\Controllers\AlamatController;
 use App\Http\Controllers\PenitipController;
 use App\Http\Controllers\OrganisasiController;
 use App\Http\Controllers\PembeliController;
@@ -11,7 +12,6 @@ use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\MerchandiseController;
 use App\Http\Controllers\RequestDonasiController;
 use App\Http\Controllers\BarangController;
-use App\Http\Controllers\NotifikasiController;
 use App\Http\Controllers\TukarPoinController;
 use App\Http\Controllers\PemesananController;
 
@@ -60,15 +60,8 @@ Route::get('/pemesanan/{id_pembeli}', [PemesananController::class, 'getByPembeli
 
 // ---------------------------------------- MOBILE --------------------------------------------
 
-Route::get('/penitip/{id}/barang', [PenitipController::class, 'apiBarang']);
 Route::get('/penitip/{idPenitip}/barang', [PenitipController::class, 'getBarangPenitip']);
 Route::get('/barang-tersedia', [BarangController::class, 'barangTersedia']);
-
-Route::get('/penitips/{id}/barang-for-notif', [PenitipController::class, 'apiBarangForNotif']);
-Route::get('/pembeli/{id}', [PembeliController::class, 'apiProfile']);
-Route::get('/penitip/{id}', [PenitipController::class, 'apiProfile']);
-Route::get('/pegawai/{id}', [PegawaiController::class, 'apiProfile']);
-
 
 Route::get('/pegawai/{id}/komisi', [PegawaiController::class, 'getKomisiTotal']);
 Route::get('/pegawai/{id}/komisi-list', [PegawaiController::class, 'getKomisiList']);
