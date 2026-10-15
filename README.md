@@ -1,61 +1,94 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# ReuseMart Web
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Marketplace barang bekas dan barang titipan, membawa barang layak pakai dari penitip ke pembeli yang membutuhkannya. Dibangun dengan Laravel 12 dan MySQL, serta dipakai bersama aplikasi mobile Flutter di [reusemart-mobile](https://github.com/Tano11933/reusemart-mobile).
 
-## About Laravel
+## Fitur
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+**Pengunjung**
+- Katalog barang tersedia dengan pencarian, filter garansi, kategori, dan halaman detail
+- Foto produk, kondisi, masa garansi, dan profil penjual
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+**Pembeli**
+- Keranjang, checkout dengan alamat pengiriman, dan pembayaran dengan unggah bukti transfer
+- Riwayat pembelian dan penilaian barang
+- Pembatalan transaksi, kelola alamat, profil, dan poin
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+**Penitip**
+- Daftar barang titipan, perpanjangan masa penitipan, dan jadwal pengambilan
+- Riwayat penjualan dan profil penitip
 
-## Learning Laravel
+**Pegawai**
+- Admin: data pegawai, jabatan, organisasi, dan merchandise
+- Customer Service: data penitip, diskusi produk, verifikasi pembayaran, klaim merchandise, dan penukaran poin
+- Gudang: inventaris barang, pengambilan titipan, pesanan diambil dan dikirim, nota pemesanan
+- Owner: request dan riwayat donasi, laporan penjualan, komisi, stok, kategori, barang kedaluwarsa, serta transaksi penitip dalam bentuk PDF
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+**Organisasi**
+- Dashboard request donasi: mengajukan, mengubah, dan memantau status permintaan
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Tampilan
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+| Beranda | Katalog |
+|---|---|
+| ![Beranda](docs/screenshots/after/01-home.png) | ![Katalog](docs/screenshots/after/02-lihat-semua.png) |
 
-## Laravel Sponsors
+| Detail barang | Keranjang |
+|---|---|
+| ![Detail](docs/screenshots/after/04-detail.png) | ![Keranjang](docs/screenshots/after/09-cart.png) |
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Screenshot lain, termasuk sisi pegawai, ada di `docs/screenshots/after`. Versi Juni 2025 tersimpan di `docs/screenshots/before`.
 
-### Premium Partners
+## Teknologi
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+- Laravel 12, PHP 8.2+, MySQL
+- Blade + Bootstrap 5 (dimuat dari CDN, tidak perlu build asset)
+- barryvdh/laravel-dompdf untuk nota dan laporan PDF
+- intervention/image untuk pengolahan gambar
+- Tema dan komponen ada di `public/css/reusemart.css`; arah desain ada di `DESIGN.md`
 
-## Contributing
+## Menjalankan
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+composer install
+copy .env.example .env
+php artisan key:generate
+```
 
-## Code of Conduct
+Atur koneksi MySQL di `.env`, lalu:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+php artisan migrate
+php artisan serve
+```
 
-## Security Vulnerabilities
+Catatan: migrasi bawaan Laravel tersedia. Skema tabel aplikasi (barang, pemesanan, dan seterusnya) belum dikemas sebagai migrasi, jadi untuk saat ini dibutuhkan dump basis data pengembangan. Pengemasan skema ke migrasi dan seeder adalah agenda berikutnya.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Struktur
 
-## License
+```
+app/Http/Controllers     controller per domain (barang, pemesanan, penitip, donasi, laporan, ...)
+app/Models               model Eloquent
+resources/views          halaman Blade per peran
+routes/web.php           route web dan sebagian endpoint API
+routes/api.php           endpoint yang dipakai aplikasi mobile
+public/css/reusemart.css tema dan komponen bersama
+docs/screenshots         dokumentasi tampilan before dan after
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Kredit
+
+Proyek kelompok mata kuliah P3L (2025), dikembangkan ulang dan dirapikan pada 2026 untuk portofolio. Repositori asli kelompok: [paniae/P3L_1829_1933_2024](https://github.com/paniae/P3L_1829_1933_2024).
+
+Anggota tim: Tano11933, paniae.
+
+## Changelog singkat
+
+**v2 (2026)**
+- Desain ulang seluruh halaman: layout, komponen, kontras, dan aksesibilitas keyboard
+- Perbaikan route rusak dan duplikat, pengamanan akses alamat dan pembatalan pesanan
+- Checkout menyimpan alamat pengiriman dan metode pembayaran
+- Endpoint mobile dirapikan, termasuk login, token FCM, dan riwayat
+- Dokumentasi: `DESIGN.md` dan screenshot before/after
+
+**v1 (Juni 2025)**
+- Versi awal proyek kelompok, tersimpan pada tag `v1.0-juni-2025`
