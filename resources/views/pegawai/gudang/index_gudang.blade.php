@@ -1,6 +1,6 @@
 @extends('layouts.workspace')
 
-@section('title', 'Data Barang Gudang — ReuseMart')
+@section('title', 'Data Barang Gudang · ReuseMart')
 @section('page-title', 'Data Barang Gudang')
 
 @section('content')
@@ -52,16 +52,16 @@
                         @endphp
                         <tr data-status="{{ $filterStatus }}" data-search="{{ \Illuminate\Support\Str::lower($item->id_barang . ' ' . $item->nama_barang . ' ' . ($item->penitip->nama_penitip ?? '') . ' ' . $item->kategori) }}">
                             <td><div class="d-flex align-items-center gap-2"><img class="rm-inventory-thumb js-open-image" src="{{ $image }}" data-full="{{ $image }}" alt="{{ $item->nama_barang }}" loading="lazy"><div class="min-w-0"><strong>{{ $item->nama_barang }}</strong><div class="small rm-text-muted">{{ $item->id_barang }}</div></div></div></td>
-                            <td>{{ $item->penitip->nama_penitip ?? '—' }}<div class="small rm-text-muted">{{ $item->id_penitip }}</div></td>
+                            <td>{{ $item->penitip->nama_penitip ?? '-' }}<div class="small rm-text-muted">{{ $item->id_penitip }}</div></td>
                             <td>{{ $item->kategori }}</td>
                             <td class="fw-semibold">Rp {{ number_format($item->harga_barang, 0, ',', '.') }}</td>
-                            <td>{{ $item->tgl_titip?->translatedFormat('d M Y') ?? '—' }}</td>
+                            <td>{{ $item->tgl_titip?->translatedFormat('d M Y') ?? '-' }}</td>
                             <td><span class="rm-inventory-status {{ $statusClass }}">{{ ucfirst($item->status) }}</span></td>
                             <td>{{ $item->garansi ? 'Aktif' : 'Tidak' }}</td>
                             <td class="text-end"><button type="button" class="btn btn-outline-secondary btn-sm rounded-pill js-edit-barang" data-item="{{ json_encode($item) }}"><i class="bi bi-pencil me-1"></i>Edit</button></td>
                         </tr>
                     @empty
-                        <tr><td colspan="8"><div class="rm-empty py-4"><i class="bi bi-box-seam d-block"></i><p class="mb-0">Belum ada barang di inventaris.</p></div></td></tr>
+                        <tr><td colspan="8"><div class="rm-empty py-4"><i class="bi bi-box-seam d-block"></i><p class="mb-2">Belum ada barang di inventaris.</p><button type="button" class="btn rm-btn-primary js-add-barang-empty"><i class="bi bi-plus-lg me-1"></i>Tambah Barang</button></div></td></tr>
                     @endforelse
                 </tbody>
             </table>
@@ -146,6 +146,7 @@
         let activeFilter = 'semua';
 
         document.getElementById('openAddBarang').addEventListener('click', () => addBarangModal.show());
+        document.querySelectorAll('.js-add-barang-empty').forEach(button => button.addEventListener('click', () => addBarangModal.show()));
 
         function applyInventoryFilters() {
             const query = document.getElementById('inventorySearch').value.trim().toLocaleLowerCase('id-ID');

@@ -1,5 +1,5 @@
 /* ============================================================================
-   ReuseMart v2 — Design System
+   ReuseMart v2 / Design System
    Satu sumber gaya untuk semua halaman web (publik, pembeli, auth, admin).
 
    Struktur:
@@ -40,15 +40,15 @@
     /* Netral */
     --rm-ink: #1c2b29;
     --rm-ink-soft: #3c4f4c;
-    --rm-muted: #647672;
+    --rm-muted: #5c6e6a;
     --rm-line: #dfe9e7;
-    --rm-line-strong: #c9d9d6;
+    --rm-line-strong: #7e948f;
     --rm-bg: #f1f7f6;
     --rm-bg-soft: #f8fbfa;
     --rm-surface: #ffffff;
 
     /* Status */
-    --rm-success: #1e7d5a;
+    --rm-success: #186b4a;
     --rm-success-soft: #e3f5ec;
     --rm-danger: #c0392b;
     --rm-danger-soft: #fdecea;
@@ -73,7 +73,7 @@
     --rm-base: 0.24s var(--rm-ease);
 
     /* Fokus keyboard */
-    --rm-focus-ring: 0 0 0 0.25rem rgba(30, 91, 90, 0.22);
+    --rm-focus-ring: 0 0 0 0.25rem rgba(30, 91, 90, 0.3);
 }
 
 /* ---------------------------------------------------------------------------
@@ -121,17 +121,25 @@ img {
    3. Aksesibilitas & motion
    --------------------------------------------------------------------------- */
 :focus-visible {
-    outline: 3px solid rgba(30, 91, 90, 0.4);
+    outline: 3px solid var(--rm-primary);
     outline-offset: 2px;
     border-radius: 4px;
 }
 
-.btn:focus-visible,
+/* Form controls already change their border on focus; the ring is the extra cue. */
 .form-control:focus-visible,
 .form-select:focus-visible,
 .form-check-input:focus-visible {
     outline: none;
     box-shadow: var(--rm-focus-ring);
+}
+
+/* On dark surfaces the brand outline disappears, so the focus ring turns white. */
+.rm-navbar :focus-visible,
+.rm-auth-brand :focus-visible,
+.rm-footer :focus-visible,
+.rm-workspace-sidebar :focus-visible {
+    outline-color: #fff;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -210,18 +218,18 @@ img {
 .rm-search .form-control {
     border-radius: var(--rm-radius-pill);
     border: 1px solid rgba(255, 255, 255, 0.5);
-    background-color: rgba(255, 255, 255, 0.14);
+    background-color: rgba(255, 255, 255, 0.1);
     color: #fff;
     padding: 0.5rem 1.1rem;
     transition: background-color var(--rm-fast), border-color var(--rm-fast), box-shadow var(--rm-fast);
 }
 
 .rm-search .form-control::placeholder {
-    color: rgba(255, 255, 255, 0.72);
+    color: rgba(255, 255, 255, 0.85);
 }
 
 .rm-search .form-control:hover {
-    background-color: rgba(255, 255, 255, 0.22);
+    background-color: rgba(255, 255, 255, 0.18);
     border-color: rgba(255, 255, 255, 0.75);
 }
 
@@ -240,6 +248,9 @@ img {
 .rm-cart-btn {
     position: relative;
     color: #fff;
+    min-width: 44px;
+    min-height: 44px;
+    justify-content: center;
     padding: 0.45rem 0.65rem;
     border-radius: var(--rm-radius-pill);
     display: inline-flex;
@@ -301,7 +312,7 @@ img {
    5. Tombol
    --------------------------------------------------------------------------- */
 .btn {
-    min-height: 42px;
+    min-height: 44px;
     transition: background-color var(--rm-fast), border-color var(--rm-fast),
                 color var(--rm-fast), box-shadow var(--rm-fast);
 }
@@ -410,7 +421,7 @@ img {
 }
 
 .form-control::placeholder {
-    color: #93a5a1;
+    color: var(--rm-muted);
 }
 
 .form-label {
@@ -445,6 +456,9 @@ img {
 }
 
 .form-check-label {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
     color: var(--rm-ink-soft);
     cursor: pointer;
 }
@@ -495,10 +509,7 @@ img {
    --------------------------------------------------------------------------- */
 .rm-hero {
     position: relative;
-    background:
-        radial-gradient(circle at 12% 18%, rgba(255, 255, 255, 0.1) 0, transparent 42%),
-        radial-gradient(circle at 88% 8%, rgba(255, 255, 255, 0.08) 0, transparent 34%),
-        linear-gradient(160deg, var(--rm-primary-darker) 0%, var(--rm-primary) 58%, #2f7d7a 100%);
+    background: linear-gradient(160deg, var(--rm-primary-darker) 0%, var(--rm-primary) 58%, #2f7d7a 100%);
     color: #fff;
     padding: 3.5rem 0 3rem;
     border-bottom-left-radius: 2rem;
@@ -527,12 +538,12 @@ img {
     max-width: 230px;
     width: 100%;
     filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.28));
-    animation: rm-float 2.8s ease-in-out infinite alternate;
+    animation: rm-mascot-enter 0.8s var(--rm-ease) both;
 }
 
-@keyframes rm-float {
-    from { transform: translateY(0); }
-    to { transform: translateY(14px); }
+@keyframes rm-mascot-enter {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .rm-hero .rm-hero-search .form-control {
@@ -556,11 +567,13 @@ img {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
     font-weight: 700;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 /* Statistik di hero */
 .rm-stat {
-    background: rgba(255, 255, 255, 0.13);
+    background: rgba(15, 47, 46, 0.35);
     border: 1px solid rgba(255, 255, 255, 0.22);
     border-radius: var(--rm-radius);
     padding: 0.8rem 1.1rem;
@@ -570,7 +583,7 @@ img {
 }
 
 .rm-stat:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(15, 47, 46, 0.25);
     transform: translateY(-2px);
 }
 
@@ -584,7 +597,7 @@ img {
 .rm-stat .rm-stat-label {
     font-size: 0.78rem;
     letter-spacing: 0.02em;
-    color: rgba(255, 255, 255, 0.82);
+    color: rgba(255, 255, 255, 0.85);
 }
 
 /* ---------------------------------------------------------------------------
@@ -1021,22 +1034,36 @@ img {
 }
 
 .rm-detail-indicators [data-bs-target] {
+    position: relative;
+    width: 32px;
+    height: 44px;
+    margin: 0;
+    border: 0;
+    background: transparent;
+    opacity: 1;
+}
+
+.rm-detail-indicators [data-bs-target]::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
     width: 10px;
     height: 10px;
     border-radius: 50%;
     background-color: var(--rm-line-strong);
-    border: 0;
-    opacity: 1;
+    transform: translate(-50%, -50%);
     transition: background-color var(--rm-fast), transform var(--rm-fast);
 }
 
-.rm-detail-indicators [data-bs-target]:hover {
+.rm-detail-indicators [data-bs-target]:hover::after,
+.rm-detail-indicators [data-bs-target].active::after {
     background-color: var(--rm-primary);
-    transform: scale(1.2);
+    transform: translate(-50%, -50%) scale(1.25);
 }
 
 .rm-detail-indicators .active {
-    background-color: var(--rm-primary);
+    background: transparent;
 }
 
 .rm-detail-info {
@@ -1080,6 +1107,7 @@ img {
     height: 64px;
     border-radius: 50%;
     background-color: #fff;
+    color: var(--rm-warning);
     box-shadow: var(--rm-shadow-xs);
     display: inline-flex;
     align-items: center;
@@ -1108,9 +1136,7 @@ img {
 
 .rm-auth-brand {
     position: relative;
-    background:
-        radial-gradient(circle at 15% 12%, rgba(255, 255, 255, 0.1) 0, transparent 45%),
-        linear-gradient(165deg, var(--rm-primary-darker) 0%, var(--rm-primary) 60%, #2f7d7a 100%);
+    background: linear-gradient(165deg, var(--rm-primary-darker) 0%, var(--rm-primary) 60%, #2f7d7a 100%);
     color: #fff;
     display: flex;
     flex-direction: column;
@@ -1256,31 +1282,12 @@ img {
     color: #fff;
 }
 
-.rm-footer .rm-footer-social a {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.1);
-    margin-right: 0.55rem;
-    font-size: 1.1rem;
-    transition: background-color var(--rm-fast), color var(--rm-fast), transform var(--rm-fast);
-}
-
-.rm-footer .rm-footer-social a:hover {
-    background-color: var(--rm-accent);
-    color: #46280d;
-    transform: translateY(-3px);
-}
-
 .rm-footer-bottom {
     border-top: 1px solid rgba(255, 255, 255, 0.12);
     margin-top: 2.25rem;
     padding-top: 1.25rem;
     font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.55);
+    color: rgba(255, 255, 255, 0.68);
 }
 
 /* ---------------------------------------------------------------------------
@@ -1403,10 +1410,10 @@ img {
 .rm-workspace-nav-label {
     display: block;
     padding: 0.7rem 0.7rem 0.35rem;
-    color: rgba(255, 255, 255, 0.48);
-    font-size: 0.66rem;
+    color: rgba(255, 255, 255, 0.62);
+    font-size: 0.68rem;
     font-weight: 700;
-    letter-spacing: 0.11em;
+    letter-spacing: 0.04em;
     text-transform: uppercase;
 }
 
@@ -1414,7 +1421,7 @@ img {
     display: flex;
     align-items: center;
     gap: 0.7rem;
-    min-height: 42px;
+    min-height: 44px;
     padding: 0.62rem 0.75rem;
     border: 1px solid transparent;
     border-radius: 0.75rem;
@@ -1487,7 +1494,7 @@ img {
 
 .rm-workspace-sidebar-bottom > small {
     padding: 0.35rem 0.75rem 0;
-    color: rgba(255, 255, 255, 0.45);
+    color: rgba(255, 255, 255, 0.62);
     font-size: 0.68rem;
 }
 
@@ -1512,8 +1519,8 @@ img {
 
 .rm-workspace-toggle {
     display: none;
-    width: 42px;
-    height: 42px;
+    width: 44px;
+    height: 44px;
     border: 1px solid var(--rm-line);
     border-radius: 0.7rem;
     background: #fff;
@@ -1648,7 +1655,7 @@ img {
 
 .rm-legacy-workspace .menu a {
     width: 100%;
-    min-height: 42px;
+    min-height: 44px;
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -1683,7 +1690,7 @@ img {
 
 .rm-legacy-workspace .logout-btn {
     width: 100%;
-    min-height: 42px;
+    min-height: 44px;
     padding: 0.6rem 0.8rem;
     border: 1px solid transparent;
     border-radius: 0.7rem;
@@ -1832,7 +1839,7 @@ img {
 .rm-legacy-workspace .main input[type="search"],
 .rm-legacy-workspace .main input[type="text"]#searchInput {
     width: min(100%, 380px) !important;
-    min-height: 42px;
+    min-height: 44px;
     padding: 0.5rem 0.9rem !important;
     border: 1.5px solid var(--rm-line-strong) !important;
     border-radius: var(--rm-radius-pill) !important;
@@ -1960,6 +1967,12 @@ img {
 }
 
 @media (max-width: 767.98px) {
+    .btn-sm {
+        min-height: 44px;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+    }
+
     .rm-hero {
         padding: 2.5rem 0 2.25rem;
         text-align: center;

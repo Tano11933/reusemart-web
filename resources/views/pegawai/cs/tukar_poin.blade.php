@@ -1,6 +1,6 @@
 @extends('layouts.workspace')
 
-@section('title', 'Tukar Poin — ReuseMart')
+@section('title', 'Tukar Poin · ReuseMart')
 @section('page-title', 'Penukaran Poin')
 
 @section('content')
@@ -28,7 +28,7 @@
                             <td><strong>{{ $item->id_tukar_poin }}</strong></td>
                             <td>{{ $item->nama_pembeli }}</td>
                             <td>{{ $item->nama_merch }}<div class="small rm-text-muted">Jumlah {{ $item->jml }}</div></td>
-                            <td>{{ $item->tgl_tukar ? \Carbon\Carbon::parse($item->tgl_tukar)->translatedFormat('d M Y') : '—' }}</td>
+                            <td>{{ $item->tgl_tukar ? \Carbon\Carbon::parse($item->tgl_tukar)->translatedFormat('d M Y') : '-' }}</td>
                             <td>{{ $item->tgl_ambil ? \Carbon\Carbon::parse($item->tgl_ambil)->translatedFormat('d M Y') : 'Belum dijadwalkan' }}</td>
                             <td><span class="rm-redemption-status {{ $item->status === 'sudah diambil' ? 'is-done' : 'is-waiting' }}">{{ ucfirst($item->status) }}</span></td>
                             <td class="text-end">
@@ -42,7 +42,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="7"><div class="rm-empty py-4"><i class="bi bi-stars d-block"></i><p class="mb-0">Tidak ada data penukaran untuk filter ini.</p></div></td></tr>
+                        <tr><td colspan="7"><div class="rm-empty py-4"><i class="bi bi-gift d-block"></i><p class="mb-2">Tidak ada data penukaran untuk filter ini.</p>@if ($filter !== 'semua')<a href="{{ route('cs.tukarPoin') }}" class="btn rm-btn-outline">Lihat semua penukaran</a>@endif</div></td></tr>
                     @endforelse
                 </tbody>
             </table>

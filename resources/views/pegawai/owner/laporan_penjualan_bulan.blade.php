@@ -19,8 +19,7 @@
     }
     .logo-wrapper { margin-bottom: 40px; text-align: center; }
     .logo-wrapper img { max-width: 60px; height: auto; pointer-events: none; user-select: none; }
-    .maskot { height: 70px; width: auto; object-fit: contain; animation: maskot-smooth-updown 2.2s cubic-bezier(.6,.04,.34,1.1) infinite alternate; filter: drop-shadow(0 4px 16px rgba(30,91,90,0.14)); }
-    @keyframes maskot-smooth-updown { from { transform: translateY(0);} to { transform: translateY(14px);} }
+    .maskot { height: 70px; width: auto; object-fit: contain; filter: drop-shadow(0 4px 16px rgba(30,91,90,0.14)); }
     .menu { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 10px; }
     .menu a {
       width: 80%; text-align: center; padding: 10px;

@@ -1,6 +1,6 @@
 @extends('layouts.guest')
 
-@section('title', $item->nama_barang . ' — ReuseMart')
+@section('title', $item->nama_barang . ' · ReuseMart')
 @section('description', \Illuminate\Support\Str::limit(strip_tags($item->deskripsi_barang), 150))
 
 @push('styles')
@@ -81,7 +81,7 @@
                                     <img src="{{ $photoUrl }}"
                                          class="d-block w-100 h-100 zoom-trigger"
                                          data-full="{{ $photoUrl }}"
-                                         alt="{{ $item->nama_barang }} — foto {{ $index + 1 }}">
+                                         alt="{{ $item->nama_barang }} , foto {{ $index + 1 }}">
                                 </div>
                             @endforeach
                         </div>
@@ -155,7 +155,7 @@
                     <dl class="row rm-detail-list small mb-0">
                         <dt class="col-5 col-sm-4">Dititipkan sejak</dt>
                         <dd class="col-7 col-sm-8">
-                            {{ $item->tgl_titip ? \Carbon\Carbon::parse($item->tgl_titip)->translatedFormat('d F Y') : '—' }}
+                            {{ $item->tgl_titip ? \Carbon\Carbon::parse($item->tgl_titip)->translatedFormat('d F Y') : '-' }}
                         </dd>
                         <dt class="col-5 col-sm-4">ID Barang</dt>
                         <dd class="col-7 col-sm-8">{{ $item->id_barang }}</dd>

@@ -9,8 +9,7 @@
         .sidebar { width: 220px; height: 100vh; position: fixed; background: linear-gradient(to bottom, #365a64, #f0e6dd); padding: 35px 0; color: white; display: flex; flex-direction: column; justify-content: space-between; align-items: center; z-index: 10; }
         .logo-wrapper { margin-bottom: 40px; text-align: center; }
         .logo-wrapper img { max-width: 60px; height: auto; }
-        .maskot { height: 70px; width: auto; object-fit: contain; animation: maskot-smooth-updown 2.2s cubic-bezier(.6,.04,.34,1.1) infinite alternate; filter: drop-shadow(0 4px 16px rgba(30,91,90,0.14)); }
-        @keyframes maskot-smooth-updown { from { transform: translateY(0);} to { transform: translateY(14px);} }
+        .maskot { height: 70px; width: auto; object-fit: contain; filter: drop-shadow(0 4px 16px rgba(30,91,90,0.14)); }
         .menu { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 10px; }
         .menu a { width: 80%; text-align: center; padding: 10px; font-weight: bold; color: white; text-decoration: none; border-radius: 8px; transition: all 0.2s;}
         .menu a:hover, .menu a.active { background-color: white; color: #2c3e65;}

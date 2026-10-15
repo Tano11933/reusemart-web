@@ -1,6 +1,6 @@
 @extends('layouts.buyer')
 
-@section('title', 'Checkout — ReuseMart')
+@section('title', 'Checkout · ReuseMart')
 
 @section('content')
     @php
@@ -411,7 +411,7 @@
 
                     (data.data || []).forEach(address => {
                         const parts = [address.detail_alamat, address.desa, address.kecamatan, address.kabupaten].filter(Boolean);
-                        const label = `${address.label_alamat}${address.default_alamat ? ' (Utama)' : ''} — ${parts.join(', ')}`;
+                        const label = `${address.label_alamat}${address.default_alamat ? ' (Utama)' : ''}: ${parts.join(', ')}`;
                         addressSelect.append(new Option(label, address.id_alamat));
                     });
 

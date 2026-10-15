@@ -1,6 +1,6 @@
 @extends('layouts.partner')
 
-@section('title', 'Request Donasi — ReuseMart')
+@section('title', 'Request Donasi · ReuseMart')
 
 @section('content')
     @php
@@ -116,7 +116,7 @@
         .rm-organization-hero { display:flex; justify-content:space-between; align-items:center; gap:1.5rem; padding:clamp(1.4rem,3vw,2.2rem); border-radius:var(--rm-radius-lg); color:#fff; background:linear-gradient(125deg,var(--rm-primary-dark),var(--rm-primary),#2f7d7a); }
         .rm-organization-hero h1,.rm-organization-hero p { color:#fff; }
         .rm-organization-hero p { color:rgba(255,255,255,.78); }
-        .rm-org-eyebrow { display:block; margin-bottom:.45rem; color:rgba(255,255,255,.72); font-size:.72rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; }
+        .rm-org-eyebrow { display:block; margin-bottom:.45rem; color:rgba(255,255,255,.8); font-size:.78rem; font-weight:600; }
         .rm-org-hero-icon { width:66px;height:66px;flex:0 0 66px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.3);border-radius:50%;background:rgba(255,255,255,.12);font-size:1.8rem; }
         .rm-org-stat { display:flex;align-items:center;gap:.8rem;height:100%;padding:1rem;border:1px solid var(--rm-line);border-radius:var(--rm-radius);background:#fff;box-shadow:var(--rm-shadow-xs); }
         .rm-org-stat-icon { width:42px;height:42px;flex:0 0 42px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--rm-primary-soft);color:var(--rm-primary);font-size:1.15rem; }

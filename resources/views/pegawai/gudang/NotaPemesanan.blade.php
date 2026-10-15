@@ -1,6 +1,6 @@
 @extends('layouts.workspace')
 
-@section('title', 'Nota Pemesanan — ReuseMart')
+@section('title', 'Nota Pemesanan · ReuseMart')
 @section('page-title', 'Nota Pemesanan')
 
 @section('content')
@@ -30,7 +30,7 @@
                             <tr>
                                 <td><strong>{{ $order->id_pemesanan }}</strong></td>
                                 <td>{{ $order->pembeli->nama_pembeli ?? 'Pembeli' }}<div class="small rm-text-muted">{{ $order->id_pembeli }}</div></td>
-                                <td>{{ $order->tgl_pesan?->translatedFormat('d M Y') ?? '—' }}</td>
+                                <td>{{ $order->tgl_pesan?->translatedFormat('d M Y') ?? '-' }}</td>
                                 <td>{{ $order->jenis_pengantaran === 'diambil' ? 'Ambil sendiri' : 'Pengiriman' }}</td>
                                 <td><span class="rm-status-pill {{ $order->status === 'transaksi selesai' ? 'is-done' : '' }}">{{ ucfirst($order->status) }}</span></td>
                                 <td class="text-end"><a href="{{ route('nota.download', $order->id_pemesanan) }}" class="btn rm-btn-primary btn-sm"><i class="bi bi-download me-1"></i>Unduh Nota</a></td>

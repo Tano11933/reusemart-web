@@ -1,6 +1,6 @@
 @extends('layouts.auth')
 
-@section('title', 'Daftar Akun — ReuseMart')
+@section('title', 'Daftar Akun · ReuseMart')
 @section('brand-title', 'Gabung ke ReuseMart')
 @section('brand-text', 'Daftar sebagai pembeli untuk berbelanja barang titipan, atau sebagai organisasi untuk mengajukan donasi barang layak pakai.')
 

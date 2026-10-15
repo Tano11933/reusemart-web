@@ -1,6 +1,6 @@
 @extends('layouts.buyer')
 
-@section('title', 'Profil Saya — ReuseMart')
+@section('title', 'Profil Saya · ReuseMart')
 
 @section('content')
     <section class="container py-4 py-lg-5">
@@ -22,7 +22,7 @@
                     <h2 class="h4 fw-bold mt-3 mb-1">{{ $pembeli->nama_pembeli }}</h2>
                     <p class="rm-text-muted mb-3">{{ $pembeli->email }}</p>
                     <span class="rm-points-card">
-                        <i class="bi bi-stars"></i>
+                        <i class="bi bi-coin"></i>
                         <span>
                             <small>Poin tersedia</small>
                             <strong>{{ number_format($pembeli->poin ?? 0, 0, ',', '.') }}</strong>

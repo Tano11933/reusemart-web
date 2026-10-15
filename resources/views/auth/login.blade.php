@@ -1,6 +1,6 @@
 @extends('layouts.auth')
 
-@section('title', 'Masuk — ReuseMart')
+@section('title', 'Masuk · ReuseMart')
 @section('brand-title', 'Selamat Datang Kembali')
 @section('brand-text', 'Masuk untuk melanjutkan belanja, memantau titipan, atau mengelola operasional ReuseMart sesuai peranmu.')
 

@@ -1,6 +1,6 @@
 @extends('layouts.guest')
 
-@section('title', 'ReuseMart — Barang Bekas Berkualitas')
+@section('title', 'ReuseMart · Barang Bekas Berkualitas')
 @section('description', 'Temukan elektronik, furnitur, fashion, dan perlengkapan lain berkualitas dengan harga bersahabat di ReuseMart.')
 
 @section('content')
@@ -12,8 +12,7 @@
                     <img class="rm-hero-logo mb-3" src="{{ asset('image/white.png') }}" alt="Logo ReuseMart">
                     <h1 class="display-5 mb-3">Beri Barang Layak Pakai Kesempatan Kedua</h1>
                     <p class="lead mb-4">
-                        Jelajahi barang titipan berkualitas — dari elektronik, furnitur, sampai fashion —
-                        dengan harga bersahabat sekaligus mengurangi limbah.
+                        Jelajahi barang titipan berkualitas: elektronik, furnitur, fashion, dan perlengkapan lain dengan harga bersahabat, sekaligus ikut mengurangi limbah.
                     </p>
 
                     <form class="rm-hero-search d-flex flex-column flex-sm-row gap-2 mb-4" method="GET" action="{{ route('guest.lihat_semua') }}" role="search">

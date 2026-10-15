@@ -1,6 +1,6 @@
 @extends('layouts.partner')
 
-@section('title', ($barang->nama_barang ?? 'Detail Barang') . ' — ReuseMart')
+@section('title', ($barang->nama_barang ?? 'Detail Barang') . ' · ReuseMart')
 
 @section('content')
     @php
@@ -48,9 +48,9 @@
 
                     <dl class="row rm-detail-list small">
                         <dt class="col-5">Dititipkan</dt>
-                        <dd class="col-7">{{ $barang->tgl_titip ? \Carbon\Carbon::parse($barang->tgl_titip)->translatedFormat('d F Y') : '—' }}</dd>
+                        <dd class="col-7">{{ $barang->tgl_titip ? \Carbon\Carbon::parse($barang->tgl_titip)->translatedFormat('d F Y') : '-' }}</dd>
                         <dt class="col-5">Masa penitipan</dt>
-                        <dd class="col-7">{{ $endDate?->translatedFormat('d F Y') ?? '—' }}</dd>
+                        <dd class="col-7">{{ $endDate?->translatedFormat('d F Y') ?? '-' }}</dd>
                         <dt class="col-5">Garansi</dt>
                         <dd class="col-7">{{ $barang->garansi ? 'Aktif' : 'Tidak ada' }}{{ $barang->garansi && $barang->tgl_garansi ? ' · sampai ' . \Carbon\Carbon::parse($barang->tgl_garansi)->translatedFormat('d M Y') : '' }}</dd>
                         <dt class="col-5">Perpanjangan</dt>

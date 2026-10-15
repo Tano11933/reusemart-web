@@ -1,6 +1,6 @@
 @extends('layouts.workspace')
 
-@section('title', 'Verifikasi Pembayaran — ReuseMart')
+@section('title', 'Verifikasi Pembayaran · ReuseMart')
 @section('page-title', 'Verifikasi Pembayaran')
 
 @section('content')
@@ -51,7 +51,7 @@
                                     <strong>{{ $item->pembeli->nama_pembeli ?? 'Pembeli' }}</strong>
                                     <div class="small rm-text-muted">{{ $item->id_pembeli }}</div>
                                 </td>
-                                <td>{{ $item->tgl_pesan?->translatedFormat('d M Y') ?? '—' }}</td>
+                                <td>{{ $item->tgl_pesan?->translatedFormat('d M Y') ?? '-' }}</td>
                                 <td class="fw-semibold">Rp {{ number_format($item->total_harga ?? 0, 0, ',', '.') }}</td>
                                 <td>
                                     @if ($item->bukti_transfer)

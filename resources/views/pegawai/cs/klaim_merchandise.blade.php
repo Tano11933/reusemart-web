@@ -1,6 +1,6 @@
 @extends('layouts.workspace')
 
-@section('title', 'Klaim Merchandise — ReuseMart')
+@section('title', 'Klaim Merchandise · ReuseMart')
 @section('page-title', 'Klaim Merchandise')
 
 @section('content')
@@ -30,7 +30,7 @@
                             <td><strong>#{{ $item->id_klaim }}</strong></td>
                             <td>{{ $item->nama_pembeli }}</td>
                             <td>{{ $item->nama_merch }}</td>
-                            <td>{{ $item->tanggal_klaim ? \Carbon\Carbon::parse($item->tanggal_klaim)->translatedFormat('d M Y') : '—' }}</td>
+                            <td>{{ $item->tanggal_klaim ? \Carbon\Carbon::parse($item->tanggal_klaim)->translatedFormat('d M Y') : '-' }}</td>
                             <td>{{ $item->tanggal_ambil ? \Carbon\Carbon::parse($item->tanggal_ambil)->translatedFormat('d M Y') : 'Belum dijadwalkan' }}</td>
                             <td><span class="rm-claim-status {{ $item->status_ambil === 'sudah' ? 'is-done' : 'is-waiting' }}">{{ $item->status_ambil === 'sudah' ? 'Sudah diambil' : 'Belum diambil' }}</span></td>
                             <td class="text-end">
@@ -42,7 +42,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="7"><div class="rm-empty py-4"><i class="bi bi-gift d-block"></i><p class="mb-0">Tidak ada klaim merchandise pada filter ini.</p></div></td></tr>
+                        <tr><td colspan="7"><div class="rm-empty py-4"><i class="bi bi-gift d-block"></i><p class="mb-2">Tidak ada klaim merchandise pada filter ini.</p>@if (request('filter') === 'belum')<a href="{{ route('cs.klaimMerchandise') }}" class="btn rm-btn-outline">Lihat semua klaim</a>@endif</div></td></tr>
                     @endforelse
                 </tbody>
             </table>

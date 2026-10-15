@@ -1,6 +1,6 @@
 @extends('layouts.workspace')
 
-@section('title', 'Data Jabatan — ReuseMart')
+@section('title', 'Data Jabatan · ReuseMart')
 @section('page-title', 'Data Jabatan')
 
 @section('content')
@@ -37,7 +37,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="3"><div class="rm-empty py-4"><i class="bi bi-person-gear d-block"></i><p class="mb-0">Belum ada data jabatan.</p></div></td></tr>
+                        <tr><td colspan="3"><div class="rm-empty py-4"><i class="bi bi-person-gear d-block"></i><p class="mb-2">Belum ada data jabatan.</p><button type="button" class="btn rm-btn-primary" data-bs-toggle="modal" data-bs-target="#addJabatanModal"><i class="bi bi-plus-lg me-1"></i>Tambah Jabatan</button></div></td></tr>
                     @endforelse
                 </tbody>
             </table>

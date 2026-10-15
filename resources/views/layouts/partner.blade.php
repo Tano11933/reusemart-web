@@ -56,9 +56,23 @@
     <footer class="rm-footer">
         <div class="container">
             <div class="row g-4">
-                <div class="col-md-5"><h5>ReuseMart</h5><p class="mb-0">A Second Life for Quality Goods — A Better Life for the Planet.</p></div>
-                <div class="col-md-4"><h6>Hubungi Kami</h6><p class="mb-1"><i class="bi bi-envelope me-2"></i>ReuseMart@gmail.com</p><p class="mb-0"><i class="bi bi-geo-alt me-2"></i>Yogyakarta, Indonesia</p></div>
-                <div class="col-md-3"><h6>Ikuti Kami</h6><div class="rm-footer-social"><a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a><a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a></div></div>
+                <div class="col-md-5"><h5>ReuseMart</h5><p class="mb-0">A Second Life for Quality Goods, A Better Life for the Planet.</p></div>
+                <div class="col-md-3">
+                    <h6>Tautan</h6>
+                    @if ($role === 'organisasi')
+                        <p class="mb-1"><a href="{{ url('/organisasi/index_organisasi') }}">Request donasi</a></p>
+                    @else
+                        <p class="mb-1"><a href="{{ route('penitip.barangTitipan') }}">Barang titipan</a></p>
+                        <p class="mb-1"><a href="{{ route('penitip.history-penjualan') }}">Riwayat penjualan</a></p>
+                        <p class="mb-0"><a href="{{ route('penitip.profil_penitip') }}">Profil saya</a></p>
+                    @endif
+                </div>
+                <div class="col-md-4">
+                    <h6>Hubungi Kami</h6>
+                    <p class="mb-1"><i class="bi bi-envelope me-2"></i><a href="mailto:ReuseMart@gmail.com">ReuseMart@gmail.com</a></p>
+                    <p class="mb-1"><i class="bi bi-telephone me-2"></i><a href="tel:+62987654321">+62 987 654 321</a></p>
+                    <p class="mb-0"><i class="bi bi-geo-alt me-2"></i>Yogyakarta, Indonesia</p>
+                </div>
             </div>
             <div class="rm-footer-bottom d-flex justify-content-between flex-wrap gap-2"><span>&copy; 2025 ReuseMart.</span><span>Versi 2 &middot; diperbarui 2026</span></div>
         </div>

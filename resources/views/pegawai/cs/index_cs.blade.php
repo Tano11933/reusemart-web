@@ -1,6 +1,6 @@
 @extends('layouts.workspace')
 
-@section('title', 'Data Penitip — ReuseMart')
+@section('title', 'Data Penitip · ReuseMart')
 @section('page-title', 'Data Penitip')
 
 @section('content')
@@ -33,7 +33,7 @@
                             <td><strong>{{ $item->nama_penitip }}</strong><div class="small rm-text-muted">{{ $item->id_penitip }}</div></td>
                             <td>{{ $item->email }}<div class="small rm-text-muted">{{ $item->nomor_telepon }}</div></td>
                             <td>{{ $item->nik_penitip }}</td>
-                            <td>{{ $item->jenis_kelamin ?: '—' }}</td>
+                            <td>{{ $item->jenis_kelamin ?: '-' }}</td>
                             <td>
                                 @if ($photoUrl)
                                     <a href="{{ $photoUrl }}" target="_blank" rel="noopener" class="btn rm-btn-outline btn-sm"><i class="bi bi-card-image me-1"></i>Lihat KTP</a>
@@ -52,7 +52,7 @@
                             </div></td>
                         </tr>
                     @empty
-                        <tr><td colspan="6"><div class="rm-empty py-4"><i class="bi bi-person-lines-fill d-block"></i><p class="mb-0">Belum ada penitip terdaftar.</p></div></td></tr>
+                        <tr><td colspan="6"><div class="rm-empty py-4"><i class="bi bi-person-lines-fill d-block"></i><p class="mb-2">Belum ada penitip terdaftar.</p><button type="button" class="btn rm-btn-primary" data-bs-toggle="modal" data-bs-target="#addPenitipModal"><i class="bi bi-person-plus me-1"></i>Tambah Penitip</button></div></td></tr>
                     @endforelse
                 </tbody>
             </table>

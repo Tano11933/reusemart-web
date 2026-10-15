@@ -1,6 +1,6 @@
 @extends('layouts.workspace')
 
-@section('title', 'Data Pegawai — ReuseMart')
+@section('title', 'Data Pegawai · ReuseMart')
 @section('page-title', 'Data Pegawai')
 
 @section('content')
@@ -27,14 +27,14 @@
                             <td><strong>{{ $item->nama_pegawai }}</strong><div class="small rm-text-muted">{{ $item->id_pegawai }}</div></td>
                             <td><span class="rm-chip">{{ $item->jabatan->nama_jabatan ?? $item->id_jabatan }}</span></td>
                             <td>{{ $item->email }}<div class="small rm-text-muted">{{ $item->nomor_telepon }}</div></td>
-                            <td>{{ $item->alamat ?: '—' }}</td>
+                            <td>{{ $item->alamat ?: '-' }}</td>
                             <td class="text-end"><div class="d-inline-flex gap-2">
                                 <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill js-edit-employee" data-id="{{ $item->id_pegawai }}" data-name="{{ $item->nama_pegawai }}" data-email="{{ $item->email }}" data-phone="{{ $item->nomor_telepon }}" data-address="{{ $item->alamat }}"><i class="bi bi-pencil me-1"></i>Edit</button>
                                 <form action="{{ route('pegawai.destroy', $item->id_pegawai) }}" method="POST" class="js-delete-employee">@csrf @method('DELETE')<button type="submit" class="btn btn-outline-danger btn-sm rounded-pill"><i class="bi bi-trash me-1"></i>Hapus</button></form>
                             </div></td>
                         </tr>
                     @empty
-                        <tr><td colspan="5"><div class="rm-empty py-4"><i class="bi bi-people d-block"></i><p class="mb-0">Belum ada data pegawai.</p></div></td></tr>
+                        <tr><td colspan="5"><div class="rm-empty py-4"><i class="bi bi-people d-block"></i><p class="mb-2">Belum ada data pegawai.</p><button type="button" class="btn rm-btn-primary" data-bs-toggle="modal" data-bs-target="#addEmployeeModal"><i class="bi bi-person-plus me-1"></i>Tambah Pegawai</button></div></td></tr>
                     @endforelse
                 </tbody>
             </table>

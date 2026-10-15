@@ -1,6 +1,6 @@
 @extends('layouts.workspace')
 
-@section('title', 'Pesanan Pengiriman — ReuseMart')
+@section('title', 'Pesanan Pengiriman · ReuseMart')
 @section('page-title', 'Pesanan Pengiriman')
 
 @section('content')
@@ -26,7 +26,7 @@
                             <tr data-search="{{ \Illuminate\Support\Str::lower($order->id_pemesanan . ' ' . ($order->pembeli->nama_pembeli ?? '') . ' ' . $order->id_pembeli) }}">
                                 <td><strong>{{ $order->id_pemesanan }}</strong><div class="small rm-text-muted">{{ $order->detailPemesanans->count() }} barang</div></td>
                                 <td><strong>{{ $order->pembeli->nama_pembeli ?? 'Pembeli' }}</strong><div class="small rm-text-muted">{{ $order->id_pembeli }}</div></td>
-                                <td>{{ $order->tgl_pesan?->translatedFormat('d M Y') ?? '—' }}</td>
+                                <td>{{ $order->tgl_pesan?->translatedFormat('d M Y') ?? '-' }}</td>
                                 <td>
                                     @if ($order->tgl_kirim)
                                         <span class="rm-scheduled-date"><i class="bi bi-calendar-check me-1"></i>{{ \Carbon\Carbon::parse($order->tgl_kirim)->translatedFormat('d M Y') }}</span>
@@ -65,7 +65,7 @@
                 <div class="modal-body"><div class="d-grid gap-2">
                     @foreach ($order->detailPemesanans as $detail)
                         @php $item = $detail->barang; $photo = trim((string) ($item->foto_barang ?? '')); $image = ($photo && file_exists(public_path('image/' . ltrim($photo, '/')))) ? asset('image/' . ltrim($photo, '/')) : asset('image/placeholder.svg'); @endphp
-                        <div class="rm-order-detail-item"><img src="{{ $image }}" alt="{{ $item->nama_barang ?? 'Barang' }}"><div><strong>{{ $item->nama_barang ?? 'Barang' }}</strong><div class="small rm-text-muted">{{ $item->kategori ?? '—' }}</div></div><strong>Rp {{ number_format($detail->harga, 0, ',', '.') }}</strong></div>
+                        <div class="rm-order-detail-item"><img src="{{ $image }}" alt="{{ $item->nama_barang ?? 'Barang' }}"><div><strong>{{ $item->nama_barang ?? 'Barang' }}</strong><div class="small rm-text-muted">{{ $item->kategori ?? '-' }}</div></div><strong>Rp {{ number_format($detail->harga, 0, ',', '.') }}</strong></div>
                     @endforeach
                 </div></div>
             </div></div>

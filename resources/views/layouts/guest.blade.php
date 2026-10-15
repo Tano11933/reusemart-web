@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'ReuseMart — Barang Bekas Berkualitas')</title>
+    <title>@yield('title', 'ReuseMart · Barang Bekas Berkualitas')</title>
     <meta name="description" content="@yield('description', 'ReuseMart: marketplace barang bekas berkualitas. Beri barang layak pakai kesempatan kedua.')">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
@@ -63,21 +63,19 @@
             <div class="row g-4">
                 <div class="col-md-5">
                     <h5 class="mb-2">ReuseMart</h5>
-                    <p class="mb-0">A Second Life for Quality Goods — A Better Life for the Planet.</p>
+                    <p class="mb-0">A Second Life for Quality Goods, A Better Life for the Planet.</p>
+                </div>
+                <div class="col-md-3">
+                    <h6 class="mb-3">Jelajahi</h6>
+                    <p class="mb-1"><a href="{{ route('guest.home') }}">Beranda</a></p>
+                    <p class="mb-1"><a href="{{ route('guest.lihat_semua') }}">Semua produk</a></p>
+                    <p class="mb-0"><a href="{{ route('login') }}">Masuk akun</a></p>
                 </div>
                 <div class="col-md-4">
                     <h6 class="mb-3">Hubungi Kami</h6>
-                    <p class="mb-1"><i class="bi bi-envelope me-2"></i>ReuseMart@gmail.com</p>
-                    <p class="mb-1"><i class="bi bi-telephone me-2"></i>+62 987 654 321</p>
+                    <p class="mb-1"><i class="bi bi-envelope me-2"></i><a href="mailto:ReuseMart@gmail.com">ReuseMart@gmail.com</a></p>
+                    <p class="mb-1"><i class="bi bi-telephone me-2"></i><a href="tel:+62987654321">+62 987 654 321</a></p>
                     <p class="mb-0"><i class="bi bi-geo-alt me-2"></i>Yogyakarta, Indonesia</p>
-                </div>
-                <div class="col-md-3">
-                    <h6 class="mb-3">Ikuti Kami</h6>
-                    <div class="rm-footer-social">
-                        <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
-                        <a href="#" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
-                        <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
-                    </div>
                 </div>
             </div>
             <div class="rm-footer-bottom d-flex flex-column flex-md-row justify-content-between gap-2">

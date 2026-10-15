@@ -1,6 +1,6 @@
 @extends('layouts.partner')
 
-@section('title', 'Barang Titipan Saya — ReuseMart')
+@section('title', 'Barang Titipan Saya · ReuseMart')
 
 @section('content')
     <section class="container py-4 py-lg-5">
@@ -15,8 +15,8 @@
 
         <div class="row g-3 mb-4">
             <div class="col-sm-6 col-lg-4"><article class="rm-consignor-stat"><span><i class="bi bi-box-seam"></i></span><div><small>Total barang titipan</small><strong>{{ $penitip->barang()->count() }}</strong></div></article></div>
-            <div class="col-sm-6 col-lg-4"><article class="rm-consignor-stat"><span class="rating"><i class="bi bi-star-fill"></i></span><div><small>Rating penitip</small><strong>{{ is_null($penitip->rating) ? '—' : number_format($penitip->rating, 1) . '/5' }}</strong></div></article></div>
-            <div class="col-sm-6 col-lg-4"><article class="rm-consignor-stat"><span class="points"><i class="bi bi-stars"></i></span><div><small>Poin tersedia</small><strong>{{ number_format($penitip->poin ?? 0, 0, ',', '.') }}</strong></div></article></div>
+            <div class="col-sm-6 col-lg-4"><article class="rm-consignor-stat"><span class="rating"><i class="bi bi-star-fill"></i></span><div><small>Rating penitip</small><strong>{{ is_null($penitip->rating) ? '-' : number_format($penitip->rating, 1) . '/5' }}</strong></div></article></div>
+            <div class="col-sm-6 col-lg-4"><article class="rm-consignor-stat"><span class="points"><i class="bi bi-coin"></i></span><div><small>Poin tersedia</small><strong>{{ number_format($penitip->poin ?? 0, 0, ',', '.') }}</strong></div></article></div>
         </div>
 
         <section class="rm-partner-panel">
@@ -66,7 +66,7 @@
         .rm-consignor-hero { display:flex; justify-content:space-between; align-items:center; gap:1.5rem; padding:clamp(1.4rem,3vw,2.2rem); border-radius:var(--rm-radius-lg); color:#fff; background:linear-gradient(125deg,var(--rm-primary-dark),var(--rm-primary),#2f7d7a); }
         .rm-consignor-hero h1,.rm-consignor-hero p { color:#fff; }
         .rm-consignor-hero p { color:rgba(255,255,255,.8); }
-        .rm-org-eyebrow { display:block; margin-bottom:.45rem; color:rgba(255,255,255,.72); font-size:.72rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; }
+        .rm-org-eyebrow { display:block; margin-bottom:.45rem; color:rgba(255,255,255,.8); font-size:.78rem; font-weight:600; }
         .rm-consignor-avatar { width:68px;height:68px;flex:0 0 68px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.25);border-radius:50%;background:rgba(255,255,255,.12);font-size:1.8rem; }
         .rm-consignor-stat { display:flex;align-items:center;gap:.8rem;height:100%;padding:1rem;border:1px solid var(--rm-line);border-radius:var(--rm-radius);background:#fff;box-shadow:var(--rm-shadow-xs); }
         .rm-consignor-stat > span { width:42px;height:42px;flex:0 0 42px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--rm-primary-soft);color:var(--rm-primary);font-size:1.15rem; }

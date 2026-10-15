@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Workspace — ReuseMart')</title>
+    <title>@yield('title', 'Workspace · ReuseMart')</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -61,7 +61,7 @@
                         <a href="{{ route('pegawai.cs') }}" class="{{ request()->routeIs('pegawai.cs') ? 'active' : '' }}"><i class="bi bi-speedometer2"></i>Dashboard CS</a>
                         <a href="{{ route('verifikasi-pembayaran.cs') }}" class="{{ request()->routeIs('verifikasi-pembayaran.cs') ? 'active' : '' }}"><i class="bi bi-credit-card"></i>Verifikasi Pembayaran</a>
                         <a href="{{ route('diskusi.index') }}" class="{{ request()->routeIs('diskusi.index') ? 'active' : '' }}"><i class="bi bi-chat-square-text"></i>Diskusi Produk</a>
-                        <a href="{{ route('cs.tukarPoin') }}" class="{{ request()->routeIs('cs.tukarPoin') ? 'active' : '' }}"><i class="bi bi-stars"></i>Penukaran Poin</a>
+                        <a href="{{ route('cs.tukarPoin') }}" class="{{ request()->routeIs('cs.tukarPoin') ? 'active' : '' }}"><i class="bi bi-coin"></i>Penukaran Poin</a>
                         <a href="{{ route('cs.klaimMerchandise') }}" class="{{ request()->routeIs('cs.klaimMerchandise') ? 'active' : '' }}"><i class="bi bi-gift"></i>Klaim Merchandise</a>
                     @elseif ($jabatan === 'Gudang')
                         <span class="rm-workspace-nav-label">Operasional Gudang</span>

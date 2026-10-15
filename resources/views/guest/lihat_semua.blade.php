@@ -1,6 +1,6 @@
 @extends('layouts.guest')
 
-@section('title', 'Semua Produk — ReuseMart')
+@section('title', 'Semua Produk · ReuseMart')
 @section('description', 'Jelajahi seluruh barang titipan yang sedang tersedia di ReuseMart.')
 
 @section('content')

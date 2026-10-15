@@ -1,6 +1,6 @@
 @extends('layouts.workspace')
 
-@section('title', 'Data Organisasi — ReuseMart')
+@section('title', 'Data Organisasi · ReuseMart')
 @section('page-title', 'Data Organisasi')
 
 @section('content')
@@ -26,8 +26,8 @@
                         <tr data-search="{{ \Illuminate\Support\Str::lower($item->id_organisasi . ' ' . $item->nama_organisasi . ' ' . $item->email) }}">
                             <td><strong>{{ $item->nama_organisasi }}</strong><div class="small rm-text-muted">{{ $item->id_organisasi }}</div></td>
                             <td>{{ $item->email }}</td>
-                            <td>{{ $item->nomor_telepon ?: '—' }}</td>
-                            <td>{{ $item->alamat_organisasi ?: '—' }}</td>
+                            <td>{{ $item->nomor_telepon ?: '-' }}</td>
+                            <td>{{ $item->alamat_organisasi ?: '-' }}</td>
                             <td class="text-end"><div class="d-inline-flex gap-2">
                                 <button type="button" class="btn btn-outline-secondary btn-sm rounded-pill js-edit-organization" data-id="{{ $item->id_organisasi }}" data-email="{{ $item->email }}" data-phone="{{ $item->nomor_telepon }}" data-address="{{ $item->alamat_organisasi }}"><i class="bi bi-pencil me-1"></i>Edit</button>
                                 <form action="{{ route('organisasi.destroy', $item->id_organisasi) }}" method="POST" class="js-delete-organization">
@@ -37,7 +37,7 @@
                             </div></td>
                         </tr>
                     @empty
-                        <tr><td colspan="5"><div class="rm-empty py-4"><i class="bi bi-building d-block"></i><p class="mb-0">Belum ada organisasi terdaftar.</p></div></td></tr>
+                        <tr><td colspan="5"><div class="rm-empty py-4"><i class="bi bi-building d-block"></i><p class="mb-2">Belum ada organisasi terdaftar.</p><button type="button" class="btn rm-btn-primary" data-bs-toggle="modal" data-bs-target="#addOrganizationModal"><i class="bi bi-plus-lg me-1"></i>Tambah Organisasi</button></div></td></tr>
                     @endforelse
                 </tbody>
             </table>

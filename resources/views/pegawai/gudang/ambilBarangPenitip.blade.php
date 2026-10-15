@@ -1,6 +1,6 @@
 @extends('layouts.workspace')
 
-@section('title', 'Pengambilan Titipan — ReuseMart')
+@section('title', 'Pengambilan Titipan · ReuseMart')
 @section('page-title', 'Pengambilan Titipan')
 
 @section('content')
@@ -26,7 +26,7 @@
                             <tr data-search="{{ \Illuminate\Support\Str::lower($item->nama_barang . ' ' . ($item->penitip->nama_penitip ?? '') . ' ' . $item->id_barang) }}">
                                 <td><strong>{{ $item->nama_barang }}</strong><div class="small rm-text-muted">{{ $item->id_barang }} · {{ $item->kategori }}</div></td>
                                 <td>{{ $item->penitip->nama_penitip ?? 'Penitip' }}<div class="small rm-text-muted">{{ $item->id_penitip }}</div></td>
-                                <td>{{ $item->tgl_akhir ? \Carbon\Carbon::parse($item->tgl_akhir)->translatedFormat('d M Y') : '—' }}</td>
+                                <td>{{ $item->tgl_akhir ? \Carbon\Carbon::parse($item->tgl_akhir)->translatedFormat('d M Y') : '-' }}</td>
                                 <td><span class="rm-status-pill">{{ ucfirst($item->status) }}</span></td>
                                 <td class="text-end"><div class="d-inline-flex flex-wrap justify-content-end gap-2">
                                     <form action="{{ route('gudang.barang-diambil', $item->id_barang) }}" method="POST" class="rm-retrieval-form">@csrf<input type="hidden" name="status_action" value="diambil"><button type="submit" class="btn rm-btn-primary btn-sm"><i class="bi bi-check2 me-1"></i>Sudah Diambil</button></form>

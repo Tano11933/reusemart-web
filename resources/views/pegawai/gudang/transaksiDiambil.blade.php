@@ -1,6 +1,6 @@
 @extends('layouts.workspace')
 
-@section('title', 'Pesanan Ambil Sendiri — ReuseMart')
+@section('title', 'Pesanan Ambil Sendiri · ReuseMart')
 @section('page-title', 'Pesanan Ambil Sendiri')
 
 @section('content')
@@ -26,7 +26,7 @@
                             <tr data-search="{{ \Illuminate\Support\Str::lower($order->id_pemesanan . ' ' . ($order->pembeli->nama_pembeli ?? '') . ' ' . $order->id_pembeli) }}">
                                 <td><strong>{{ $order->id_pemesanan }}</strong><div class="small rm-text-muted">Pembayaran {{ $order->status_pembayaran }}</div></td>
                                 <td><strong>{{ $order->pembeli->nama_pembeli ?? 'Pembeli' }}</strong><div class="small rm-text-muted">{{ $order->id_pembeli }}</div></td>
-                                <td>{{ $order->tgl_pesan?->translatedFormat('d M Y') ?? '—' }}</td>
+                                <td>{{ $order->tgl_pesan?->translatedFormat('d M Y') ?? '-' }}</td>
                                 <td><button type="button" class="btn btn-outline-secondary btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#detail-{{ \Illuminate\Support\Str::slug($order->id_pemesanan) }}"><i class="bi bi-eye me-1"></i>{{ $order->detailPemesanans->count() }} barang</button></td>
                                 <td class="fw-semibold">Rp {{ number_format($order->total_harga ?? $order->total_harga_pesanan ?? 0, 0, ',', '.') }}</td>
                                 <td class="text-end">
@@ -55,7 +55,7 @@
                                 $photo = trim((string) ($item->foto_barang ?? ''));
                                 $image = ($photo !== '' && file_exists(public_path('image/' . ltrim($photo, '/')))) ? asset('image/' . ltrim($photo, '/')) : asset('image/placeholder.svg');
                             @endphp
-                            <div class="rm-order-detail-item"><img src="{{ $image }}" alt="{{ $item->nama_barang ?? 'Barang' }}" onerror="this.onerror=null;this.src='{{ asset('image/placeholder.svg') }}'"><div class="min-w-0"><strong>{{ $item->nama_barang ?? 'Barang tidak tersedia' }}</strong><div class="small rm-text-muted">Berat {{ $item->berat_barang ?? '—' }} kg &middot; {{ $item->kategori ?? '—' }}</div></div><span class="fw-semibold">Rp {{ number_format($detail->harga, 0, ',', '.') }}</span></div>
+                            <div class="rm-order-detail-item"><img src="{{ $image }}" alt="{{ $item->nama_barang ?? 'Barang' }}" onerror="this.onerror=null;this.src='{{ asset('image/placeholder.svg') }}'"><div class="min-w-0"><strong>{{ $item->nama_barang ?? 'Barang tidak tersedia' }}</strong><div class="small rm-text-muted">Berat {{ $item->berat_barang ?? '-' }} kg &middot; {{ $item->kategori ?? '-' }}</div></div><span class="fw-semibold">Rp {{ number_format($detail->harga, 0, ',', '.') }}</span></div>
                         @endforeach
                     </div>
                 </div>

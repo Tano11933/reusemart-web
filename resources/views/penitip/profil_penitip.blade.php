@@ -1,6 +1,6 @@
 @extends('layouts.partner')
 
-@section('title', 'Profil Penitip — ReuseMart')
+@section('title', 'Profil Penitip · ReuseMart')
 
 @section('content')
     <section class="container py-4 py-lg-5">
@@ -19,7 +19,7 @@
                     <p class="rm-text-muted mb-3">{{ $penitip->email }}</p>
                     <div class="rm-consignor-rating">
                         <i class="bi bi-star-fill"></i>
-                        <strong>{{ is_null($penitip->rating) ? '—' : number_format($penitip->rating, 1) }}</strong>
+                        <strong>{{ is_null($penitip->rating) ? '-' : number_format($penitip->rating, 1) }}</strong>
                         <span>/ 5 rating</span>
                     </div>
                     <a href="{{ route('penitip.barangTitipan') }}" class="btn rm-btn-primary w-100 mt-3"><i class="bi bi-box-seam me-1"></i>Lihat Barang Titipan</a>
@@ -46,7 +46,7 @@
 
                 <div class="row g-3 mt-1">
                     <div class="col-sm-6"><section class="rm-balance-card"><span><i class="bi bi-wallet2"></i></span><div><small>Saldo penitipan</small><strong>Rp {{ number_format($penitip->saldo ?? 0, 0, ',', '.') }}</strong></div></section></div>
-                    <div class="col-sm-6"><section class="rm-balance-card points"><span><i class="bi bi-stars"></i></span><div><small>Poin</small><strong>{{ number_format($penitip->poin ?? 0, 0, ',', '.') }} poin</strong></div></section></div>
+                    <div class="col-sm-6"><section class="rm-balance-card points"><span><i class="bi bi-coin"></i></span><div><small>Poin</small><strong>{{ number_format($penitip->poin ?? 0, 0, ',', '.') }} poin</strong></div></section></div>
                 </div>
             </div>
         </div>

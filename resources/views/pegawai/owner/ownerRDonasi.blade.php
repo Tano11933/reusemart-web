@@ -1,6 +1,6 @@
 @extends('layouts.workspace')
 
-@section('title', 'Request Donasi — ReuseMart')
+@section('title', 'Request Donasi · ReuseMart')
 @section('page-title', 'Request Donasi')
 
 @section('content')

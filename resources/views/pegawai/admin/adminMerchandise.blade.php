@@ -1,6 +1,6 @@
 @extends('layouts.workspace')
 
-@section('title', 'Data Merchandise — ReuseMart')
+@section('title', 'Data Merchandise · ReuseMart')
 @section('page-title', 'Data Merchandise')
 
 @section('content')
@@ -34,7 +34,7 @@
                             <td class="text-end"><div class="d-inline-flex gap-2"><button type="button" class="btn btn-outline-secondary btn-sm rounded-pill js-edit-merchandise" data-id="{{ $item->id_merch }}" data-name="{{ $item->nama_merch }}" data-stock="{{ $item->stok }}" data-points="{{ $item->harga_poin }}" data-image="{{ $image }}"><i class="bi bi-pencil me-1"></i>Edit</button><form action="{{ route('merchandise.destroy', $item->id_merch) }}" method="POST" class="js-delete-merchandise">@csrf @method('DELETE')<button type="submit" class="btn btn-outline-danger btn-sm rounded-pill"><i class="bi bi-trash me-1"></i>Hapus</button></form></div></td>
                         </tr>
                     @empty
-                        <tr><td colspan="4"><div class="rm-empty py-4"><i class="bi bi-gift d-block"></i><p class="mb-0">Belum ada merchandise.</p></div></td></tr>
+                        <tr><td colspan="4"><div class="rm-empty py-4"><i class="bi bi-gift d-block"></i><p class="mb-2">Belum ada merchandise.</p><button type="button" class="btn rm-btn-primary" data-bs-toggle="modal" data-bs-target="#addMerchandiseModal"><i class="bi bi-plus-lg me-1"></i>Tambah Merchandise</button></div></td></tr>
                     @endforelse
                 </tbody>
             </table>

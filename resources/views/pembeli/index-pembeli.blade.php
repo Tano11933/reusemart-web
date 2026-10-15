@@ -1,6 +1,6 @@
 @extends('layouts.buyer')
 
-@section('title', 'Kelola Alamat — ReuseMart')
+@section('title', 'Kelola Alamat · ReuseMart')
 
 @section('content')
     <section class="container py-4 py-lg-5">

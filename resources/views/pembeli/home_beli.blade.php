@@ -1,6 +1,6 @@
 @extends('layouts.buyer')
 
-@section('title', 'Beranda Pembeli — ReuseMart')
+@section('title', 'Beranda Pembeli · ReuseMart')
 
 @section('content')
     <section class="rm-hero">
@@ -12,7 +12,7 @@
                         {{ $pembeli->nama_pembeli ?? 'Pembeli' }}
                     </h1>
                     <p class="lead mb-4">
-                        Temukan barang titipan berkualitas hari ini — cek dulu katalog terbaru kami.
+                        Temukan barang titipan berkualitas hari ini. Cek dulu katalog terbaru kami.
                     </p>
 
                     <div class="d-flex flex-wrap gap-2">

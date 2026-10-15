@@ -1,6 +1,6 @@
 @extends('layouts.buyer')
 
-@section('title', 'Konfirmasi Pembayaran — ReuseMart')
+@section('title', 'Konfirmasi Pembayaran · ReuseMart')
 
 @section('content')
     <section class="container py-4 py-lg-5">
@@ -103,7 +103,7 @@
                     </div>
 
                     <div class="rm-payment-points mt-3">
-                        <i class="bi bi-stars"></i>
+                        <i class="bi bi-coin"></i>
                         <span>Kamu akan mendapat <strong>{{ number_format($pemesanan->poin_pesanan ?? 0, 0, ',', '.') }} poin</strong> setelah pesanan selesai.</span>
                     </div>
                 </section>

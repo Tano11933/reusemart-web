@@ -1,6 +1,6 @@
 @extends('layouts.buyer')
 
-@section('title', $barang->nama_barang . ' — ReuseMart')
+@section('title', $barang->nama_barang . ' · ReuseMart')
 
 @push('styles')
     <style>
@@ -201,7 +201,7 @@
                                             data-full="{{ $photoUrl }}" aria-label="Perbesar foto {{ $index + 1 }}">
                                         <img src="{{ $photoUrl }}"
                                              class="d-block w-100 h-100"
-                                             alt="{{ $barang->nama_barang }} — foto {{ $index + 1 }}"
+                                             alt="{{ $barang->nama_barang }} , foto {{ $index + 1 }}"
                                              onerror="this.onerror=null;this.src='{{ asset('image/placeholder.svg') }}'">
                                     </button>
                                 </div>
@@ -277,7 +277,7 @@
                                 @csrf
                                 <input type="hidden" name="buy_now" value="1">
                                 <button type="submit" class="btn rm-btn-primary w-100">
-                                    <i class="bi bi-lightning-charge me-1"></i>Beli Sekarang
+                                    <i class="bi bi-bag-check me-1"></i>Beli Sekarang
                                 </button>
                             </form>
                         </div>
@@ -293,7 +293,7 @@
                         <dd class="col-7 col-sm-8">{{ $barang->kondisi ?? 'Baik' }}</dd>
                         <dt class="col-5 col-sm-4">Dititipkan</dt>
                         <dd class="col-7 col-sm-8">
-                            {{ $barang->tgl_titip ? \Carbon\Carbon::parse($barang->tgl_titip)->translatedFormat('d F Y') : '—' }}
+                            {{ $barang->tgl_titip ? \Carbon\Carbon::parse($barang->tgl_titip)->translatedFormat('d F Y') : '-' }}
                         </dd>
                         <dt class="col-5 col-sm-4">ID Barang</dt>
                         <dd class="col-7 col-sm-8">{{ $barang->id_barang }}</dd>

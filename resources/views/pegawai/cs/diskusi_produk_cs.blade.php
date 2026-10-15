@@ -1,6 +1,6 @@
 @extends('layouts.workspace')
 
-@section('title', 'Diskusi Produk — ReuseMart')
+@section('title', 'Diskusi Produk · ReuseMart')
 @section('page-title', 'Diskusi Produk')
 
 @section('content')
@@ -30,7 +30,7 @@
                         <p class="rm-cs-latest mb-0">
                             @if ($item->latestKomentar)
                                 <span>Komentar terbaru:</span> {{ $item->latestKomentar->komentar }}
-                                <small>— {{ $item->latestKomentar->pembeli?->nama_pembeli ?? $item->latestKomentar->pegawai?->nama_pegawai ?? 'Anonim' }}</small>
+                                <small>oleh {{ $item->latestKomentar->pembeli?->nama_pembeli ?? $item->latestKomentar->pegawai?->nama_pegawai ?? 'Anonim' }}</small>
                             @else
                                 <span>Belum ada komentar</span>
                             @endif
@@ -176,7 +176,7 @@
                 form.querySelector('textarea').value = '';
                 document.getElementById('thread-' + form.dataset.id).querySelector('.rm-thread-count').innerHTML = '<i class="bi bi-chat-dots"></i>' + container.querySelectorAll('.rm-cs-comment').length + ' komentar';
                 const latest = document.querySelector(`.rm-cs-product-card[data-id="${CSS.escape(form.dataset.id)}"] .rm-cs-latest`);
-                if (latest) latest.textContent = `Komentar terbaru: ${result.komentar} — ${result.nama}`;
+                if (latest) latest.textContent = `Komentar terbaru dari ${result.nama}: ${result.komentar}`;
             } catch (error) {
                 Swal.fire({ icon: 'error', title: 'Tidak terkirim', text: error.message });
             } finally { button.disabled = false; }

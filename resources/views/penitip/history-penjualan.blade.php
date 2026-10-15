@@ -1,6 +1,6 @@
 @extends('layouts.partner')
 
-@section('title', 'Riwayat Penjualan — ReuseMart')
+@section('title', 'Riwayat Penjualan · ReuseMart')
 
 @section('content')
     @php $totalPenjualan = $transactions->sum(fn ($detail) => $detail->harga ?? 0); @endphp
@@ -33,9 +33,9 @@
                                     $img = ($foto !== '' && file_exists(public_path('image/' . ltrim($foto, '/')))) ? asset('image/' . ltrim($foto, '/')) : asset('image/placeholder.svg');
                                 @endphp
                                 <tr data-search="{{ \Illuminate\Support\Str::lower(($item->nama_barang ?? '') . ' ' . ($order->id_pemesanan ?? '')) }}">
-                                    <td><div class="d-flex align-items-center gap-3"><img class="rm-sales-thumb" src="{{ $img }}" alt="{{ $item->nama_barang ?? 'Barang' }}" onerror="this.onerror=null;this.src='{{ asset('image/placeholder.svg') }}'"><div><strong>{{ $item->nama_barang ?? 'Barang tidak tersedia' }}</strong><div class="small rm-text-muted">{{ $item->kategori ?? '—' }}</div></div></div></td>
-                                    <td>{{ $order->id_pemesanan ?? '—' }}</td>
-                                    <td>{{ $order?->tgl_pesan?->translatedFormat('d M Y') ?? '—' }}</td>
+                                    <td><div class="d-flex align-items-center gap-3"><img class="rm-sales-thumb" src="{{ $img }}" alt="{{ $item->nama_barang ?? 'Barang' }}" onerror="this.onerror=null;this.src='{{ asset('image/placeholder.svg') }}'"><div><strong>{{ $item->nama_barang ?? 'Barang tidak tersedia' }}</strong><div class="small rm-text-muted">{{ $item->kategori ?? '-' }}</div></div></div></td>
+                                    <td>{{ $order->id_pemesanan ?? '-' }}</td>
+                                    <td>{{ $order?->tgl_pesan?->translatedFormat('d M Y') ?? '-' }}</td>
                                     <td class="fw-bold" style="color:var(--rm-primary)">Rp {{ number_format($detail->harga ?? 0, 0, ',', '.') }}</td>
                                     <td class="text-end"><a href="{{ $item ? route('penitip.detail_barang', ['id' => $item->id_barang]) : '#' }}" class="btn rm-btn-outline btn-sm" @disabled(!$item)>Detail</a></td>
                                 </tr>

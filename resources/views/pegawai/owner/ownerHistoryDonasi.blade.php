@@ -1,6 +1,6 @@
 @extends('layouts.workspace')
 
-@section('title', 'Riwayat Donasi — ReuseMart')
+@section('title', 'Riwayat Donasi · ReuseMart')
 @section('page-title', 'Riwayat Donasi')
 
 @section('content')
@@ -36,7 +36,7 @@
                         <tr data-search="{{ \Illuminate\Support\Str::lower($org->nama_organisasi . ' ' . $org->id_organisasi) }}">
                             <td><strong>{{ $org->nama_organisasi }}</strong></td>
                             <td><span class="rm-chip">{{ $org->id_organisasi }}</span></td>
-                            <td>{{ $org->alamat_organisasi ?: '—' }}</td>
+                            <td>{{ $org->alamat_organisasi ?: '-' }}</td>
                             <td class="text-end">
                                 <button type="button" class="btn rm-btn-outline btn-sm js-show-donations"
                                         data-org-id="{{ $org->id_organisasi }}" data-org-name="{{ $org->nama_organisasi }}">
@@ -93,7 +93,7 @@
 
         function cell(row, value) {
             const td = document.createElement('td');
-            td.textContent = value ?? '—';
+            td.textContent = value ?? '-';
             row.append(td);
         }
 
@@ -127,7 +127,7 @@
                         const tr = document.createElement('tr');
                         cell(tr, item.nama_barang_request);
                         cell(tr, item.id_donasi);
-                        cell(tr, item.tgl_donasi ? new Date(item.tgl_donasi).toLocaleDateString('id-ID') : '—');
+                        cell(tr, item.tgl_donasi ? new Date(item.tgl_donasi).toLocaleDateString('id-ID') : '-');
                         cell(tr, item.nama_penerima);
                         historyBody.append(tr);
                     });
