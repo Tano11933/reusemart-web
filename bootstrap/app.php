@@ -17,6 +17,13 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->validateCsrfTokens(except: [
             'api/login',
         ]);
+
+        // Pembatas akses: "role" untuk semua peran pengguna, "jabatan" untuk
+        // pegawai (dipakai setelah "role:pegawai").
+        $middleware->alias([
+            'role' => \App\Http\Middleware\EnsureRole::class,
+            'jabatan' => \App\Http\Middleware\EnsureJabatan::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

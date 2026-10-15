@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 
 class KlaimMerchandiseController extends Controller
 {
@@ -31,7 +30,7 @@ class KlaimMerchandiseController extends Controller
                 'merchandise.nama_merch',
                 'cs.nama_pegawai as nama_cs'
             )
-            ->orderBy('klaim_merchandise.created_at', 'desc');
+            ->orderBy('klaim_merchandise.tanggal_klaim', 'desc');
 
         if ($filter == 'belum') {
             $query->where('klaim_merchandise.status_ambil', 'belum');
@@ -59,8 +58,7 @@ class KlaimMerchandiseController extends Controller
             ->where('status_ambil', 'belum')
             ->update([
                 'tanggal_ambil' => $request->tanggal_ambil,
-                'status_ambil' => 'sudah',
-                'updated_at' => Carbon::now()
+                'status_ambil' => 'sudah'
             ]);
 
         if ($update) {

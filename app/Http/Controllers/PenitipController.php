@@ -371,7 +371,7 @@ class PenitipController extends Controller
     public function getBarangPenitip($idPenitip)
     {
         $barang = Barang::where('id_penitip', $idPenitip)
-            ->orderByDesc('created_at')
+            ->orderByDesc('tgl_titip')
             ->get()
             ->map(function ($item) {
                 // Cek status donasi dan tanggal akhir

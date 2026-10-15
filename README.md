@@ -86,6 +86,8 @@ Anggota tim: Tano11933, paniae.
 **v2 (2026)**
 - Desain ulang seluruh halaman: layout, komponen, kontras, dan aksesibilitas keyboard
 - Perbaikan route rusak dan duplikat, pengamanan akses alamat dan pembatalan pesanan
+- Pembatasan akses per peran dan jabatan lewat middleware, plus pembatasan percobaan login
+- Perbaikan bug halaman klaim merchandise CS dan endpoint barang penitip di aplikasi mobile
 - Checkout menyimpan alamat pengiriman dan metode pembayaran
 - Endpoint mobile dirapikan, termasuk login, token FCM, dan riwayat
 - Dokumentasi: `DESIGN.md` dan screenshot before/after
