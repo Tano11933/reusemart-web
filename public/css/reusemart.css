@@ -3035,3 +3035,57 @@ img {
         font-size: 0.92rem;
     }
 }
+
+/* ---------------------------------------------------------------------------
+   Rapikan lanjutan: kartu tanpa ruang kosong, detail tanpa kotak-kotak
+   --------------------------------------------------------------------------- */
+
+.rm-product-card .rm-product-title {
+    min-height: 0;
+    font-size: 0.86rem;
+}
+
+.rm-product-card .rm-product-body {
+    padding: 0.65rem 0.75rem 0.8rem;
+}
+
+.rm-product-card .rm-product-price {
+    margin-top: 0.05rem;
+}
+
+.rm-price-box {
+    background: transparent;
+    border: 0;
+    padding: 0;
+}
+
+.rm-price-box .rm-price {
+    font-size: 1.9rem;
+    line-height: 1.15;
+}
+
+.rm-detail-info h1 {
+    font-size: 1.55rem;
+    line-height: 1.25;
+}
+
+.rm-detail-divider {
+    margin: 1.1rem 0;
+    border-top: 1px solid var(--rm-line);
+    opacity: 1;
+}
+
+.rm-detail-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem 0.65rem;
+    color: var(--rm-ink-soft);
+}
+
+.rm-detail-meta .rm-text-muted {
+    margin-right: 0.25rem;
+}
+
+.rm-detail-meta .rm-detail-dot {
+    color: var(--rm-line-strong);
+}

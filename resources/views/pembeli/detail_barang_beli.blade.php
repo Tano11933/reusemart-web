@@ -223,6 +223,8 @@
                         @endif
                     </div>
 
+                    <hr class="rm-detail-divider">
+
                     @if ($inCart)
                         <div class="alert alert-info d-flex align-items-center gap-2 mb-3">
                             <i class="bi bi-cart-check-fill" aria-hidden="true"></i>
@@ -252,16 +254,13 @@
                         Barang bekas layak pakai. Periksa deskripsi dan foto sebelum checkout.
                     </p>
 
-                    <dl class="row rm-detail-list small mb-0">
-                        <dt class="col-5 col-sm-4">Kondisi</dt>
-                        <dd class="col-7 col-sm-8">{{ $barang->kondisi ?? 'Baik' }}</dd>
-                        <dt class="col-5 col-sm-4">Dititipkan</dt>
-                        <dd class="col-7 col-sm-8">
-                            {{ $barang->tgl_titip ? \Carbon\Carbon::parse($barang->tgl_titip)->translatedFormat('d F Y') : '-' }}
-                        </dd>
-                        <dt class="col-5 col-sm-4">ID Barang</dt>
-                        <dd class="col-7 col-sm-8">{{ $barang->id_barang }}</dd>
-                    </dl>
+                    <div class="rm-detail-meta small">
+                        <span><span class="rm-text-muted">Kondisi</span>{{ $barang->kondisi ?? 'Baik' }}</span>
+                        <span class="rm-detail-dot" aria-hidden="true">&bull;</span>
+                        <span><span class="rm-text-muted">Dititipkan</span>{{ $barang->tgl_titip ? \Carbon\Carbon::parse($barang->tgl_titip)->translatedFormat('d F Y') : '-' }}</span>
+                        <span class="rm-detail-dot" aria-hidden="true">&bull;</span>
+                        <span><span class="rm-text-muted">ID Barang</span>{{ $barang->id_barang }}</span>
+                    </div>
                 </div>
             </div>
 

@@ -140,11 +140,13 @@
                         @endif
                     </div>
 
-                    <div class="d-grid gap-2 d-sm-flex mb-2">
-                        <a href="{{ route('login') }}" class="btn rm-btn-primary btn-lg flex-fill">
+                    <hr class="rm-detail-divider">
+
+                    <div class="d-flex flex-wrap gap-2 mb-2">
+                        <a href="{{ route('login') }}" class="btn rm-btn-primary flex-fill">
                             <i class="bi bi-cart-check me-1" aria-hidden="true"></i>Beli Sekarang
                         </a>
-                        <a href="{{ route('login') }}" class="btn rm-btn-outline btn-lg flex-fill">
+                        <a href="{{ route('login') }}" class="btn rm-btn-outline flex-fill">
                             <i class="bi bi-cart-plus me-1" aria-hidden="true"></i>Keranjang
                         </a>
                     </div>
@@ -153,14 +155,11 @@
                         Login sebagai pembeli untuk membeli atau menambahkan barang ke keranjang.
                     </p>
 
-                    <dl class="row rm-detail-list small mb-0">
-                        <dt class="col-5 col-sm-4">Dititipkan sejak</dt>
-                        <dd class="col-7 col-sm-8">
-                            {{ $item->tgl_titip ? \Carbon\Carbon::parse($item->tgl_titip)->translatedFormat('d F Y') : '-' }}
-                        </dd>
-                        <dt class="col-5 col-sm-4">ID Barang</dt>
-                        <dd class="col-7 col-sm-8">{{ $item->id_barang }}</dd>
-                    </dl>
+                    <div class="rm-detail-meta small">
+                        <span><span class="rm-text-muted">Dititipkan sejak</span>{{ $item->tgl_titip ? \Carbon\Carbon::parse($item->tgl_titip)->translatedFormat('d F Y') : '-' }}</span>
+                        <span class="rm-detail-dot" aria-hidden="true">&bull;</span>
+                        <span><span class="rm-text-muted">ID Barang</span>{{ $item->id_barang }}</span>
+                    </div>
                 </div>
             </div>
 
