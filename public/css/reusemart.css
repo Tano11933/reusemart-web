@@ -2678,6 +2678,13 @@ img {
     border-radius: var(--rm-radius-sm);
 }
 
+/* Di desktop hamburger harus disembunyikan (menu tampil penuh). */
+@media (min-width: 992px) {
+    .rm-navbar .navbar-toggler {
+        display: none;
+    }
+}
+
 .rm-navbar .navbar-collapse .btn {
     white-space: nowrap;
 }
@@ -2872,4 +2879,109 @@ img {
 .rm-detail-list dd {
     padding-top: 0.15rem;
     padding-bottom: 0.15rem;
+}
+
+/* ---------------------------------------------------------------------------
+   Kartu produk gaya toko Apple: tile gambar besar, teks minimalis
+   --------------------------------------------------------------------------- */
+
+.rm-product-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0;
+}
+
+.rm-product-card .rm-product-media {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border: 0;
+    border-radius: var(--rm-radius-lg);
+    background: #f4f6f6;
+}
+
+.rm-product-card .rm-product-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s var(--rm-ease);
+}
+
+.rm-product-card:hover .rm-product-media,
+.rm-product-card:focus-within .rm-product-media {
+    background: #eef2f2;
+}
+
+.rm-product-card:hover .rm-product-media img {
+    transform: scale(1.035);
+}
+
+.rm-card-link {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: var(--rm-radius-lg);
+}
+
+.rm-product-card .rm-badge-garansi {
+    position: absolute;
+    top: 0.6rem;
+    left: 0.6rem;
+    z-index: 2;
+    padding: 0.18rem 0.5rem;
+    border: 1px solid var(--rm-line);
+    border-radius: var(--rm-radius-sm);
+    background: rgba(255, 255, 255, 0.94);
+    color: var(--rm-ink);
+    font-size: 0.72rem;
+    font-weight: 600;
+}
+
+.rm-product-card .rm-product-body {
+    padding: 0.8rem 0.15rem 0;
+}
+
+.rm-product-card .rm-product-title {
+    margin: 0;
+    font-size: 0.98rem;
+    font-weight: 600;
+    color: var(--rm-ink);
+}
+
+.rm-product-card .rm-product-title a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.rm-product-card:hover .rm-product-title {
+    color: var(--rm-primary);
+}
+
+.rm-product-card .rm-product-price {
+    margin: 0.2rem 0 0.35rem;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--rm-muted);
+}
+
+.rm-product-card .rm-product-meta {
+    font-size: 0.8rem;
+    color: var(--rm-muted);
+}
+
+.rm-product-card .rm-product-actions {
+    position: relative;
+    z-index: 2;
+    margin-top: 0.7rem;
+}
+
+.rm-product-card .rm-product-actions .btn {
+    width: 100%;
 }
