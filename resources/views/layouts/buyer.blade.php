@@ -24,7 +24,7 @@
     <nav class="navbar navbar-expand-lg rm-navbar sticky-top py-2">
         <div class="container">
             <a class="navbar-brand text-white" href="{{ route('home_beli') }}">
-                <span class="rm-brand-mark"><i class="bi bi-recycle" aria-hidden="true"></i></span>
+                <img src="{{ asset('image/white.png') }}" alt="Logo ReuseMart">
                 <span>ReuseMart</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#buyerNavbar" aria-controls="buyerNavbar" aria-expanded="false" aria-label="Buka navigasi">

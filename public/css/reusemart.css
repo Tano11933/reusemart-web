@@ -173,17 +173,10 @@ img {
     padding-right: 0.75rem;
 }
 
-.rm-brand-mark {
-    width: 36px;
-    height: 36px;
-    display: inline-grid;
-    place-items: center;
-    border-radius: var(--rm-radius-sm);
-    background: rgba(255, 255, 255, 0.16);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    color: #fff;
-    font-size: 1.1rem;
-    flex-shrink: 0;
+.rm-navbar .navbar-brand img {
+    max-width: 42px;
+    height: auto;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.18));
 }
 
 .rm-navbar .nav-link {
@@ -2772,4 +2765,111 @@ img {
         margin-top: 1.5rem;
         padding-top: 1.35rem;
     }
+}
+
+/* ---------------------------------------------------------------------------
+   Revisi tampilan: kartu produk, filter katalog, dan halaman detail
+   --------------------------------------------------------------------------- */
+
+/* Kartu produk: meta sebaris dan tombol detail yang ringan (tidak kaku). */
+.rm-product-meta-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-top: 0.2rem;
+}
+
+.rm-rating-sm {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--rm-muted);
+    white-space: nowrap;
+}
+
+.rm-rating-sm i {
+    font-size: 0.8rem;
+    color: var(--rm-gold);
+}
+
+.rm-btn-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    width: 100%;
+    margin-top: 0.9rem;
+    padding: 0.55rem 0.9rem;
+    border: 1px solid var(--rm-line);
+    border-radius: var(--rm-radius-sm);
+    background: #fff;
+    color: var(--rm-primary);
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color var(--rm-fast), border-color var(--rm-fast), color var(--rm-fast), box-shadow var(--rm-fast);
+}
+
+.rm-btn-card:hover,
+.rm-btn-card:focus-visible {
+    background: var(--rm-primary-soft);
+    border-color: var(--rm-primary);
+    color: var(--rm-primary-dark);
+    box-shadow: var(--rm-shadow-xs);
+}
+
+/* Filter katalog: tombol tidak boleh terlipat, radius lebih kecil. */
+.rm-filter-bar {
+    border-radius: var(--rm-radius) !important;
+}
+
+.rm-filter-bar .input-group {
+    min-width: 0;
+}
+
+.rm-filter-bar .input-group .input-group-text {
+    border-radius: var(--rm-radius-sm) 0 0 var(--rm-radius-sm);
+}
+
+.rm-filter-bar .input-group .form-control {
+    border-radius: 0 var(--rm-radius-sm) var(--rm-radius-sm) 0;
+}
+
+.rm-filter-bar .btn[type="submit"] {
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.rm-filter-toggle {
+    flex-shrink: 0;
+    border-radius: var(--rm-radius-sm);
+}
+
+/* Halaman detail: harga lebih ringkas dan tombol tidak kebesaran. */
+.rm-detail-card {
+    padding: 1.5rem;
+}
+
+.rm-price-box {
+    background-color: var(--rm-bg-soft);
+    padding: 0.9rem 1.1rem;
+}
+
+.rm-price-box .rm-price {
+    font-size: 1.55rem;
+}
+
+.rm-detail-info .btn-lg {
+    padding: 0.65rem 1.25rem;
+    font-size: 1rem;
+    border-radius: var(--rm-radius-sm);
+}
+
+.rm-detail-list dt,
+.rm-detail-list dd {
+    padding-top: 0.15rem;
+    padding-bottom: 0.15rem;
 }

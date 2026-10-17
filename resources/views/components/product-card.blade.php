@@ -20,9 +20,6 @@
     $rating = optional($item->penitip)->rating;
     $hasRating = !is_null($rating);
     $ratingValue = $hasRating ? max(0, min(5, (float) $rating)) : null;
-    $fullStars = $hasRating ? (int) floor($ratingValue) : 0;
-    $halfStar = $hasRating && ($ratingValue - $fullStars) >= 0.5;
-    $emptyStars = $hasRating ? 5 - $fullStars - ($halfStar ? 1 : 0) : 0;
 @endphp
 
 <article class="rm-product-card">
@@ -38,34 +35,25 @@
         <h3 class="rm-product-title">{{ $item->nama_barang }}</h3>
         <p class="rm-product-price"><span class="rm-product-currency">Rp</span> {{ number_format($item->harga_barang, 0, ',', '.') }}</p>
 
-        <div class="rm-product-tags">
+        <div class="rm-product-meta-row">
             <span class="rm-chip rm-product-category">
                 <i class="bi bi-tag" aria-hidden="true"></i>
                 <span>{{ $item->kategori }}</span>
             </span>
-        </div>
 
-        @if ($hasRating)
-            <div class="rm-rating" aria-label="Rating penjual {{ number_format($ratingValue, 1) }} dari 5">
-                @for ($i = 0; $i < $fullStars; $i++)
-                    <i class="bi bi-star-fill"></i>
-                @endfor
-                @if ($halfStar)
-                    <i class="bi bi-star-half"></i>
-                @endif
-                @for ($i = 0; $i < $emptyStars; $i++)
-                    <i class="bi bi-star"></i>
-                @endfor
-                <span class="rm-rating-value">{{ number_format($ratingValue, 1) }}</span>
-            </div>
-        @else
-            <p class="rm-product-meta mb-0"><i class="bi bi-person me-1" aria-hidden="true"></i>Penjual baru</p>
-        @endif
+            @if ($hasRating)
+                <span class="rm-rating-sm" aria-label="Rating penjual {{ number_format($ratingValue, 1) }} dari 5">
+                    <i class="bi bi-star-fill" aria-hidden="true"></i>{{ number_format($ratingValue, 1) }}
+                </span>
+            @else
+                <span class="rm-rating-sm rm-text-muted">Penjual baru</span>
+            @endif
+        </div>
 
         @if (isset($action))
             <div class="mt-auto pt-2">{{ $action }}</div>
         @else
-            <a href="{{ $detailUrl }}" class="btn rm-btn-primary w-100">Lihat Detail</a>
+            <a href="{{ $detailUrl }}" class="rm-btn-card">Lihat Detail <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
         @endif
     </div>
 </article>

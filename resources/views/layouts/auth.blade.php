@@ -20,7 +20,7 @@
     <div class="rm-auth">
         <aside class="rm-auth-brand">
             <a href="{{ route('guest.home') }}" class="rm-auth-logo">
-                <span class="rm-brand-mark"><i class="bi bi-recycle" aria-hidden="true"></i></span>
+                <img src="{{ asset('image/white.png') }}" alt="Logo ReuseMart">
                 <span>ReuseMart</span>
             </a>
 
