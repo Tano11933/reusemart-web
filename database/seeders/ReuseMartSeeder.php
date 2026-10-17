@@ -172,6 +172,16 @@ class ReuseMartSeeder extends Seeder
                 ['T2', 'T1', null, 'Tenda Camping Kapasitas 4', 'Waterproof, lengkap dengan tas', 'Perlengkapan Taman & Outdoor', 900000, 4, 'tendacamping.jpg', 'tendacamping1.jpg', 'tersedia'],
                 ['P1', 'T2', null, 'Printer Epson L360', 'Masih bisa print dan scan', 'Elektronik & Gadget', 750000, 6, 'printerepson.jpg', 'printerepson1.jpg', 'tersedia'],
                 ['B2', 'T2', null, 'Ban Motor IRC', 'Ukuran 80/90-14, masih layak', 'Otomotif & Aksesori', 200000, 8, 'banmotorirc.jpg', 'banmotorirc1.jpg', 'terjual'],
+                ['R2', 'T1', 'P5', 'Rice Cooker Philips', 'Masih berfungsi normal, panci anti lengket, lengkap', 'Elektronik & Gadget', 275000, 3, 'ricecooker.jpg', 'ricecooker2.jpg', 'tersedia'],
+                ['K4', 'T1', null, 'Kipas Angin Cosmos', 'Tiga kecepatan, baling-baling bersih, angin dingin', 'Elektronik & Gadget', 160000, 3, 'kipasangin.png', 'kipasangin2.png', 'tersedia'],
+                ['S6', 'T1', null, 'Setrika Philips', 'Panas stabil, alas anti lengket, kabel masih bagus', 'Elektronik & Gadget', 130000, 1, 'setrika.jpg', 'setrika2.png', 'tersedia'],
+                ['S7', 'T2', null, 'Speaker Bluetooth JBL', 'Suara jernih, baterai tahan lama, tombol normal', 'Elektronik & Gadget', 450000, 1, 'speaker.jpg', 'speaker2.jpg', 'tersedia'],
+                ['K5', 'T1', null, 'Keyboard Mechanical', 'Tombol responsif, lampu berfungsi, kabel USB lengkap', 'Elektronik & Gadget', 250000, 1, 'keyboard.jpg', 'keyboard2.jpg', 'tersedia'],
+                ['S8', 'T2', 'P5', 'Sepatu Sneakers Vans', 'Ukuran 42, pemakaian ringan, sol masih tebal', 'Pakaian & Aksesori', 350000, 1, 'sepatu.jpg', 'sepatu2.jpg', 'tersedia'],
+                ['T4', 'T1', null, 'Tas Ransel Eiger', 'Banyak kompartemen, jahitan kuat, resleting lancar', 'Pakaian & Aksesori', 280000, 1, 'ransel.jpg', 'ransel2.jpg', 'tersedia'],
+                ['J4', 'T2', 'P5', 'Jaket Denim', 'Ukuran L, bahan tebal, warna masih pekat', 'Pakaian & Aksesori', 220000, 1, 'jaketdenim.jpg', 'jaketdenim2.jpg', 'tersedia'],
+                ['R3', 'T1', null, 'Rak Sepatu Kayu', 'Tiga tingkat, kayu kokoh, muat enam pasang', 'Perabotan Rumah Tangga', 185000, 4, 'raksepatu.jpg', 'raksepatu2.jpg', 'tersedia'],
+                ['L3', 'T2', null, 'Lampu Meja Belajar', 'Lampu LED hemat energi, leher bisa diatur', 'Perabotan Rumah Tangga', 120000, 1, 'lampumeja.jpg', 'lampumeja2.jpg', 'tersedia'],
             ];
 
             foreach ($barang as [$id, $idPenitip, $idHunter, $nama, $deskripsi, $kategori, $harga, $berat, $foto, $foto2, $status]) {
