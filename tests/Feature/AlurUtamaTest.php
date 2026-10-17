@@ -66,6 +66,41 @@ class AlurUtamaTest extends TestCase
         ])->assertOk()->assertJsonPath('success', true);
     }
 
+    public function test_riwayat_mobile_menyediakan_tanggal_pesanan(): void
+    {
+        $response = $this->getJson('/api/pembeli/PEM1/history-data');
+
+        $response->assertOk()->assertJsonStructure([
+            '0' => ['id_pemesanan', 'status', 'tgl_pesan', 'total_harga_pesanan', 'detail'],
+        ]);
+        $this->assertNotEmpty($response->json('0.tgl_pesan'));
+    }
+
+    public function test_data_demo_mobile_mengisi_tugas_riwayat_dan_komisi(): void
+    {
+        $demoId = 'DEMO-KURIR-' . now()->format('Ym');
+        $this->assertDatabaseHas('pemesanan', ['id_pemesanan' => $demoId]);
+        $this->assertDatabaseHas('detail_pemesanan', [
+            'id_pemesanan' => $demoId,
+            'id_barang' => 'R2',
+        ]);
+        $this->assertDatabaseHas('barang', ['id_barang' => 'R2']);
+        $pengiriman = $this->getJson('/api/pegawai/P6/pengiriman')->assertOk();
+        $this->assertNotEmpty($pengiriman->json());
+
+        $riwayat = $this->getJson('/api/kurir/P6/history')->assertOk();
+        $riwayat->assertJsonStructure([
+            '0' => ['id_pemesanan', 'status', 'detail'],
+        ]);
+        $this->assertNotEmpty($riwayat->json('0.detail'), json_encode($riwayat->json()));
+
+        $komisi = $this->getJson('/api/pegawai/P5/komisi')->assertOk();
+        $this->assertGreaterThan(0, $komisi->json('total_komisi'));
+
+        $hunterBarang = $this->getJson('/api/barang/hunter/P5')->assertOk();
+        $this->assertNotEmpty($hunterBarang->json());
+    }
+
     public function test_register_pembeli_baru(): void
     {
         $this->post('/register/pembeli', [

@@ -61,7 +61,7 @@ php artisan migrate --seed
 php artisan serve
 ```
 
-Seeder mengisi data demo (akun semua peran, merchandise, barang titipan, dan satu transaksi selesai) dengan kata sandi `password123`:
+Seeder mengisi data demo (akun semua peran, katalog berfoto, pesanan kurir, riwayat pembelian, dan komisi hunter) dengan kata sandi `password123`:
 
 | Peran | Jabatan | Email |
 |---|---|---|

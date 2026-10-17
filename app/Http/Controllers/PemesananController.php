@@ -628,6 +628,7 @@ class PemesananController extends Controller
             return [
                 'id_pemesanan' => $p->id_pemesanan,
                 'status' => $p->status,
+                'tgl_pesan' => $p->tgl_pesan,
                 'total_harga_pesanan' => $p->total_harga_pesanan,
                 'detail' => $p->detailPemesanans->map(function($d) {
                     // Join ke tabel barang
@@ -694,16 +695,18 @@ class PemesananController extends Controller
                 'total_harga_pesanan' => $p->total_harga_pesanan,
                 'tgl_pesan' => $p->tgl_pesan,
                 'detail' => $p->detailPemesanans->map(function ($d) {
+                    $barang = $d->barang;
+
                     return [
                         'id_detail_pemesanan' => $d->id_detail_pemesanan,
-                        'nama_barang' => $d->barang->nama_barang ?? '-',
+                        'nama_barang' => $barang->nama_barang ?? '-',
                         'harga' => $d->harga,
-                        'foto_barang' => $d->barang->foto_barang ?? '',
-                        'kategori' => $d->barang->kategori ?? '-',
-                        'deskripsi' => $d->barang->deskripsi_barang ?? '-',
-                        'status_garansi' => ($d->barang->garansi ?? false) ? 'Aktif' : 'Tidak Ada',
-                        'tgl_titip' => $d->barang->tgl_titip ? $d->barang->tgl_titip->toIso8601String() : '-',
-                        'tgl_laku' => $d->barang->tgl_laku ? $d->barang->tgl_laku->toIso8601String() : '-',
+                        'foto_barang' => $barang->foto_barang ?? '',
+                        'kategori' => $barang->kategori ?? '-',
+                        'deskripsi' => $barang->deskripsi_barang ?? '-',
+                        'status_garansi' => ($barang->garansi ?? false) ? 'Aktif' : 'Tidak Ada',
+                        'tgl_titip' => $barang?->tgl_titip?->toIso8601String() ?? '-',
+                        'tgl_laku' => $barang?->tgl_laku?->toIso8601String() ?? '-',
                     ];
                 })->values(),
             ];
@@ -723,33 +726,59 @@ class PemesananController extends Controller
 
         public function historyByKurir($id)
     {
-        $pemesanan = Pemesanan::with(['detailPemesanans.barang'])
+        $pemesanan = Pemesanan::query()
             ->where('id_pegawai', $id)
             ->where('status', 'transaksi selesai')
             ->get();
 
         $result = $pemesanan->map(function ($p) {
+            $details = DB::table('detail_pemesanan as detail')
+                ->join('barang', 'detail.id_barang', '=', 'barang.id_barang')
+                ->where('detail.id_pemesanan', $p->id_pemesanan)
+                ->select(
+                    'detail.id_detail_pemesanan',
+                    'detail.harga as harga_detail',
+                    'barang.nama_barang',
+                    'barang.harga_barang',
+                    'barang.foto_barang',
+                    'barang.kategori',
+                    'barang.deskripsi_barang',
+                    'barang.garansi',
+                    'barang.tgl_titip',
+                    'barang.tgl_laku'
+                )
+                ->get()
+                ->map(function ($detail) {
+                    return [
+                        'id_detail_pemesanan' => $detail->id_detail_pemesanan,
+                        'nama_barang' => $detail->nama_barang,
+                        'harga' => $detail->harga_barang ?? $detail->harga_detail,
+                        'foto_barang' => $detail->foto_barang ?? '',
+                        'kategori' => $detail->kategori ?? '-',
+                        'deskripsi' => $detail->deskripsi_barang ?? '-',
+                        'status_garansi' => $detail->garansi ? 'Aktif' : 'Tidak Ada',
+                        'tanggal_titip' => $detail->tgl_titip
+                            ? Carbon::parse($detail->tgl_titip)->toDateString()
+                            : null,
+                        'tanggal_laku' => $detail->tgl_laku
+                            ? Carbon::parse($detail->tgl_laku)->toDateString()
+                            : null,
+                    ];
+                })
+                ->values();
+
+            if ($details->isEmpty()) {
+                return null;
+            }
+
             return [
                 'id_pemesanan' => $p->id_pemesanan,
                 'status' => $p->status,
                 'total_harga_pesanan' => $p->total_harga_pesanan,
                 'tgl_pesan' => $p->tgl_pesan->toDateString(), // Format tanggal pesan ke format 'YYYY-MM-DD'
-                'detail' => $p->detailPemesanans->map(function ($d) {
-                    $barang = $d->barang;
-                    return [
-                        'id_detail_pemesanan' => $d->id_detail_pemesanan,
-                        'nama_barang' => $barang->nama_barang ?? '',
-                        'harga' => $barang->harga_barang ?? $d->harga,
-                        'foto_barang' => $barang->foto_barang ?? '',
-                        'kategori' => $barang->kategori ?? '-',
-                        'deskripsi' => $barang->deskripsi_barang ?? '-',
-                        'status_garansi' => $barang->garansi ? 'Aktif' : 'Tidak Ada',
-                        'tanggal_titip' => $barang->tgl_titip ? $barang->tgl_titip->toDateString() : null, // Format tanggal titip
-                        'tanggal_laku' => $barang->tgl_laku ? $barang->tgl_laku->toDateString() : null, // Format tanggal laku
-                    ];
-                }),
+                'detail' => $details,
             ];
-        });
+        })->filter()->values();
 
         return response()->json($result);
     }

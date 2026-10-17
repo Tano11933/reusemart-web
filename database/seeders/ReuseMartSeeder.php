@@ -325,6 +325,8 @@ class ReuseMartSeeder extends Seeder
                 'status' => 'belum diambil',
             ]);
         }
+
+        $this->seedMobileDemoDelivery($now);
     }
 
     private function emailAda(string $tabel, string $email): bool
@@ -352,5 +354,92 @@ class ReuseMartSeeder extends Seeder
         } while (DB::table($tabel)->where($kolom, $kandidat)->exists());
 
         return $kandidat;
+    }
+
+    /**
+     * Satu pesanan selesai dengan rincian dan komisi agar halaman riwayat
+     * kurir, riwayat pembeli, serta rincian komisi memiliki contoh nyata.
+     */
+    private function seedMobileDemoDelivery(Carbon $now): void
+    {
+        $kurirId = DB::table('pegawai')->where('email', 'kurir@reusemart.test')->value('id_pegawai');
+        $hunterId = DB::table('pegawai')->where('email', 'hunter@reusemart.test')->value('id_pegawai');
+        $pembeliId = DB::table('pembeli')->where('email', 'budi@reusemart.test')->value('id_pembeli');
+        $barang = DB::table('barang')
+            ->where('nama_barang', 'Rice Cooker Philips')
+            ->first();
+
+        if ($barang && DB::table('detail_pemesanan')->where('id_barang', $barang->id_barang)->exists()) {
+            $barang = DB::table('barang')
+                ->where('status', 'tersedia')
+                ->whereNotIn('id_barang', DB::table('detail_pemesanan')->select('id_barang'))
+                ->orderBy('id_barang')
+                ->first();
+        }
+
+        if (! $kurirId || ! $hunterId || ! $pembeliId || ! $barang) {
+            return;
+        }
+
+        $idPemesanan = 'DEMO-KURIR-' . $now->format('Ym');
+        if (DB::table('pemesanan')->where('id_pemesanan', $idPemesanan)->exists()) {
+            return;
+        }
+
+        $harga = (int) $barang->harga_barang;
+        $tglPesan = $now->copy()->subDays(2);
+
+        DB::table('pemesanan')->insert([
+            'id_pemesanan' => $idPemesanan,
+            'id_pembeli' => $pembeliId,
+            'id_pegawai' => $kurirId,
+            'tgl_pesan' => $tglPesan->toDateTimeString(),
+            'tgl_kirim' => $now->copy()->subDay()->toDateString(),
+            'tgl_ambil' => null,
+            'poin_pesanan' => (int) floor($harga / 10000),
+            'status' => 'transaksi selesai',
+            'jenis_pengantaran' => 'dikirim',
+            'alamat_pengiriman' => null,
+            'tgl_pembayaran' => $tglPesan->copy()->addHour()->toDateTimeString(),
+            'total_harga_pesanan' => $harga,
+            'total_ongkir' => 20000,
+            'harga_setelah_ongkir' => $harga + 20000,
+            'potongan_harga' => 0,
+            'total_harga' => $harga + 20000,
+            'bukti_transfer' => null,
+            'metode_pembayaran' => 'transfer',
+            'status_pembayaran' => 'valid',
+        ]);
+
+        DB::table('detail_pemesanan')->insert([
+            'id_detail_pemesanan' => 'DP-' . $idPemesanan,
+            'rating_diberikan' => 5,
+            'id_barang' => $barang->id_barang,
+            'id_pemesanan' => $idPemesanan,
+            'harga' => $harga,
+        ]);
+
+        DB::table('barang')->where('id_barang', $barang->id_barang)->update([
+            'id_hunter' => $hunterId,
+            'status' => 'terjual',
+            'tgl_laku' => $now->toDateString(),
+        ]);
+
+        $nomorKomisi = 0;
+        foreach (DB::table('komisi')->pluck('id_komisi') as $idKomisi) {
+            if (preg_match('/^K0*(\d+)$/i', (string) $idKomisi, $matches)) {
+                $nomorKomisi = max($nomorKomisi, (int) $matches[1]);
+            }
+        }
+
+        DB::table('komisi')->insert([
+            'id_komisi' => 'K' . ($nomorKomisi + 1),
+            'id_barang' => $barang->id_barang,
+            'id_pemesanan' => $idPemesanan,
+            'id_pegawai' => $hunterId,
+            'komisi_perusahaan' => $harga * 0.15,
+            'komisi_hunter' => $harga * 0.05,
+            'bonus' => 0,
+        ]);
     }
 }
