@@ -2,19 +2,19 @@
 
 namespace Tests\Feature;
 
-// use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ExampleTest extends TestCase
 {
+    use RefreshDatabase;
+
     /**
-     * A basic test example.
+     * Halaman publik beranda tampil setelah database diisi data demo.
      */
     public function test_the_application_returns_a_successful_response(): void
     {
-        // TODO(v2 fase 2): aktifkan kembali setelah tabel aplikasi punya migrasi.
-        // Test ini gagal di SQLite in-memory karena skema tabel hanya ada di MySQL lokal.
-        $this->markTestSkipped('Butuh migrasi tabel aplikasi (lihat roadmap v2, fase 2).');
+        $this->seed();
 
         $response = $this->get('/');
 

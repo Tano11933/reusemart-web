@@ -57,11 +57,29 @@ php artisan key:generate
 Atur koneksi MySQL di `.env`, lalu:
 
 ```bash
-php artisan migrate
+php artisan migrate --seed
 php artisan serve
 ```
 
-Catatan: migrasi bawaan Laravel tersedia. Skema tabel aplikasi (barang, pemesanan, dan seterusnya) belum dikemas sebagai migrasi, jadi untuk saat ini dibutuhkan dump basis data pengembangan. Pengemasan skema ke migrasi dan seeder adalah agenda berikutnya.
+Seeder mengisi data demo (akun semua peran, merchandise, barang titipan, dan satu transaksi selesai) dengan kata sandi `password123`:
+
+| Peran | Jabatan | Email |
+|---|---|---|
+| Pegawai | Admin | admin@reusemart.test |
+| Pegawai | Customer Service | cs@reusemart.test |
+| Pegawai | Gudang | gudang@reusemart.test |
+| Pegawai | Owner | owner@reusemart.test |
+| Pegawai | Hunter | hunter@reusemart.test |
+| Pegawai | Kurir | kurir@reusemart.test |
+| Pembeli | - | budi@reusemart.test |
+| Penitip | - | tokolestari@reusemart.test |
+| Organisasi | - | panti@reusemart.test |
+
+Catatan:
+
+- Seluruh skema tabel aplikasi (barang, pemesanan, penitip, dan seterusnya) tersedia sebagai migrasi di `database/migrations`, jadi tidak perlu dump basis data lagi.
+- Migrasi dan seeder dibuat idempoten: `php artisan migrate --seed` aman dijalankan di basis data baru maupun basis data lama yang sudah berisi data.
+- `php artisan test` memakai SQLite in-memory; pastikan ekstensi `pdo_sqlite` aktif di PHP.
 
 ## Struktur
 
@@ -71,6 +89,8 @@ app/Models               model Eloquent
 resources/views          halaman Blade per peran
 routes/web.php           route web dan sebagian endpoint API
 routes/api.php           endpoint yang dipakai aplikasi mobile
+database/migrations      skema lengkap tabel aplikasi (digenerate dari basis data lama)
+database/seeders         ReuseMartSeeder: data demo untuk setup baru
 public/css/reusemart.css tema dan komponen bersama
 docs/screenshots         dokumentasi tampilan before dan after
 ```
@@ -87,6 +107,8 @@ Anggota tim: Tano11933, paniae.
 - Desain ulang seluruh halaman: layout, komponen, kontras, dan aksesibilitas keyboard
 - Perbaikan route rusak dan duplikat, pengamanan akses alamat dan pembatalan pesanan
 - Pembatasan akses per peran dan jabatan lewat middleware, plus pembatasan percobaan login
+- Skema tabel aplikasi dikemas menjadi migrasi lengkap + seeder data demo; setup tanpa dump basis data
+- Seluruh test kembali aktif: 20 test (login tiap peran, register, akses, migrasi, foreign key)
 - Perbaikan bug halaman klaim merchandise CS dan endpoint barang penitip di aplikasi mobile
 - Checkout menyimpan alamat pengiriman dan metode pembayaran
 - Endpoint mobile dirapikan, termasuk login, token FCM, dan riwayat

@@ -554,47 +554,4 @@ class PenitipController extends Controller
             'data' => $topPenitip
         ]);
     }
-
-    public function hitungTopSellerBulanan()
-    {
-        $now = \Carbon\Carbon::now();
-        $bulanLalu = $now->copy()->subMonth()->month;
-        $tahunLalu = $now->copy()->subMonth()->year;
-
-        // Cari penitip dengan penjualan tertinggi bulan lalu
-        $topSeller = DB::table('pemesanan')
-            ->select(
-                'id_penitip',
-                DB::raw('SUM(total_harga_pesanan) as total_penjualan')
-            )
-            ->where('status', 'transaksi selesai')
-            ->whereMonth('tgl_pembayaran', $bulanLalu)
-            ->whereYear('tgl_pembayaran', $tahunLalu)
-            ->groupBy('id_penitip')
-            ->orderByDesc('total_penjualan')
-            ->first();
-
-        if ($topSeller) {
-            $bonus = round($topSeller->total_penjualan * 0.01);
-
-            // Tambahkan bonus ke saldo penitip
-            DB::table('penitip')
-                ->where('id_penitip', $topSeller->id_penitip)
-                ->increment('saldo', $bonus);
-
-            // Simpan history/top seller (jika ingin histori)
-            DB::table('bonus_penitip')->insert([
-                'id_penitip' => $topSeller->id_penitip,
-                'bulan' => $bulanLalu,
-                'tahun' => $tahunLalu,
-                'total_penjualan' => $topSeller->total_penjualan,
-                'bonus' => $bonus,
-                'status' => 'claimed',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-        }
-
-        return response()->json(['message' => 'Top Seller bulanan telah dihitung dan saldo diupdate.']);
-    }
 }

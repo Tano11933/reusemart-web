@@ -183,7 +183,6 @@ class AuthController extends Controller
             if ($user) {
                 DB::table($table)->where('email', $request->email)->update([
                     'password' => Hash::make($request->new_password),
-                    'updated_at' => now()
                 ]);
 
                 return redirect()->route('login')->with('status', 'Password berhasil direset. Silakan login.');

@@ -1,0 +1,36 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        if (Schema::hasTable('komisi') && count(Schema::getForeignKeys('komisi')) === 0) {
+            Schema::table('komisi', function (Blueprint $table) {
+                $table->foreign(['id_barang'])->references(['id_barang'])->on('barang')->onUpdate('cascade')->onDelete('cascade');
+                $table->foreign(['id_pegawai'])->references(['id_pegawai'])->on('pegawai')->onUpdate('cascade')->onDelete('cascade');
+                $table->foreign(['id_pemesanan'])->references(['id_pemesanan'])->on('pemesanan')->onUpdate('cascade')->onDelete('cascade');
+            });
+        }
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        if (Schema::hasTable('komisi')) {
+            Schema::table('komisi', function (Blueprint $table) {
+                $table->dropForeign('komisi_id_barang_foreign');
+                $table->dropForeign('komisi_id_pegawai_foreign');
+                $table->dropForeign('komisi_id_pemesanan_foreign');
+            });
+        }
+    }
+};
