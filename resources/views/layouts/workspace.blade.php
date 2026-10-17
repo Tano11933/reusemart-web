@@ -26,7 +26,7 @@
         <aside class="rm-workspace-sidebar" id="workspaceSidebar" aria-label="Navigasi workspace">
             <div class="rm-workspace-sidebar-top">
                 <a class="rm-workspace-brand" href="{{ route('guest.home') }}">
-                    <img src="{{ asset('image/white.png') }}" alt="">
+                    <span class="rm-brand-mark"><i class="bi bi-recycle" aria-hidden="true"></i></span>
                     <span><strong>ReuseMart</strong><small>Workspace</small></span>
                 </a>
 

@@ -58,9 +58,9 @@
     --rm-info-soft: #e8f2f8;
 
     /* Bentuk & bayangan */
-    --rm-radius-sm: 0.65rem;
-    --rm-radius: 1rem;
-    --rm-radius-lg: 1.25rem;
+    --rm-radius-sm: 0.5rem;
+    --rm-radius: 0.75rem;
+    --rm-radius-lg: 1rem;
     --rm-radius-pill: 999px;
     --rm-shadow-xs: 0 1px 2px rgba(15, 47, 46, 0.05);
     --rm-shadow-sm: 0 2px 10px rgba(15, 47, 46, 0.06);
@@ -173,10 +173,17 @@ img {
     padding-right: 0.75rem;
 }
 
-.rm-navbar .navbar-brand img {
-    max-width: 42px;
-    height: auto;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.18));
+.rm-brand-mark {
+    width: 36px;
+    height: 36px;
+    display: inline-grid;
+    place-items: center;
+    border-radius: var(--rm-radius-sm);
+    background: rgba(255, 255, 255, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #fff;
+    font-size: 1.1rem;
+    flex-shrink: 0;
 }
 
 .rm-navbar .nav-link {
@@ -184,7 +191,7 @@ img {
     font-weight: 500;
     padding: 0.5rem 0.95rem;
     margin-right: 0.15rem;
-    border-radius: var(--rm-radius-pill);
+    border-radius: var(--rm-radius-sm);
     transition: background-color var(--rm-fast), color var(--rm-fast), box-shadow var(--rm-fast);
 }
 
@@ -511,9 +518,9 @@ img {
     position: relative;
     background: linear-gradient(160deg, var(--rm-primary-darker) 0%, var(--rm-primary) 58%, #2f7d7a 100%);
     color: #fff;
-    padding: 3.5rem 0 3rem;
-    border-bottom-left-radius: 2rem;
-    border-bottom-right-radius: 2rem;
+    padding: 3rem 0 2.5rem;
+    border-bottom-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
 }
 
 .rm-hero h1,
@@ -529,9 +536,17 @@ img {
     color: rgba(255, 255, 255, 0.85);
 }
 
-.rm-hero .rm-hero-logo {
-    max-width: 92px;
-    filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.25));
+.rm-hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    color: #fff;
+    border-radius: var(--rm-radius-sm);
+    padding: 0.4rem 0.85rem;
+    font-size: 0.9rem;
+    font-weight: 600;
 }
 
 .rm-hero-mascot {
@@ -547,7 +562,7 @@ img {
 }
 
 .rm-hero .rm-hero-search .form-control {
-    border-radius: var(--rm-radius-pill);
+    border-radius: var(--rm-radius-lg);
     border: 2px solid transparent;
     padding: 0.8rem 1.3rem;
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.14);
@@ -563,7 +578,7 @@ img {
 }
 
 .rm-hero .rm-hero-search .btn {
-    border-radius: var(--rm-radius-pill);
+    border-radius: var(--rm-radius-lg);
     padding-left: 1.5rem;
     padding-right: 1.5rem;
     font-weight: 700;
@@ -1072,7 +1087,7 @@ img {
 }
 
 .rm-price-box {
-    background: linear-gradient(135deg, var(--rm-primary-soft-2), var(--rm-primary-soft));
+    background-color: var(--rm-primary-soft-2);
     border: 1px solid var(--rm-line);
     border-radius: var(--rm-radius);
     padding: 1.1rem 1.25rem;
@@ -1095,7 +1110,7 @@ img {
 }
 
 .rm-locked-discussion {
-    background: linear-gradient(160deg, #fffaf0, var(--rm-warning-soft));
+    background-color: var(--rm-warning-soft);
     border: 1px solid #f2dfb4;
     border-radius: var(--rm-radius-lg);
     padding: 2.75rem 1.5rem;
@@ -2098,5 +2113,663 @@ img {
     .rm-rating .rm-rating-value {
         font-size: 0.68rem;
         padding: 0.02rem 0.35rem;
+    }
+}
+
+/* ---------------------------------------------------------------------------
+   19. Storefront & pembeli
+   Penyempurnaan header halaman, filter, kartu, galeri, dan status pesanan.
+   --------------------------------------------------------------------------- */
+
+/* Header halaman yang dipakai katalog, keranjang, riwayat, dan profil. */
+.rm-page-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.15rem 1.35rem;
+    margin-bottom: 1.5rem;
+    background-color: var(--rm-surface);
+    border: 1px solid var(--rm-line);
+    border-radius: var(--rm-radius-lg);
+    box-shadow: var(--rm-shadow-xs);
+}
+
+.rm-page-head-main {
+    display: flex;
+    align-items: center;
+    gap: 0.95rem;
+    min-width: 0;
+}
+
+.rm-page-head-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    flex: 0 0 52px;
+    border-radius: var(--rm-radius);
+    background-color: var(--rm-primary-soft);
+    color: var(--rm-primary);
+    font-size: 1.4rem;
+}
+
+.rm-page-head .rm-page-title {
+    font-size: clamp(1.4rem, 2vw, 1.8rem);
+    margin-bottom: 0.2rem;
+}
+
+.rm-page-head .rm-page-sub {
+    margin-top: 0;
+    font-size: 0.92rem;
+}
+
+.rm-page-head-aside {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+@media (max-width: 575.98px) {
+    .rm-page-head {
+        align-items: flex-start;
+        padding: 1rem;
+        gap: 0.75rem;
+    }
+
+    .rm-page-head-icon {
+        width: 44px;
+        height: 44px;
+        flex-basis: 44px;
+        font-size: 1.2rem;
+    }
+
+    .rm-page-head-aside {
+        align-self: center;
+    }
+}
+
+/* Judul seksi dengan aksi di sisi kanan. */
+.rm-section-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 0.75rem 1rem;
+    margin-bottom: 1.4rem;
+}
+
+.rm-section-head .rm-section-title {
+    margin-bottom: 0;
+}
+
+.rm-section-head .rm-section-title::after {
+    left: 0;
+    transform: none;
+}
+
+.rm-section-head .rm-page-sub {
+    margin-top: 0.2rem;
+}
+
+/* Filter katalog: search, chip bergaransi, dan tombol aksi. */
+.rm-filter-bar {
+    overflow: visible;
+}
+
+.rm-filter-bar .card-body {
+    padding: 0.9rem;
+}
+
+.rm-filter-bar .input-group {
+    min-height: 46px;
+}
+
+.rm-filter-bar .btn[type="submit"] {
+    min-width: 96px;
+    align-self: stretch;
+}
+
+.rm-filter-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    min-height: 44px;
+    padding: 0.3rem 0.9rem 0.3rem 0.65rem;
+    border: 1px solid var(--rm-line);
+    border-radius: var(--rm-radius-pill);
+    background-color: var(--rm-bg-soft);
+    transition: background-color var(--rm-fast), border-color var(--rm-fast);
+}
+
+.rm-filter-toggle:hover {
+    border-color: var(--rm-line-strong);
+    background-color: #fff;
+}
+
+.rm-filter-toggle:has(.form-check-input:checked) {
+    border-color: rgba(30, 91, 90, 0.45);
+    background-color: var(--rm-primary-soft);
+}
+
+.rm-filter-toggle .form-check-input {
+    margin: 0;
+    flex: 0 0 auto;
+}
+
+.rm-filter-toggle .form-check-label {
+    min-height: 0;
+    font-size: 0.86rem;
+    font-weight: 600;
+    color: var(--rm-ink-soft);
+    white-space: nowrap;
+}
+
+.rm-filter-toggle .form-check-input:checked ~ .form-check-label {
+    color: var(--rm-primary-dark);
+}
+
+@media (max-width: 991.98px) {
+    .rm-filter-bar .card-body {
+        padding: 0.8rem;
+    }
+
+    .rm-filter-toggle,
+    .rm-filter-bar .btn[type="submit"] {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Chip kecil untuk kategori produk. */
+.rm-product-tags {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem;
+    min-width: 0;
+}
+
+.rm-product-category {
+    max-width: 100%;
+    gap: 0.35rem;
+    padding: 0.22rem 0.62rem;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--rm-muted);
+    background-color: var(--rm-bg-soft);
+}
+
+.rm-product-category i {
+    color: var(--rm-primary);
+    font-size: 0.78rem;
+}
+
+.rm-product-category span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.rm-chip.rm-chip-success {
+    color: var(--rm-success);
+    background-color: var(--rm-success-soft);
+    border-color: #cbe9d9;
+}
+
+/* Kartu produk: naik halus, border teal, dan hierarki harga yang lebih jelas. */
+.rm-product-card {
+    transition: transform var(--rm-base), box-shadow var(--rm-base),
+                border-color var(--rm-base);
+}
+
+.rm-product-card:focus-within {
+    border-color: var(--rm-primary);
+    box-shadow: var(--rm-shadow-md);
+}
+
+.rm-product-media {
+    background-color: var(--rm-primary-soft-2);
+    border-bottom: 1px solid var(--rm-line);
+}
+
+.rm-product-media img {
+    padding: 0.7rem;
+}
+
+.rm-product-body {
+    gap: 0.45rem;
+    padding: 1rem 1.05rem 1.1rem;
+}
+
+.rm-product-title {
+    line-height: 1.4;
+    min-height: 2.8em;
+}
+
+.rm-product-price {
+    font-size: clamp(1.05rem, 0.45vw + 0.95rem, 1.2rem);
+    font-weight: 800;
+    color: var(--rm-primary-dark);
+    line-height: 1.3;
+}
+
+.rm-product-currency {
+    font-size: 0.76em;
+    font-weight: 700;
+    color: var(--rm-muted);
+    letter-spacing: 0.01em;
+}
+
+.rm-product-meta {
+    line-height: 1.4;
+}
+
+.rm-badge-garansi {
+    font-size: 0.7rem;
+    padding: 0.32rem 0.62rem;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .rm-product-card:hover {
+        transform: translateY(-4px);
+        border-color: rgba(30, 91, 90, 0.55);
+        box-shadow: var(--rm-shadow-md);
+    }
+
+    .rm-product-card:hover .rm-product-title {
+        color: var(--rm-primary);
+    }
+}
+
+@media (max-width: 380px) {
+    .rm-product-price {
+        font-size: 0.96rem;
+    }
+}
+
+/* Galeri foto halaman detail. */
+.rm-gallery-thumbnails {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.55rem;
+    margin-top: 0.9rem;
+}
+
+.rm-gallery-thumb {
+    width: 64px;
+    height: 64px;
+    padding: 0.22rem;
+    border: 2px solid transparent;
+    border-radius: var(--rm-radius-sm);
+    background-color: var(--rm-primary-soft-2);
+    overflow: hidden;
+    transition: border-color var(--rm-fast), background-color var(--rm-fast);
+}
+
+.rm-gallery-thumb:hover {
+    border-color: var(--rm-line-strong);
+    background-color: #fff;
+}
+
+.rm-gallery-thumb.active {
+    border-color: var(--rm-primary);
+    background-color: #fff;
+}
+
+.rm-gallery-thumb img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 0.4rem;
+}
+
+.rm-gallery-nav {
+    top: 50%;
+    width: 44px;
+    height: 44px;
+    transform: translateY(-50%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--rm-line);
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.94);
+    color: var(--rm-primary);
+    font-size: 1.15rem;
+    opacity: 1;
+    box-shadow: var(--rm-shadow-sm);
+    transition: background-color var(--rm-fast), border-color var(--rm-fast), color var(--rm-fast);
+}
+
+.rm-gallery-nav.carousel-control-prev {
+    left: 0.7rem;
+}
+
+.rm-gallery-nav.carousel-control-next {
+    right: 0.7rem;
+}
+
+.rm-gallery-nav:hover {
+    background-color: #fff;
+    border-color: var(--rm-primary);
+    color: var(--rm-primary-dark);
+}
+
+.rm-detail-media {
+    border: 1px solid var(--rm-line);
+    background-color: var(--rm-primary-soft-2);
+}
+
+.rm-price-box {
+    background-color: var(--rm-primary-soft-2);
+    border: 1px solid var(--rm-line);
+}
+
+.rm-detail-section {
+    margin-top: 2rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--rm-line);
+}
+
+.rm-detail-section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 0.55rem;
+}
+
+.rm-detail-section-title i {
+    color: var(--rm-primary);
+}
+
+.rm-detail-description {
+    white-space: pre-line;
+    line-height: 1.75;
+    color: var(--rm-ink-soft);
+    margin-bottom: 0;
+}
+
+/* Status pesanan yang konsisten di riwayat dan pembatalan. */
+.rm-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.75rem;
+    border: 1px solid var(--rm-line);
+    border-radius: var(--rm-radius-pill);
+    background-color: var(--rm-bg-soft);
+    color: var(--rm-ink-soft);
+    font-size: 0.76rem;
+    font-weight: 700;
+    line-height: 1.3;
+    white-space: nowrap;
+}
+
+.rm-status-pill.rm-status-success {
+    color: #176246;
+    background-color: var(--rm-success-soft);
+    border-color: #cbe9d9;
+}
+
+.rm-status-pill.rm-status-danger {
+    color: #8e2a20;
+    background-color: var(--rm-danger-soft);
+    border-color: #f3cfcb;
+}
+
+.rm-status-pill.rm-status-info {
+    color: #1f5573;
+    background-color: var(--rm-info-soft);
+    border-color: #cbe1ee;
+}
+
+.rm-status-pill.rm-status-pending {
+    color: #76540f;
+    background-color: var(--rm-warning-soft);
+    border-color: #f2dfb4;
+}
+
+.rm-order-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+    border-radius: 50%;
+    background-color: var(--rm-primary-soft);
+    color: var(--rm-primary);
+    font-size: 1.1rem;
+}
+
+/* Keranjang belanja. */
+.rm-cart-card {
+    padding: 0;
+    overflow: hidden;
+}
+
+.rm-cart-table thead th {
+    white-space: nowrap;
+}
+
+.rm-cart-thumb {
+    width: 64px;
+    height: 64px;
+    flex: 0 0 64px;
+    object-fit: contain;
+    padding: 0.25rem;
+    border: 1px solid var(--rm-line);
+    border-radius: var(--rm-radius-sm);
+    background-color: var(--rm-primary-soft-2);
+}
+
+.rm-cart-product {
+    min-width: 180px;
+}
+
+.rm-cart-table tfoot td {
+    background-color: var(--rm-bg-soft);
+}
+
+.rm-cart-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    border-top: 1px solid var(--rm-line);
+    background-color: var(--rm-bg-soft);
+}
+
+@media (max-width: 575.98px) {
+    .rm-cart-thumb {
+        width: 54px;
+        height: 54px;
+        flex-basis: 54px;
+    }
+
+    .rm-cart-actions .btn {
+        width: 100%;
+    }
+}
+
+/* Opsi pengiriman dan poin di checkout. */
+.rm-delivery-option:focus-within,
+.rm-points-option:focus-within {
+    border-color: var(--rm-primary);
+    box-shadow: var(--rm-focus-ring);
+}
+
+/* Empty state dengan aksi yang lebih tegas. */
+.rm-empty h2,
+.rm-empty h3 {
+    margin-bottom: 0.35rem;
+}
+
+.rm-empty .btn {
+    margin-top: 0.25rem;
+}
+
+/* Pagination siap pakai. */
+.rm-pagination {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.35rem;
+    margin: 2rem 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.rm-pagination .page-item {
+    list-style: none;
+}
+
+.rm-pagination .page-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0.4rem 0.7rem;
+    border: 1px solid var(--rm-line);
+    border-radius: var(--rm-radius-pill);
+    background-color: var(--rm-surface);
+    color: var(--rm-ink-soft);
+    font-weight: 600;
+    line-height: 1;
+    transition: background-color var(--rm-fast), border-color var(--rm-fast), color var(--rm-fast);
+}
+
+.rm-pagination .page-link:hover {
+    border-color: var(--rm-primary);
+    background-color: var(--rm-primary-soft-2);
+    color: var(--rm-primary-dark);
+}
+
+.rm-pagination .page-item.active .page-link {
+    border-color: var(--rm-primary);
+    background-color: var(--rm-primary);
+    color: #fff;
+}
+
+.rm-pagination .page-item.disabled .page-link {
+    border-color: var(--rm-line);
+    background-color: var(--rm-bg-soft);
+    color: var(--rm-muted);
+    opacity: 0.7;
+}
+
+/* Navbar dan footer pengunjung/pembeli. */
+.rm-navbar .navbar-nav .nav-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+}
+
+.rm-navbar .navbar-toggler {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    border-radius: var(--rm-radius-sm);
+}
+
+.rm-navbar .navbar-collapse .btn {
+    white-space: nowrap;
+}
+
+@media (max-width: 991.98px) {
+    .rm-navbar .navbar-collapse {
+        margin-top: 0.65rem;
+        padding-top: 0.75rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.16);
+    }
+
+    .rm-navbar .navbar-nav {
+        margin-bottom: 0.35rem !important;
+    }
+
+    .rm-navbar .nav-link {
+        width: 100%;
+    }
+
+    .rm-navbar .rm-search {
+        max-width: none;
+        margin-bottom: 0.5rem !important;
+    }
+
+    .rm-navbar .rm-search .form-control {
+        min-height: 46px;
+    }
+
+    .rm-navbar .navbar-collapse > .d-flex {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+}
+
+.rm-footer h5 {
+    font-size: 1.2rem;
+}
+
+.rm-footer h6 {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.72);
+}
+
+.rm-footer p a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0.15rem 0;
+    border-bottom: 1px solid transparent;
+}
+
+.rm-footer p a:hover {
+    border-bottom-color: rgba(255, 255, 255, 0.55);
+}
+
+.rm-footer .bi {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.rm-footer a .bi {
+    transition: color var(--rm-fast);
+}
+
+.rm-footer a:hover .bi {
+    color: #fff;
+}
+
+/* Panduan sentuh pada layar kecil. */
+@media (max-width: 575.98px) {
+    .rm-gallery-thumb {
+        width: 56px;
+        height: 56px;
+    }
+
+    .rm-gallery-nav {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+
+    .rm-detail-section {
+        margin-top: 1.5rem;
+        padding-top: 1.35rem;
     }
 }

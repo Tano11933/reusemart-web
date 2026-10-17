@@ -17,7 +17,7 @@
     <nav class="navbar navbar-expand-lg rm-navbar sticky-top py-2">
         <div class="container">
             <a class="navbar-brand text-white" href="{{ $role === 'organisasi' ? url('/organisasi/index_organisasi') : route('penitip.barangTitipan') }}">
-                <img src="{{ asset('image/white.png') }}" alt="Logo ReuseMart"><span>ReuseMart</span>
+                <span class="rm-brand-mark"><i class="bi bi-recycle" aria-hidden="true"></i></span><span>ReuseMart</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#partnerNavbar" aria-controls="partnerNavbar" aria-expanded="false" aria-label="Buka navigasi">
                 <i class="bi bi-list fs-4 text-white" aria-hidden="true"></i>

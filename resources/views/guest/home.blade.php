@@ -9,7 +9,7 @@
         <div class="container">
             <div class="row align-items-center g-4">
                 <div class="col-lg-7">
-                    <img class="rm-hero-logo mb-3" src="{{ asset('image/white.png') }}" alt="Logo ReuseMart">
+                    <span class="rm-hero-badge mb-3"><i class="bi bi-recycle" aria-hidden="true"></i>Marketplace barang bekas</span>
                     <h1 class="display-5 mb-3">Beri Barang Layak Pakai Kesempatan Kedua</h1>
                     <p class="lead mb-4">
                         Jelajahi barang titipan berkualitas: elektronik, furnitur, fashion, dan perlengkapan lain dengan harga bersahabat, sekaligus ikut mengurangi limbah.
@@ -44,15 +44,18 @@
 
     {{-- Kategori --}}
     <section class="container py-5">
-        <div class="text-center">
-            <img src="{{ asset('image/b.png') }}" alt="" width="64" class="mb-2">
-            <h2 class="rm-section-title h4 mb-4 d-block">Kategori</h2>
+        <div class="text-center mb-4">
+            <img src="{{ asset('image/b.png') }}" alt="" width="56" class="mb-2">
+            <h2 class="rm-section-title h4 mb-0 d-block">Kategori</h2>
         </div>
 
         @if ($kategoris->isEmpty())
             <div class="rm-empty">
-                <i class="bi bi-grid d-block mb-2"></i>
-                Belum ada kategori yang tersedia saat ini.
+                <i class="bi bi-grid d-block mb-2" aria-hidden="true"></i>
+                <p class="mb-3">Belum ada kategori yang tersedia saat ini.</p>
+                <a href="{{ route('guest.lihat_semua') }}" class="btn rm-btn-outline">
+                    <i class="bi bi-grid me-1" aria-hidden="true"></i>Lihat katalog
+                </a>
             </div>
         @else
             <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-3 justify-content-center">
@@ -72,15 +75,20 @@
 
     {{-- Barang terbaru --}}
     <section class="container pb-5">
-        <h2 class="rm-section-title h4 mb-4 text-center d-block">Barang Terbaru</h2>
+        <div class="text-center mb-4">
+            <h2 class="rm-section-title h4 mb-0 d-block">Barang Terbaru</h2>
+        </div>
 
         @if ($barang->isEmpty())
             <div class="rm-empty">
-                <i class="bi bi-box-seam d-block mb-2"></i>
-                Belum ada barang yang tersedia. Cek kembali nanti, ya!
+                <i class="bi bi-box-seam d-block mb-2" aria-hidden="true"></i>
+                <p class="mb-3">Belum ada barang yang tersedia. Cek kembali nanti, ya!</p>
+                <a href="{{ route('guest.lihat_semua') }}" class="btn rm-btn-outline">
+                    <i class="bi bi-grid me-1" aria-hidden="true"></i>Lihat katalog
+                </a>
             </div>
         @else
-            <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3 g-md-4 justify-content-center">
+            <div class="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3 g-lg-4 justify-content-center">
                 @foreach ($barang as $item)
                     <div class="col">
                         <x-product-card :item="$item" />
@@ -90,7 +98,7 @@
 
             <div class="text-center mt-4">
                 <a href="{{ route('guest.lihat_semua') }}" class="btn rm-btn-outline px-4">
-                    Lihat Semua Produk <i class="bi bi-arrow-right ms-1"></i>
+                    Lihat Semua Produk <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i>
                 </a>
             </div>
         @endif

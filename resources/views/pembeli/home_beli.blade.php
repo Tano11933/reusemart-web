@@ -36,20 +36,23 @@
     </section>
 
     <section class="container py-5">
-        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
-            <h2 class="h4 fw-bold mb-0">Barang Titipan Terbaru</h2>
+        <div class="rm-section-head">
+            <h2 class="rm-section-title h4 mb-0">Barang Titipan Terbaru</h2>
             <a href="{{ route('lihat_semua_beli') }}" class="btn rm-btn-outline btn-sm px-3">
-                Lihat Semua <i class="bi bi-arrow-right ms-1"></i>
+                Lihat Semua <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i>
             </a>
         </div>
 
         @if ($barang->isEmpty())
             <div class="rm-empty">
-                <i class="bi bi-box-seam d-block mb-2"></i>
-                Belum ada barang yang tersedia. Cek kembali nanti, ya!
+                <i class="bi bi-box-seam d-block mb-2" aria-hidden="true"></i>
+                <p class="mb-3">Belum ada barang yang tersedia. Cek kembali nanti, ya!</p>
+                <a href="{{ route('lihat_semua_beli') }}" class="btn rm-btn-outline">
+                    <i class="bi bi-grid me-1" aria-hidden="true"></i>Buka katalog
+                </a>
             </div>
         @else
-            <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3 g-md-4 justify-content-center">
+            <div class="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3 g-lg-4 justify-content-center">
                 @foreach ($barang->take(8) as $item)
                     <div class="col">
                         <x-product-card :item="$item" detail-route="detail_barang_beli">
@@ -57,7 +60,7 @@
                                 <form method="POST" action="{{ route('add_to_cart', $item->id_barang) }}">
                                     @csrf
                                     <button type="submit" class="btn rm-btn-primary w-100">
-                                        <i class="bi bi-cart-plus me-1"></i>Beli
+                                        <i class="bi bi-cart-plus me-1" aria-hidden="true"></i>Beli
                                     </button>
                                 </form>
                             </x-slot:action>

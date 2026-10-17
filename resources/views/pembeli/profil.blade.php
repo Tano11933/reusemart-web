@@ -10,9 +10,14 @@
             <span class="rm-text-muted">Profil Saya</span>
         </nav>
 
-        <div class="mb-4">
-            <h1 class="rm-page-title">Profil Saya</h1>
-            <p class="rm-page-sub">Kelola informasi akun dan pintasan aktivitas belanjamu.</p>
+        <div class="rm-page-head">
+            <div class="rm-page-head-main">
+                <span class="rm-page-head-icon" aria-hidden="true"><i class="bi bi-person-badge"></i></span>
+                <div>
+                    <h1 class="rm-page-title">Profil Saya</h1>
+                    <p class="rm-page-sub">Kelola informasi akun dan pintasan aktivitas belanjamu.</p>
+                </div>
+            </div>
         </div>
 
         <div class="row g-4">

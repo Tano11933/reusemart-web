@@ -36,8 +36,14 @@
 
     <div class="rm-product-body">
         <h3 class="rm-product-title">{{ $item->nama_barang }}</h3>
-        <p class="rm-product-price">Rp {{ number_format($item->harga_barang, 0, ',', '.') }}</p>
-        <p class="rm-product-meta"><i class="bi bi-tag me-1"></i>{{ $item->kategori }}</p>
+        <p class="rm-product-price"><span class="rm-product-currency">Rp</span> {{ number_format($item->harga_barang, 0, ',', '.') }}</p>
+
+        <div class="rm-product-tags">
+            <span class="rm-chip rm-product-category">
+                <i class="bi bi-tag" aria-hidden="true"></i>
+                <span>{{ $item->kategori }}</span>
+            </span>
+        </div>
 
         @if ($hasRating)
             <div class="rm-rating" aria-label="Rating penjual {{ number_format($ratingValue, 1) }} dari 5">
@@ -53,7 +59,7 @@
                 <span class="rm-rating-value">{{ number_format($ratingValue, 1) }}</span>
             </div>
         @else
-            <p class="rm-product-meta mb-0"><i class="bi bi-person me-1"></i>Penjual baru</p>
+            <p class="rm-product-meta mb-0"><i class="bi bi-person me-1" aria-hidden="true"></i>Penjual baru</p>
         @endif
 
         @if (isset($action))

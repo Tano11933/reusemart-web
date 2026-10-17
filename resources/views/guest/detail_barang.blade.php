@@ -5,24 +5,6 @@
 
 @push('styles')
     <style>
-        .rm-detail-indicators {
-            position: static;
-            margin: 0.9rem 0 0;
-        }
-
-        .rm-detail-indicators [data-bs-target] {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background-color: #cfe0de;
-            border: 0;
-            opacity: 1;
-        }
-
-        .rm-detail-indicators .active {
-            background-color: var(--rm-primary);
-        }
-
         #modalImage {
             max-height: 88vh;
             object-fit: contain;
@@ -77,7 +59,7 @@
                     <div id="productCarousel" class="carousel slide" data-bs-interval="false">
                         <div class="carousel-inner rm-detail-media">
                             @foreach ($photoUrls as $index => $photoUrl)
-                                <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
+                                <div class="carousel-item {{ $index === 0 ? 'active' : '' }} h-100">
                                     <img src="{{ $photoUrl }}"
                                          class="d-block w-100 h-100 zoom-trigger"
                                          data-full="{{ $photoUrl }}"
@@ -87,12 +69,24 @@
                         </div>
 
                         @if (count($photoUrls) > 1)
-                            <div class="carousel-indicators rm-detail-indicators d-flex justify-content-center gap-2">
+                            <button class="carousel-control-prev rm-gallery-nav" type="button"
+                                    data-bs-target="#productCarousel" data-bs-slide="prev">
+                                <i class="bi bi-chevron-left" aria-hidden="true"></i>
+                                <span class="visually-hidden">Foto sebelumnya</span>
+                            </button>
+                            <button class="carousel-control-next rm-gallery-nav" type="button"
+                                    data-bs-target="#productCarousel" data-bs-slide="next">
+                                <i class="bi bi-chevron-right" aria-hidden="true"></i>
+                                <span class="visually-hidden">Foto berikutnya</span>
+                            </button>
+
+                            <div class="rm-gallery-thumbnails" aria-label="Pilih foto produk">
                                 @foreach ($photoUrls as $index => $photoUrl)
-                                    <button type="button" data-bs-target="#productCarousel"
-                                            data-bs-slide-to="{{ $index }}"
-                                            class="{{ $index === 0 ? 'active' : '' }}"
-                                            aria-label="Foto {{ $index + 1 }}"></button>
+                                    <button type="button" class="rm-gallery-thumb {{ $index === 0 ? 'active' : '' }}"
+                                            data-bs-target="#productCarousel" data-bs-slide-to="{{ $index }}"
+                                            aria-label="Tampilkan foto {{ $index + 1 }}">
+                                        <img src="{{ $photoUrl }}" alt="">
+                                    </button>
                                 @endforeach
                             </div>
                         @endif
@@ -100,19 +94,26 @@
                 </div>
 
                 <div class="col-lg-6 rm-detail-info">
-                    <span class="badge rounded-pill text-bg-light border mb-2">
-                        <i class="bi bi-tag me-1"></i>{{ $item->kategori }}
-                    </span>
+                    <div class="d-flex flex-wrap gap-2 mb-2">
+                        <span class="rm-chip">
+                            <i class="bi bi-tag" aria-hidden="true"></i>{{ $item->kategori }}
+                        </span>
+                        @if ($item->garansi)
+                            <span class="rm-chip rm-chip-success">
+                                <i class="bi bi-shield-check" aria-hidden="true"></i>Bergaransi
+                            </span>
+                        @endif
+                    </div>
 
                     <h1 class="h3 fw-bold mb-3">{{ $item->nama_barang }}</h1>
 
                     <div class="mb-3">
                         <span class="rm-seller-chip">
-                            <i class="bi bi-person-circle"></i>
+                            <i class="bi bi-person-circle" aria-hidden="true"></i>
                             {{ $penitip->nama_penitip ?? 'Penitip' }}
                             @if (!is_null($rating))
                                 <span class="rm-rating">
-                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill" aria-hidden="true"></i>
                                     {{ number_format($rating, 1) }}
                                 </span>
                             @else
@@ -126,7 +127,7 @@
                         <div class="rm-price">Rp {{ number_format($item->harga_barang, 0, ',', '.') }}</div>
                         @if ($item->garansi)
                             <div class="small mt-1 text-success">
-                                <i class="bi bi-shield-check me-1"></i>
+                                <i class="bi bi-shield-check me-1" aria-hidden="true"></i>
                                 Bergaransi
                                 @if ($item->tgl_garansi)
                                     s.d. {{ \Carbon\Carbon::parse($item->tgl_garansi)->translatedFormat('d F Y') }}
@@ -134,21 +135,21 @@
                             </div>
                         @else
                             <div class="small mt-1 rm-text-muted">
-                                <i class="bi bi-shield-slash me-1"></i>Tidak bergaransi
+                                <i class="bi bi-shield-slash me-1" aria-hidden="true"></i>Tidak bergaransi
                             </div>
                         @endif
                     </div>
 
                     <div class="d-grid gap-2 d-sm-flex mb-2">
                         <a href="{{ route('login') }}" class="btn rm-btn-primary btn-lg flex-fill">
-                            <i class="bi bi-cart-check me-1"></i>Beli Sekarang
+                            <i class="bi bi-cart-check me-1" aria-hidden="true"></i>Beli Sekarang
                         </a>
                         <a href="{{ route('login') }}" class="btn rm-btn-outline btn-lg flex-fill">
-                            <i class="bi bi-cart-plus me-1"></i>Keranjang
+                            <i class="bi bi-cart-plus me-1" aria-hidden="true"></i>Keranjang
                         </a>
                     </div>
                     <p class="rm-text-muted small">
-                        <i class="bi bi-info-circle me-1"></i>
+                        <i class="bi bi-info-circle me-1" aria-hidden="true"></i>
                         Login sebagai pembeli untuk membeli atau menambahkan barang ke keranjang.
                     </p>
 
@@ -163,22 +164,24 @@
                 </div>
             </div>
 
-            <hr class="my-4">
-
-            <h2 class="h5 fw-bold mb-2">Deskripsi</h2>
-            <p class="mb-0" style="white-space: pre-line;">{{ $item->deskripsi_barang ?: 'Penitip belum menuliskan deskripsi untuk barang ini.' }}</p>
+            <div class="rm-detail-section">
+                <h2 class="rm-detail-section-title">
+                    <i class="bi bi-file-text" aria-hidden="true"></i>Deskripsi
+                </h2>
+                <p class="rm-detail-description">{{ $item->deskripsi_barang ?: 'Penitip belum menuliskan deskripsi untuk barang ini.' }}</p>
+            </div>
         </div>
 
         @if ($serupa->isNotEmpty())
             <section class="mt-5 rm-related">
-                <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+                <div class="rm-section-head">
                     <h2 class="h4 fw-bold mb-0">Barang Serupa</h2>
                     <a href="{{ route('guest.per_kategori', ['kategori' => $item->kategori]) }}" class="btn rm-btn-outline btn-sm px-3">
-                        Lihat Kategori <i class="bi bi-arrow-right ms-1"></i>
+                        Lihat Kategori <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i>
                     </a>
                 </div>
 
-                <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3 g-md-4 justify-content-center">
+                <div class="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3 g-lg-4 justify-content-center">
                     @foreach ($serupa as $lain)
                         <div class="col">
                             <x-product-card :item="$lain" />
@@ -223,5 +226,14 @@
                 new bootstrap.Modal(document.getElementById('imageModal')).show();
             });
         });
+
+        const productGallery = document.getElementById('productCarousel');
+        if (productGallery) {
+            productGallery.addEventListener('slide.bs.carousel', function (event) {
+                productGallery.querySelectorAll('[data-bs-slide-to]').forEach(function (thumb, index) {
+                    thumb.classList.toggle('active', index === event.to);
+                });
+            });
+        }
     </script>
 @endpush

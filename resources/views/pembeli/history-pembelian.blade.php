@@ -12,12 +12,17 @@
             <span class="rm-text-muted">Riwayat Pembelian</span>
         </nav>
 
-        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-end gap-3 mb-4">
-            <div>
-                <h1 class="rm-page-title">Riwayat Pembelian</h1>
-                <p class="rm-page-sub">Pantau status pesanan dan beri penilaian setelah transaksi selesai.</p>
+        <div class="rm-page-head">
+            <div class="rm-page-head-main">
+                <span class="rm-page-head-icon" aria-hidden="true"><i class="bi bi-receipt"></i></span>
+                <div>
+                    <h1 class="rm-page-title">Riwayat Pembelian</h1>
+                    <p class="rm-page-sub">Pantau status pesanan dan beri penilaian setelah transaksi selesai.</p>
+                </div>
             </div>
-            <span class="rm-chip"><i class="bi bi-receipt"></i>{{ $transactions->count() }} transaksi</span>
+            <div class="rm-page-head-aside">
+                <span class="rm-chip"><i class="bi bi-receipt" aria-hidden="true"></i>{{ $transactions->count() }} transaksi</span>
+            </div>
         </div>
 
         @if ($transactions->isEmpty())
@@ -127,6 +132,12 @@
             border-radius: var(--rm-radius-lg);
             box-shadow: var(--rm-shadow-xs);
             overflow: hidden;
+            transition: border-color var(--rm-base), box-shadow var(--rm-base);
+        }
+
+        .rm-order-card:hover {
+            border-color: var(--rm-line-strong);
+            box-shadow: var(--rm-shadow-sm);
         }
 
         .rm-order-header,
@@ -140,35 +151,9 @@
 
         .rm-order-header {
             justify-content: space-between;
+            flex-wrap: wrap;
             border-bottom: 1px solid var(--rm-line);
         }
-
-        .rm-order-icon {
-            width: 40px;
-            height: 40px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            background: var(--rm-primary-soft);
-            color: var(--rm-primary);
-            font-size: 1.1rem;
-        }
-
-        .rm-status-pill {
-            display: inline-flex;
-            align-items: center;
-            border-radius: var(--rm-radius-pill);
-            padding: 0.35rem 0.75rem;
-            font-size: 0.76rem;
-            line-height: 1.3;
-            font-weight: 700;
-        }
-
-        .rm-status-success { color: #176246; background: var(--rm-success-soft); }
-        .rm-status-danger { color: #8e2a20; background: var(--rm-danger-soft); }
-        .rm-status-info { color: #1f5573; background: var(--rm-info-soft); }
-        .rm-status-pending { color: #76540f; background: var(--rm-warning-soft); }
 
         .rm-order-items {
             padding: 0 1.25rem;
@@ -205,6 +190,7 @@
             height: 72px;
             object-fit: contain;
             padding: 0.25rem;
+            border: 1px solid var(--rm-line);
             background: var(--rm-primary-soft-2);
             border-radius: var(--rm-radius-sm);
         }

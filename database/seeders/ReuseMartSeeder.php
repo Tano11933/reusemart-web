@@ -158,41 +158,45 @@ class ReuseMartSeeder extends Seeder
             $tglTitip = $now->copy()->subDays(14)->toDateTimeString();
             $tglAkhir = $now->copy()->addDays(16)->toDateString();
 
-            DB::table('barang')->insert([
-                [
-                    'id_barang' => 'B1', 'id_penitip' => 'T1', 'id_gudang' => 'P3', 'id_hunter' => null,
-                    'nama_barang' => 'Box Bayi IKEA', 'deskripsi_barang' => 'Kayu kokoh, kondisi mulus',
-                    'kategori' => 'Perlengkapan Bayi & Anak', 'harga_barang' => 700000, 'berat_barang' => 10,
-                    'tgl_titip' => $tglTitip, 'tgl_garansi' => null, 'tgl_laku' => null,
-                    'tgl_akhir' => $tglAkhir, 'tgl_ambil' => null, 'garansi' => 0, 'perpanjangan' => 0,
-                    'status' => 'tersedia', 'foto_barang' => 'bayiikea.jpg', 'foto_barang2' => 'bayiikea1.jpg',
-                ],
-                [
-                    'id_barang' => 'G1', 'id_penitip' => 'T2', 'id_gudang' => 'P3', 'id_hunter' => 'P5',
-                    'nama_barang' => 'Gitar Akustik Yamaha', 'deskripsi_barang' => 'Suara masih jernih, senar baru',
-                    'kategori' => 'Hobi, Mainan, & Koleksi', 'harga_barang' => 400000, 'berat_barang' => 3,
-                    'tgl_titip' => $tglTitip, 'tgl_garansi' => null, 'tgl_laku' => null,
-                    'tgl_akhir' => $tglAkhir, 'tgl_ambil' => null, 'garansi' => 0, 'perpanjangan' => 0,
-                    'status' => 'tersedia', 'foto_barang' => 'gitaryamaha.jpg', 'foto_barang2' => 'gitaryamaha1.jpg',
-                ],
-                [
-                    'id_barang' => 'A1', 'id_penitip' => 'T1', 'id_gudang' => 'P3', 'id_hunter' => null,
-                    'nama_barang' => 'Alat Makeup Set', 'deskripsi_barang' => 'Belum dipakai, lengkap',
-                    'kategori' => 'Kosmetik & Perawatan Diri', 'harga_barang' => 300000, 'berat_barang' => 2,
-                    'tgl_titip' => $tglTitip, 'tgl_garansi' => null, 'tgl_laku' => null,
-                    'tgl_akhir' => $tglAkhir, 'tgl_ambil' => null, 'garansi' => 0, 'perpanjangan' => 0,
-                    'status' => 'tersedia', 'foto_barang' => 'setmakeup.jpg', 'foto_barang2' => 'setmakeup1.jpg',
-                ],
-                [
-                    'id_barang' => 'B2', 'id_penitip' => 'T2', 'id_gudang' => 'P3', 'id_hunter' => null,
-                    'nama_barang' => 'Ban Motor IRC', 'deskripsi_barang' => 'Ukuran 80/90-14, masih layak',
-                    'kategori' => 'Otomotif & Aksesori', 'harga_barang' => 200000, 'berat_barang' => 8,
-                    'tgl_titip' => $tglTitip, 'tgl_garansi' => null,
-                    'tgl_laku' => $now->copy()->subDays(9)->toDateString(),
-                    'tgl_akhir' => $tglAkhir, 'tgl_ambil' => null, 'garansi' => 0, 'perpanjangan' => 0,
-                    'status' => 'terjual', 'foto_barang' => 'banmotorirc.jpg', 'foto_barang2' => 'banmotorirc1.jpg',
-                ],
-            ]);
+            $barang = [
+                ['B1', 'T1', null, 'Box Bayi IKEA', 'Kayu kokoh, kondisi mulus', 'Perlengkapan Bayi & Anak', 700000, 10, 'bayiikea.jpg', 'bayiikea1.jpg', 'tersedia'],
+                ['G1', 'T2', 'P5', 'Gitar Akustik Yamaha', 'Suara masih jernih, senar baru', 'Hobi, Mainan, & Koleksi', 400000, 3, 'gitaryamaha.jpg', 'gitaryamaha1.jpg', 'tersedia'],
+                ['A1', 'T1', null, 'Alat Makeup Set', 'Belum dipakai, lengkap', 'Kosmetik & Perawatan Diri', 300000, 2, 'setmakeup.jpg', 'setmakeup1.jpg', 'tersedia'],
+                ['A2', 'T2', null, 'Blender Philips 600W', 'Mata pisau tajam, wadah lengkap, siap pakai', 'Perabotan Rumah Tangga', 320000, 2, 'blender.jpg', 'blender1.jpg', 'tersedia'],
+                ['T3', 'T1', null, 'TV LED LG 32 Inch', 'Kondisi seperti baru, gambar jernih', 'Elektronik & Gadget', 1700000, 5, 'tvledlg.jpg', 'tvledlg1.jpg', 'tersedia'],
+                ['H1', 'T2', null, 'Helm Full Face KYT', 'Double visor, busa masih tebal', 'Otomotif & Aksesori', 500000, 2, 'helmkyt.jpg', 'helmkyt1.jpg', 'tersedia'],
+                ['K1', 'T1', null, 'Komik Naruto Vol. 1-5', 'Kondisi bagus, lengkap lima volume', 'Hobi, Mainan, & Koleksi', 100000, 2, 'komiknaruto.jpg', 'komiknaruto1.jpg', 'tersedia'],
+                ['L2', 'T2', 'P5', 'Laptop Asus Vivobook', 'RAM 8GB, SSD 256GB, siap pakai', 'Elektronik & Gadget', 3500000, 2, 'vivobookseken.jpg', 'vivobookseken1.jpg', 'tersedia'],
+                ['M2', 'T1', null, 'Meja Kantor Minimalis', 'Kondisi sangat baik, kokoh', 'Perabotan Rumah Tangga', 600000, 12, 'mejakantorminimalis.jpg', 'mejakantorminimalis1.jpg', 'tersedia'],
+                ['S4', 'T2', null, 'Smartwatch Xiaomi', 'Tampilan mulus, baterai awet', 'Elektronik & Gadget', 450000, 1, 'smartwatchxiaomi.jpg', 'smartwatchxiaomi1.jpg', 'tersedia'],
+                ['T2', 'T1', null, 'Tenda Camping Kapasitas 4', 'Waterproof, lengkap dengan tas', 'Perlengkapan Taman & Outdoor', 900000, 4, 'tendacamping.jpg', 'tendacamping1.jpg', 'tersedia'],
+                ['P1', 'T2', null, 'Printer Epson L360', 'Masih bisa print dan scan', 'Elektronik & Gadget', 750000, 6, 'printerepson.jpg', 'printerepson1.jpg', 'tersedia'],
+                ['B2', 'T2', null, 'Ban Motor IRC', 'Ukuran 80/90-14, masih layak', 'Otomotif & Aksesori', 200000, 8, 'banmotorirc.jpg', 'banmotorirc1.jpg', 'terjual'],
+            ];
+
+            foreach ($barang as [$id, $idPenitip, $idHunter, $nama, $deskripsi, $kategori, $harga, $berat, $foto, $foto2, $status]) {
+                DB::table('barang')->insert([
+                    'id_barang' => $id,
+                    'id_penitip' => $idPenitip,
+                    'id_gudang' => 'P3',
+                    'id_hunter' => $idHunter,
+                    'nama_barang' => $nama,
+                    'deskripsi_barang' => $deskripsi,
+                    'kategori' => $kategori,
+                    'harga_barang' => $harga,
+                    'berat_barang' => $berat,
+                    'tgl_titip' => $tglTitip,
+                    'tgl_garansi' => null,
+                    'tgl_laku' => $status === 'terjual' ? $now->copy()->subDays(9)->toDateString() : null,
+                    'tgl_akhir' => $tglAkhir,
+                    'tgl_ambil' => null,
+                    'garansi' => 0,
+                    'perpanjangan' => 0,
+                    'status' => $status,
+                    'foto_barang' => $foto,
+                    'foto_barang2' => $foto2,
+                ]);
+            }
         }
 
         if (DB::table('pemesanan')->count() === 0) {

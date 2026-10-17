@@ -4,42 +4,6 @@
 
 @push('styles')
     <style>
-        .rm-product-gallery {
-            max-width: 100%;
-        }
-
-        .rm-gallery-thumbnails {
-            display: flex;
-            justify-content: center;
-            gap: 0.6rem;
-            margin-top: 0.85rem;
-        }
-
-        .rm-gallery-thumb {
-            width: 58px;
-            height: 58px;
-            border: 2px solid transparent;
-            border-radius: 0.75rem;
-            background: var(--rm-primary-soft-2);
-            padding: 0.2rem;
-            overflow: hidden;
-            transition: border-color var(--rm-fast), background-color var(--rm-fast);
-        }
-
-        .rm-gallery-thumb.active,
-        .rm-gallery-thumb:hover {
-            border-color: var(--rm-primary);
-            background: #fff;
-        }
-
-        .rm-gallery-thumb img {
-            display: block;
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            border-radius: 0.5rem;
-        }
-
         .rm-discussion-card {
             border: 1px solid var(--rm-line);
             border-radius: var(--rm-radius-lg);
@@ -224,9 +188,9 @@
 
                 <div class="col-lg-6 rm-detail-info">
                     <div class="d-flex flex-wrap gap-2 mb-2">
-                        <span class="rm-chip"><i class="bi bi-tag"></i>{{ $barang->kategori }}</span>
+                        <span class="rm-chip"><i class="bi bi-tag" aria-hidden="true"></i>{{ $barang->kategori }}</span>
                         @if ($barang->garansi)
-                            <span class="rm-chip text-success"><i class="bi bi-shield-check"></i>Bergaransi</span>
+                            <span class="rm-chip rm-chip-success"><i class="bi bi-shield-check" aria-hidden="true"></i>Bergaransi</span>
                         @endif
                     </div>
 
@@ -234,11 +198,11 @@
 
                     <div class="mb-3">
                         <span class="rm-seller-chip">
-                            <i class="bi bi-person-circle"></i>
+                            <i class="bi bi-person-circle" aria-hidden="true"></i>
                             <span>{{ $penitip->nama_penitip ?? 'Penitip' }}</span>
                             @if (!is_null($sellerRating))
                                 <span class="rm-rating ms-1" aria-label="Rating {{ number_format($sellerRating, 1) }} dari 5">
-                                    <i class="bi bi-star-fill"></i>{{ number_format($sellerRating, 1) }}
+                                    <i class="bi bi-star-fill" aria-hidden="true"></i>{{ number_format($sellerRating, 1) }}
                                 </span>
                             @else
                                 <span class="rm-text-muted">Penjual baru</span>
@@ -251,17 +215,17 @@
                         <div class="rm-price">Rp {{ number_format($barang->harga_barang, 0, ',', '.') }}</div>
                         @if ($barang->garansi && $barang->tgl_garansi)
                             <div class="small text-success mt-1">
-                                <i class="bi bi-shield-check me-1"></i>
+                                <i class="bi bi-shield-check me-1" aria-hidden="true"></i>
                                 Garansi berlaku sampai {{ \Carbon\Carbon::parse($barang->tgl_garansi)->translatedFormat('d F Y') }}
                             </div>
                         @else
-                            <div class="small rm-text-muted mt-1"><i class="bi bi-shield-slash me-1"></i>Tidak bergaransi</div>
+                            <div class="small rm-text-muted mt-1"><i class="bi bi-shield-slash me-1" aria-hidden="true"></i>Tidak bergaransi</div>
                         @endif
                     </div>
 
                     @if ($inCart)
                         <div class="alert alert-info d-flex align-items-center gap-2 mb-3">
-                            <i class="bi bi-cart-check-fill"></i>
+                            <i class="bi bi-cart-check-fill" aria-hidden="true"></i>
                             <span>Barang ini sudah ada di keranjang.</span>
                             <a href="{{ route('cart.index') }}" class="alert-link ms-auto">Lihat</a>
                         </div>
@@ -270,21 +234,21 @@
                             <form action="{{ route('add_to_cart', $barang->id_barang) }}" method="POST" class="flex-fill">
                                 @csrf
                                 <button type="submit" class="btn rm-btn-outline w-100">
-                                    <i class="bi bi-cart-plus me-1"></i>Tambah ke Keranjang
+                                    <i class="bi bi-cart-plus me-1" aria-hidden="true"></i>Tambah ke Keranjang
                                 </button>
                             </form>
                             <form action="{{ route('add_to_cart', $barang->id_barang) }}" method="POST" class="flex-fill">
                                 @csrf
                                 <input type="hidden" name="buy_now" value="1">
                                 <button type="submit" class="btn rm-btn-primary w-100">
-                                    <i class="bi bi-bag-check me-1"></i>Beli Sekarang
+                                    <i class="bi bi-bag-check me-1" aria-hidden="true"></i>Beli Sekarang
                                 </button>
                             </form>
                         </div>
                     @endif
 
                     <p class="rm-text-muted small mb-4">
-                        <i class="bi bi-info-circle me-1"></i>
+                        <i class="bi bi-info-circle me-1" aria-hidden="true"></i>
                         Barang bekas layak pakai. Periksa deskripsi dan foto sebelum checkout.
                     </p>
 
@@ -301,30 +265,32 @@
                 </div>
             </div>
 
-            <hr class="my-4">
-
-            <div class="row g-4">
-                <div class="col-lg-8">
-                    <h2 class="h5 fw-bold mb-2">Tentang Barang Ini</h2>
-                    <p class="mb-0" style="white-space: pre-line;">{{ $barang->deskripsi_barang ?: 'Penitip belum menambahkan deskripsi.' }}</p>
-                </div>
-                <div class="col-lg-4">
-                    <div class="rm-surface-card p-3 h-100">
-                        <div class="small rm-text-muted mb-1">Penilaian Penitip</div>
-                        @if (!is_null($sellerRating))
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="fs-3 fw-bold" style="color: var(--rm-primary);">{{ number_format($sellerRating, 1) }}</span>
-                                <span class="rm-rating fs-6" aria-hidden="true">
-                                    @for ($i = 1; $i <= 5; $i++)
-                                        <i class="bi {{ $i <= round($sellerRating) ? 'bi-star-fill' : 'bi-star' }}"></i>
-                                    @endfor
-                                </span>
-                            </div>
-                            <p class="small rm-text-muted mb-0">Rata-rata dari penilaian pembeli.</p>
-                        @else
-                            <p class="mb-0 fw-semibold">Belum ada penilaian</p>
-                            <p class="small rm-text-muted mb-0">Jadilah pembeli pertama yang memberi ulasan.</p>
-                        @endif
+            <div class="rm-detail-section">
+                <div class="row g-4">
+                    <div class="col-lg-8">
+                        <h2 class="rm-detail-section-title">
+                            <i class="bi bi-file-text" aria-hidden="true"></i>Tentang Barang Ini
+                        </h2>
+                        <p class="rm-detail-description">{{ $barang->deskripsi_barang ?: 'Penitip belum menambahkan deskripsi.' }}</p>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="rm-surface-card p-3 h-100">
+                            <div class="small rm-text-muted mb-1">Penilaian Penitip</div>
+                            @if (!is_null($sellerRating))
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="fs-3 fw-bold" style="color: var(--rm-primary);">{{ number_format($sellerRating, 1) }}</span>
+                                    <span class="rm-rating fs-6" aria-hidden="true">
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            <i class="bi {{ $i <= round($sellerRating) ? 'bi-star-fill' : 'bi-star' }}"></i>
+                                        @endfor
+                                    </span>
+                                </div>
+                                <p class="small rm-text-muted mb-0">Rata-rata dari penilaian pembeli.</p>
+                            @else
+                                <p class="mb-0 fw-semibold">Belum ada penilaian</p>
+                                <p class="small rm-text-muted mb-0">Jadilah pembeli pertama yang memberi ulasan.</p>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>
@@ -332,16 +298,16 @@
 
         @if ($serupa->isNotEmpty())
             <section class="mt-5 rm-related">
-                <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+                <div class="rm-section-head">
                     <div>
                         <h2 class="h4 fw-bold mb-1">Mungkin Kamu Suka</h2>
                         <p class="rm-page-sub">Pilihan lain dari kategori {{ $barang->kategori }}.</p>
                     </div>
                     <a href="{{ route('guest.per_kategori', ['kategori' => $barang->kategori]) }}" class="btn rm-btn-outline btn-sm px-3">
-                        Lihat Kategori <i class="bi bi-arrow-right ms-1"></i>
+                        Lihat Kategori <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i>
                     </a>
                 </div>
-                <div class="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3 g-md-4 justify-content-center">
+                <div class="row row-cols-2 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3 g-lg-4 justify-content-center">
                     @foreach ($serupa as $related)
                         <div class="col">
                             <x-product-card :item="$related" detail-route="detail_barang_beli" />
@@ -352,12 +318,12 @@
         @endif
 
         <section class="mt-5" aria-labelledby="discussionTitle">
-            <div class="d-flex flex-wrap justify-content-between align-items-end gap-2 mb-3">
+            <div class="rm-section-head align-items-end mb-3">
                 <div>
                     <h2 class="h4 fw-bold mb-1" id="discussionTitle">Diskusi Produk</h2>
                     <p class="rm-page-sub">Tanyakan hal yang ingin kamu ketahui sebelum membeli.</p>
                 </div>
-                <span class="rm-chip"><i class="bi bi-chat-dots"></i>{{ $diskusi->count() }} komentar</span>
+                <span class="rm-chip"><i class="bi bi-chat-dots" aria-hidden="true"></i>{{ $diskusi->count() }} komentar</span>
             </div>
 
             <div class="rm-discussion-card">

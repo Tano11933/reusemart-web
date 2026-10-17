@@ -17,9 +17,14 @@
             <span class="rm-text-muted">Checkout</span>
         </nav>
 
-        <div class="mb-4">
-            <h1 class="rm-page-title">Checkout</h1>
-            <p class="rm-page-sub">Pilih metode penerimaan dan periksa ringkasan pesanan sebelum lanjut.</p>
+        <div class="rm-page-head">
+            <div class="rm-page-head-main">
+                <span class="rm-page-head-icon" aria-hidden="true"><i class="bi bi-bag-check"></i></span>
+                <div>
+                    <h1 class="rm-page-title">Checkout</h1>
+                    <p class="rm-page-sub">Pilih metode penerimaan dan periksa ringkasan pesanan sebelum lanjut.</p>
+                </div>
+            </div>
         </div>
 
         @if ($errors->any())

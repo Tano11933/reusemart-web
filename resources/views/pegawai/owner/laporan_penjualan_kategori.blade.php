@@ -1,80 +1,45 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <title>Laporan Penjualan per Kategori Barang</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body, html { margin: 0; padding: 0; background: #f8f8f8; color: #2c3e65; min-height: 100vh;}
-        .sidebar { width: 220px; height: 100vh; position: fixed; background: linear-gradient(to bottom, #365a64, #f0e6dd); padding: 35px 0; color: white; display: flex; flex-direction: column; justify-content: space-between; align-items: center; z-index: 10; }
-        .logo-wrapper { margin-bottom: 40px; text-align: center; }
-        .logo-wrapper img { max-width: 60px; height: auto; }
-        .maskot { height: 70px; width: auto; object-fit: contain; filter: drop-shadow(0 4px 16px rgba(30,91,90,0.14)); }
-        .menu { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 10px; }
-        .menu a { width: 80%; text-align: center; padding: 10px; font-weight: bold; color: white; text-decoration: none; border-radius: 8px; transition: all 0.2s;}
-        .menu a:hover, .menu a.active { background-color: white; color: #2c3e65;}
-        .logout-wrapper { text-align: center; margin-bottom: 10px; }
-        .logout-btn { padding: 12px 24px; background-color: #365a64; border: none; color: white; font-size: 14px; font-weight: bold; border-radius: 8px; cursor: pointer; transition: background-color 0.3s;}
-        .logout-btn:hover { background-color: #2c2c2c; }
-        .main { margin-left: 220px; padding: 30px;}
-        .card { background-color: #fdf3e7; padding: 28px 26px 32px 26px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 30px;}
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 15px;}
-        th, td { border: 1px solid #ddd; padding: 10px 12px; vertical-align: middle; }
-        thead tr { background-color: #365a64; color: white;}
-        tbody tr:nth-child(even) { background-color: #f0f0f0;}
-        .btn-pdf { background: #3498db; color: #fff; border-radius: 15px; border: none; font-size: 13px; padding: 7px 16px;}
-        .btn-pdf:hover { background: #2167a8; }
-        .fw-bold { font-weight: 700; }
-        @media (max-width:900px) { .sidebar { position: static; width: 100%; min-height: auto; flex-direction: row; padding: 10px;} .main { margin-left: 0; padding: 14px 0 0 0;} .logo-wrapper, .logout-wrapper { display: none; } }
-    </style>
-    <link rel="stylesheet" href="{{ asset('css/reusemart.css') }}">
-</head>
-<body class="rm-body rm-legacy-workspace">
-<div class="sidebar">
-    <div>
-        <div class="logo-wrapper" style="display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 40px;">
-            <img src="{{ asset('image/white.png') }}" alt="Logo" style="height: 58px; width: auto;">
-            <img src="{{ asset('image/d.jpg') }}" alt="Maskot" class="maskot">
-        </div>
-        <div class="menu">
-            <a href="{{ route('owner.requestRDonasi') }}" class="{{ request()->routeIs('owner.requestRDonasi') ? 'active' : '' }}">Data Request Donasi</a>
-            <a href="{{ route('owner.ownerHistoryDonasi') }}" class="{{ request()->routeIs('owner.ownerHistoryDonasi') ? 'active' : '' }}">History Donasi</a>
-            <a href="{{ route('owner.laporanPenjualanBulanan') }}" class="{{ request()->routeIs('owner.laporanPenjualanBulanan') ? 'active' : '' }}">Laporan Penjualan</a>
-            <a href="{{ route('owner.laporanKomisiBulanan') }}" class="{{ request()->routeIs('owner.laporanKomisiBulanan') ? 'active' : '' }}">Laporan Komisi Bulanan</a>
-            <a href="{{ route('owner.laporanStokGudang') }}" class="{{ request()->routeIs('owner.laporanStokGudang') ? 'active' : '' }}">Laporan Stok Gudang</a>
-            <a href="{{ route('owner.laporanPenjualanKategori') }}" class="{{ request()->routeIs('owner.laporanPenjualanKategori') ? 'active' : '' }}">Laporan Penjualan Kategori</a>
-            <a href="{{ route('owner.laporanBarangExpired') }}" class="{{ request()->routeIs('owner.laporanBarangExpired') ? 'active' : '' }}">Barang Expired Penitipan</a>
-            <a href="{{ route('donasi.laporan') }}" class="{{ request()->routeIs('donasi.laporan') ? 'active' : '' }}">Laporan Donasi Barang</a>
-            <a href="{{ route('requestdonasi.laporan') }}" class="{{ request()->routeIs('requestdonasi.laporan') ? 'active' : '' }}">Laporan Request Donasi Barang</a>
-            <a href="{{ route('transaksi.penitip.laporan') }}" class="{{ request()->routeIs('transaksi.penitip.laporan') ? 'active' : '' }}">Laporan Transaksi Penitip</a>
-        </div>
-    </div>
-    <div class="logout-wrapper">
-        <button id="logoutBtn" class="logout-btn">Log out</button>
-    </div>
-</div>
+@extends('layouts.workspace')
 
-<div class="main">
-    <div class="card">
-        <div style="font-size: 1.3em; font-weight: bold;">ReUse Mart</div>
-        <div>Jl. Green Eco Park No. 456 Yogyakarta</div>
-        <div class="fw-bold mt-3 mb-2">LAPORAN PENJUALAN PER KATEGORI BARANG</div>
-        <form method="GET" action="{{ route('owner.laporanPenjualanKategori') }}" class="mb-3 d-flex" style="gap: 8px;">
-            <label for="tahun" class="fw-bold mt-2" style="min-width:90px;">Tahun:</label>
-            <select name="tahun" id="tahun" class="form-select" style="max-width:120px;">
-                @for ($y = date('Y'); $y >= date('Y')-6; $y--)
-                    <option value="{{ $y }}" {{ $tahun == $y ? 'selected' : '' }}>{{ $y }}</option>
-                @endfor
-            </select>
-            <button type="submit" class="btn btn-primary ms-2">Tampilkan</button>
-            <a href="{{ route('owner.laporanPenjualanKategori.pdf', ['tahun' => $tahun]) }}" 
-               target="_blank" class="btn btn-pdf fw-bold ms-2" style="padding: 9px 28px; font-size: 16px;">
+@section('title', 'Laporan Penjualan Kategori · ReuseMart')
+@section('page-title', 'Laporan Penjualan Kategori')
+
+@section('content')
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3 mb-4">
+        <div>
+            <h1 class="rm-page-title">Laporan Penjualan Kategori</h1>
+            <p class="rm-page-sub">Jumlah item yang berhasil dan gagal terjual untuk setiap kategori barang.</p>
+        </div>
+        <span class="rm-chip"><i class="bi bi-calendar3"></i>Tahun {{ $tahun }}</span>
+    </div>
+
+    <section class="rm-workspace-card">
+        <div class="rm-report-head">
+            <strong>ReUse Mart</strong>
+            <span>Jl. Green Eco Park No. 456 Yogyakarta</span>
+        </div>
+        <h2 class="rm-report-title">Laporan Penjualan per Kategori Barang</h2>
+
+        <form method="GET" action="{{ route('owner.laporanPenjualanKategori') }}" class="d-flex flex-wrap align-items-end gap-2 mb-3">
+            <div>
+                <label for="tahun" class="form-label fw-semibold small mb-1">Tahun</label>
+                <select name="tahun" id="tahun" class="form-select form-select-sm" style="min-width: 120px;">
+                    @for ($y = date('Y'); $y >= date('Y') - 6; $y--)
+                        <option value="{{ $y }}" {{ $tahun == $y ? 'selected' : '' }}>{{ $y }}</option>
+                    @endfor
+                </select>
+            </div>
+            <button type="submit" class="btn rm-btn-outline btn-sm">Tampilkan</button>
+            <a href="{{ route('owner.laporanPenjualanKategori.pdf', ['tahun' => $tahun]) }}" target="_blank" class="btn btn-pdf btn-sm">
                 <i class="bi bi-printer"></i> Cetak PDF
             </a>
         </form>
-        <div>Tahun : <b>{{ $tahun }}</b></div>
-        <div>Tanggal cetak: <b>{{ $tanggalCetak }}</b></div>
-        <div class="table-responsive mt-3 mb-2">
+
+        <div class="rm-report-meta">
+            <span>Tahun: <b>{{ $tahun }}</b></span>
+            <span>Tanggal cetak: <b>{{ $tanggalCetak }}</b></span>
+        </div>
+
+        <div class="table-responsive">
             <table class="table table-bordered align-middle">
                 <thead>
                     <tr>
@@ -85,7 +50,7 @@
                 </thead>
                 <tbody>
                     @php $totalTerjual = $totalGagal = 0; @endphp
-                    @forelse($data as $d)
+                    @forelse ($data as $d)
                         <tr>
                             <td>{{ $d['kategori'] }}</td>
                             <td>{{ $d['item_terjual'] }}</td>
@@ -96,9 +61,11 @@
                             $totalGagal += $d['item_gagal'];
                         @endphp
                     @empty
-                        <tr><td colspan="3" class="text-center">Tidak ada data</td></tr>
+                        <tr>
+                            <td colspan="3" class="text-center">Tidak ada data</td>
+                        </tr>
                     @endforelse
-                    <tr class="fw-bold" style="background: #f6f6f6">
+                    <tr class="fw-bold table-secondary">
                         <td>Total</td>
                         <td>{{ $totalTerjual }}</td>
                         <td>{{ $totalGagal }}</td>
@@ -106,39 +73,18 @@
                 </tbody>
             </table>
         </div>
-    </div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-document.getElementById('logoutBtn')?.addEventListener('click', function () {
-    Swal.fire({
-        title: 'Yakin ingin logout?',
-        text: 'Kamu akan keluar dari sistem.',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Ya, logout',
-        cancelButtonText: 'Batal'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            fetch("{{ route('logout') }}", {
-                method: 'POST',
-                headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
-            }).then(() => {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Logout berhasil',
-                    text: 'Kamu telah keluar dari sistem.',
-                    timer: 1500,
-                    showConfirmButton: false
-                }).then(() => {
-                    window.location.href = '/login';
-                });
-            });
-        }
-    });
-});
-</script>
-</body>
-</html>
+    </section>
+@endsection
+
+@push('styles')
+    <style>
+        .btn-pdf { background: #3498db; color: #fff; border: none; border-radius: var(--rm-radius-pill); font-size: .82rem; font-weight: 700; padding: .55rem 1.15rem; }
+        .btn-pdf:hover { background: #2167a8; color: #fff; }
+        .rm-report-head { display: flex; flex-direction: column; gap: .1rem; padding-bottom: .85rem; border-bottom: 1px solid var(--rm-line); margin-bottom: 1rem; }
+        .rm-report-head strong { font-size: 1.05rem; }
+        .rm-report-head span { color: var(--rm-muted); font-size: .85rem; }
+        .rm-report-title { font-size: .95rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; margin: 0 0 .6rem; }
+        .rm-report-meta { display: flex; flex-wrap: wrap; gap: .3rem 1.5rem; font-size: .88rem; color: var(--rm-muted); margin-bottom: 1rem; }
+        .rm-report-meta b { color: var(--rm-ink); }
+    </style>
+@endpush
