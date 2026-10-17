@@ -60,7 +60,7 @@
         <p class="rm-product-price"><span class="rm-product-currency">Rp</span> {{ number_format($item->harga_barang, 0, ',', '.') }}</p>
 
         <div class="rm-product-meta-row">
-            <span class="rm-product-meta">{{ $item->kategori }}</span>
+            <span class="rm-product-meta"><i class="bi bi-tag" aria-hidden="true"></i>{{ $item->kategori }}</span>
 
             @if ($hasRating)
                 <span class="rm-rating-sm" aria-label="Rating penjual {{ number_format($ratingValue, 1) }} dari 5">
