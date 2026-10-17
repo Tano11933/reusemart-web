@@ -42,96 +42,86 @@ class ReuseMartSeeder extends Seeder
             ]);
         }
 
-        if (DB::table('pegawai')->count() === 0) {
-            $pegawai = [
-                ['P1', 'J5', 'Admin ReuseMart', 'admin@reusemart.test'],
-                ['P2', 'J1', 'Citra Layanan', 'cs@reusemart.test'],
-                ['P3', 'J2', 'Gunawan Gudang', 'gudang@reusemart.test'],
-                ['P4', 'J6', 'Omar Pemilik', 'owner@reusemart.test'],
-                ['P5', 'J3', 'Hendra Hunter', 'hunter@reusemart.test'],
-                ['P6', 'J4', 'Kurnia Kurir', 'kurir@reusemart.test'],
-            ];
+        $akunPegawai = [
+            ['J5', 'Admin ReuseMart', 'admin@reusemart.test'],
+            ['J1', 'Citra Layanan', 'cs@reusemart.test'],
+            ['J2', 'Gunawan Gudang', 'gudang@reusemart.test'],
+            ['J6', 'Omar Pemilik', 'owner@reusemart.test'],
+            ['J3', 'Hendra Hunter', 'hunter@reusemart.test'],
+            ['J4', 'Kurnia Kurir', 'kurir@reusemart.test'],
+        ];
 
-            foreach ($pegawai as $i => [$id, $idJabatan, $nama, $email]) {
-                DB::table('pegawai')->insert([
-                    'id_pegawai' => $id,
-                    'id_jabatan' => $idJabatan,
-                    'id_role' => 4,
-                    'email' => $email,
-                    'password' => $password,
-                    'nama_pegawai' => $nama,
-                    'tgl_lahir' => Carbon::parse('1995-01-0' . ($i + 1))->toDateString(),
-                    'nomor_telepon' => '0812000000' . str_pad((string) ($i + 1), 2, '0', STR_PAD_LEFT),
-                    'alamat' => 'Jl. Sadang Serang No. ' . ($i + 1) . ', Bandung',
-                ]);
+        foreach ($akunPegawai as $i => [$idJabatan, $nama, $email]) {
+            if ($this->emailAda('pegawai', $email)) {
+                continue;
             }
+
+            DB::table('pegawai')->insert([
+                'id_pegawai' => $this->idBaru('pegawai', 'id_pegawai', 'P'),
+                'id_jabatan' => $idJabatan,
+                'id_role' => 4,
+                'email' => $email,
+                'password' => $password,
+                'nama_pegawai' => $nama,
+                'tgl_lahir' => Carbon::parse('1995-01-0' . ($i + 1))->toDateString(),
+                'nomor_telepon' => '0812000000' . str_pad((string) ($i + 1), 2, '0', STR_PAD_LEFT),
+                'alamat' => 'Jl. Sadang Serang No. ' . ($i + 1) . ', Bandung',
+            ]);
         }
 
-        if (DB::table('pembeli')->count() === 0) {
+        $akunPembeli = [
+            ['Budi Santoso', 'Pria', '2000-03-12', '081211111111', 'budi@reusemart.test', 150],
+            ['Sari Dewi', 'Wanita', '2001-07-25', '081222222222', 'sari@reusemart.test', 0],
+        ];
+
+        foreach ($akunPembeli as [$nama, $jenisKelamin, $tglLahir, $telepon, $email, $poin]) {
+            if ($this->emailAda('pembeli', $email)) {
+                continue;
+            }
+
             DB::table('pembeli')->insert([
-                [
-                    'id_pembeli' => 'PEM1',
-                    'id_role' => 2,
-                    'nama_pembeli' => 'Budi Santoso',
-                    'jenis_kelamin' => 'Pria',
-                    'tgl_lahir' => '2000-03-12',
-                    'nomor_telepon' => '081211111111',
-                    'email' => 'budi@reusemart.test',
-                    'password' => $password,
-                    'poin' => 150,
-                ],
-                [
-                    'id_pembeli' => 'PEM2',
-                    'id_role' => 2,
-                    'nama_pembeli' => 'Sari Dewi',
-                    'jenis_kelamin' => 'Wanita',
-                    'tgl_lahir' => '2001-07-25',
-                    'nomor_telepon' => '081222222222',
-                    'email' => 'sari@reusemart.test',
-                    'password' => $password,
-                    'poin' => 0,
-                ],
+                'id_pembeli' => $this->idBaru('pembeli', 'id_pembeli', 'PEM'),
+                'id_role' => 2,
+                'nama_pembeli' => $nama,
+                'jenis_kelamin' => $jenisKelamin,
+                'tgl_lahir' => $tglLahir,
+                'nomor_telepon' => $telepon,
+                'email' => $email,
+                'password' => $password,
+                'poin' => $poin,
             ]);
         }
 
-        if (DB::table('penitip')->count() === 0) {
+        $akunPenitip = [
+            ['Toko Lestari', '3273010101010001', 'Wanita', '1990-02-14', '082211111111', 4.8, 20000, 'tokolestari@reusemart.test'],
+            ['Toko Maju', '3273010101010002', 'Pria', '1988-09-03', '082222222222', 4.6, 10000, 'tokomaju@reusemart.test'],
+        ];
+
+        foreach ($akunPenitip as [$nama, $nik, $jenisKelamin, $tglLahir, $telepon, $rating, $saldo, $email]) {
+            if ($this->emailAda('penitip', $email)) {
+                continue;
+            }
+
             DB::table('penitip')->insert([
-                [
-                    'id_penitip' => 'T1',
-                    'id_role' => 1,
-                    'nama_penitip' => 'Toko Lestari',
-                    'nik_penitip' => '3273010101010001',
-                    'jenis_kelamin' => 'Wanita',
-                    'tgl_lahir' => '1990-02-14',
-                    'nomor_telepon' => '082211111111',
-                    'rating' => 4.8,
-                    'saldo' => 20000,
-                    'email' => 'tokolestari@reusemart.test',
-                    'password' => $password,
-                    'poin' => 0,
-                    'foto_ktp' => null,
-                ],
-                [
-                    'id_penitip' => 'T2',
-                    'id_role' => 1,
-                    'nama_penitip' => 'Toko Maju',
-                    'nik_penitip' => '3273010101010002',
-                    'jenis_kelamin' => 'Pria',
-                    'tgl_lahir' => '1988-09-03',
-                    'nomor_telepon' => '082222222222',
-                    'rating' => 4.6,
-                    'saldo' => 10000,
-                    'email' => 'tokomaju@reusemart.test',
-                    'password' => $password,
-                    'poin' => 0,
-                    'foto_ktp' => null,
-                ],
+                'id_penitip' => $this->idBaru('penitip', 'id_penitip', 'T'),
+                'id_role' => 1,
+                'nama_penitip' => $nama,
+                'nik_penitip' => $nik,
+                'jenis_kelamin' => $jenisKelamin,
+                'tgl_lahir' => $tglLahir,
+                'nomor_telepon' => $telepon,
+                'rating' => $rating,
+                'saldo' => $saldo,
+                'email' => $email,
+                'password' => $password,
+                'poin' => 0,
+                'foto_ktp' => null,
             ]);
         }
 
-        if (DB::table('organisasi')->count() === 0) {
+        if (! $this->emailAda('organisasi', 'panti@reusemart.test')) {
             DB::table('organisasi')->insert([
-                'id_organisasi' => 'ORG1',
+                'id_organisasi' => $this->idBaru('organisasi', 'id_organisasi', 'ORG'),
                 'id_role' => 3,
                 'nama_organisasi' => 'Panti Asuhan Kasih',
                 'nomor_telepon' => '083233333333',
@@ -287,5 +277,32 @@ class ReuseMartSeeder extends Seeder
                 'status' => 'belum diambil',
             ]);
         }
+    }
+
+    private function emailAda(string $tabel, string $email): bool
+    {
+        return DB::table($tabel)->where('email', $email)->exists();
+    }
+
+    /**
+     * Cari id baru berpola prefix + angka (PEM1, T1, P1, ORG1) yang belum terpakai,
+     * supaya akun demo bisa disisipkan ke database yang sudah berisi data.
+     */
+    private function idBaru(string $tabel, string $kolom, string $prefix): string
+    {
+        $max = 0;
+
+        foreach (DB::table($tabel)->pluck($kolom) as $id) {
+            if (preg_match('/^' . preg_quote($prefix, '/') . '0*(\d+)$/i', (string) $id, $m)) {
+                $max = max($max, (int) $m[1]);
+            }
+        }
+
+        do {
+            $max++;
+            $kandidat = $prefix . $max;
+        } while (DB::table($tabel)->where($kolom, $kandidat)->exists());
+
+        return $kandidat;
     }
 }
