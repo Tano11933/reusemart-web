@@ -168,7 +168,7 @@ class ReuseMartSeeder extends Seeder
                 ['K1', 'T1', null, 'Komik Naruto Vol. 1-5', 'Kondisi bagus, lengkap lima volume', 'Hobi, Mainan, & Koleksi', 100000, 2, 'komiknaruto.jpg', 'komiknaruto1.jpg', 'tersedia'],
                 ['L2', 'T2', 'P5', 'Laptop Asus Vivobook', 'RAM 8GB, SSD 256GB, siap pakai', 'Elektronik & Gadget', 3500000, 2, 'vivobookseken.jpg', 'vivobookseken1.jpg', 'tersedia'],
                 ['M2', 'T1', null, 'Meja Kantor Minimalis', 'Kondisi sangat baik, kokoh', 'Perabotan Rumah Tangga', 600000, 12, 'mejakantorminimalis.jpg', 'mejakantorminimalis1.jpg', 'tersedia'],
-                ['S4', 'T2', null, 'Smartwatch Xiaomi', 'Tampilan mulus, baterai awet', 'Elektronik & Gadget', 450000, 1, 'smartwatchxiaomi.jpg', 'smartwatchxiaomi1.jpg', 'tersedia'],
+                ['S4', 'T2', null, 'Smartwatch Xiaomi', 'Tampilan mulus, baterai awet', 'Elektronik & Gadget', 450000, 1, 'smartwatchxiaomi.jpg', 'smartwatchxiaomi1.jpg', 'diproses'],
                 ['T2', 'T1', null, 'Tenda Camping Kapasitas 4', 'Waterproof, lengkap dengan tas', 'Perlengkapan Taman & Outdoor', 900000, 4, 'tendacamping.jpg', 'tendacamping1.jpg', 'tersedia'],
                 ['P1', 'T2', null, 'Printer Epson L360', 'Masih bisa print dan scan', 'Elektronik & Gadget', 750000, 6, 'printerepson.jpg', 'printerepson1.jpg', 'tersedia'],
                 ['B2', 'T2', null, 'Ban Motor IRC', 'Ukuran 80/90-14, masih layak', 'Otomotif & Aksesori', 200000, 8, 'banmotorirc.jpg', 'banmotorirc1.jpg', 'terjual'],
@@ -241,6 +241,40 @@ class ReuseMartSeeder extends Seeder
                 'komisi_perusahaan' => 20000,
                 'komisi_hunter' => 10000,
                 'bonus' => 0,
+            ]);
+
+            // Pesanan kedua: sedang dikirim kurir demo supaya layar kurir ada isinya.
+            $tglPesan2 = $now->copy()->subDays(2);
+            $idPemesanan2 = $tglPesan2->format('Y') . '.' . (int) $tglPesan2->format('n') . '.2';
+
+            DB::table('pemesanan')->insert([
+                'id_pemesanan' => $idPemesanan2,
+                'id_pembeli' => 'PEM2',
+                'id_pegawai' => 'P6',
+                'tgl_pesan' => $tglPesan2->toDateTimeString(),
+                'tgl_kirim' => $now->copy()->addDay()->toDateString(),
+                'tgl_ambil' => null,
+                'poin_pesanan' => 45,
+                'status' => 'proses pengiriman',
+                'jenis_pengantaran' => 'dikirim',
+                'alamat_pengiriman' => 'A2',
+                'tgl_pembayaran' => $tglPesan2->copy()->addHour()->toDateTimeString(),
+                'total_harga_pesanan' => 450000,
+                'total_ongkir' => 20000,
+                'harga_setelah_ongkir' => 470000,
+                'potongan_harga' => 0,
+                'total_harga' => 470000,
+                'bukti_transfer' => null,
+                'metode_pembayaran' => 'transfer',
+                'status_pembayaran' => 'valid',
+            ]);
+
+            DB::table('detail_pemesanan')->insert([
+                'id_detail_pemesanan' => 'DP-DEMO-2',
+                'rating_diberikan' => null,
+                'id_barang' => 'S4',
+                'id_pemesanan' => $idPemesanan2,
+                'harga' => 450000,
             ]);
         }
 
