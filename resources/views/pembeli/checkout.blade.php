@@ -58,7 +58,7 @@
                                 <span class="rm-delivery-icon"><i class="bi bi-truck"></i></span>
                                 <span class="rm-delivery-copy">
                                     <strong>Diantar kurir</strong>
-                                    <small>Barang diantar ke alamat tersimpan.</small>
+                                    <small>Diantar ke alamat tersimpan. Gratis di atas Rp 1,5 jt.</small>
                                 </span>
                                 <i class="bi bi-check-circle-fill rm-delivery-check"></i>
                             </label>
@@ -67,7 +67,7 @@
                                 <span class="rm-delivery-icon"><i class="bi bi-shop"></i></span>
                                 <span class="rm-delivery-copy">
                                     <strong>Ambil sendiri</strong>
-                                    <small>Ambil pesanan di lokasi ReuseMart.</small>
+                                    <small>Ambil langsung di lokasi ReuseMart, tanpa ongkir.</small>
                                 </span>
                                 <i class="bi bi-check-circle-fill rm-delivery-check"></i>
                             </label>
@@ -162,7 +162,7 @@
                         Buat Pesanan <i class="bi bi-arrow-right ms-1"></i>
                     </button>
                     <p class="small rm-text-muted text-center mt-2 mb-0">
-                        <i class="bi bi-lock me-1"></i>Kamu akan diarahkan ke halaman pembayaran setelah pesanan dibuat.
+                        <i class="bi bi-lock me-1"></i>Setelah pesanan dibuat kamu memilih pembayaran Transfer Bank atau DANA dan mengunggah bukti transfer.
                     </p>
                 </section>
 
@@ -176,40 +176,6 @@
 
 @push('styles')
     <style>
-        .rm-checkout-card,
-        .rm-checkout-summary {
-            border: 1px solid var(--rm-line);
-            border-radius: var(--rm-radius-lg);
-            background: #fff;
-            box-shadow: var(--rm-shadow-xs);
-            padding: 1.35rem;
-        }
-
-        .rm-checkout-summary {
-            position: sticky;
-            top: 92px;
-        }
-
-        .rm-checkout-section-heading {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            margin-bottom: 1.15rem;
-        }
-
-        .rm-checkout-step {
-            width: 36px;
-            height: 36px;
-            flex: 0 0 36px;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--rm-primary);
-            color: #fff;
-            font-weight: 700;
-        }
-
         .rm-delivery-options,
         .rm-points-choice {
             display: grid;
@@ -284,99 +250,9 @@
             display: block;
         }
 
-        .rm-checkout-items {
-            display: grid;
-            gap: 0.8rem;
-            max-height: 300px;
-            overflow: auto;
-            padding-right: 0.25rem;
-        }
-
-        .rm-checkout-item {
-            display: grid;
-            grid-template-columns: 52px minmax(0, 1fr) auto;
-            align-items: center;
-            gap: 0.7rem;
-            font-size: 0.84rem;
-        }
-
-        .rm-checkout-item img {
-            width: 52px;
-            height: 52px;
-            object-fit: contain;
-            padding: 0.2rem;
-            border-radius: var(--rm-radius-sm);
-            background: var(--rm-primary-soft-2);
-        }
-
-        .rm-checkout-item strong {
-            font-size: 0.8rem;
-            white-space: nowrap;
-        }
-
-        .rm-summary-lines {
-            display: grid;
-            gap: 0.6rem;
-            margin-top: 1.2rem;
-            padding: 1rem 0;
-            border-top: 1px solid var(--rm-line);
-            border-bottom: 1px solid var(--rm-line);
-        }
-
-        .rm-summary-lines > div {
-            display: flex;
-            justify-content: space-between;
-            gap: 0.8rem;
-            color: var(--rm-muted);
-            font-size: 0.86rem;
-        }
-
-        .rm-summary-lines strong {
-            color: var(--rm-ink);
-            text-align: right;
-        }
-
-        .rm-checkout-total {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .rm-checkout-total span {
-            color: var(--rm-ink-soft);
-            font-weight: 600;
-        }
-
-        .rm-checkout-total strong {
-            color: var(--rm-primary-dark);
-            font-size: 1.25rem;
-            font-weight: 800;
-            text-align: right;
-        }
-
-        @media (max-width: 991.98px) {
-            .rm-checkout-summary {
-                position: static;
-            }
-        }
-
-        @media (max-width: 575.98px) {
-            .rm-checkout-card,
-            .rm-checkout-summary {
-                padding: 1rem;
-            }
-
-            .rm-checkout-item {
-                grid-template-columns: 46px minmax(0, 1fr) auto;
-                gap: 0.55rem;
-            }
-
-            .rm-checkout-item img {
-                width: 46px;
-                height: 46px;
-            }
+        .rm-points-option:has(input:disabled) {
+            cursor: not-allowed;
+            opacity: 0.55;
         }
     </style>
 @endpush
@@ -438,10 +314,12 @@
             function updateDelivery() {
                 const selected = document.querySelector('input[name="jenis_pengantaran"]:checked')?.value;
                 const isDelivery = selected === 'dikirim';
+                const shippingFree = isDelivery && subtotal >= 1500000;
                 addressSection.classList.toggle('d-none', !isDelivery);
                 addressSelect.required = isDelivery;
                 if (isDelivery && !addressesLoaded) loadAddresses();
-                shippingPreview.textContent = !selected ? 'Pilih metode' : (isDelivery ? (subtotal >= 1500000 ? 'Gratis' : money(100000)) : money(0));
+                shippingPreview.textContent = !selected ? 'Pilih metode' : (isDelivery ? (shippingFree ? 'Gratis' : money(100000)) : money(0));
+                shippingPreview.classList.toggle('rm-text-success', shippingFree);
                 updateTotal();
             }
 

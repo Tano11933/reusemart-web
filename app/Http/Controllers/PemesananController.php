@@ -7,6 +7,7 @@ use App\Models\Pemesanan;
 use App\Models\Pegawai;
 use App\Models\Pembeli;
 use App\Models\Alamat;
+use App\Models\Barang;
 use App\Models\DetailPemesanan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
