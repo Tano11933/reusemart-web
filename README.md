@@ -105,13 +105,15 @@ Anggota tim: Tano11933, paniae.
 
 **v2 (2026)**
 - Desain ulang seluruh halaman: layout, komponen, kontras, dan aksesibilitas keyboard
+- Beranda guest dan pembeli ditata ulang sebagai storefront ringkas: kategori cepat, produk tampil lebih awal, dan pencarian tidak berulang
 - Perbaikan route rusak dan duplikat, pengamanan akses alamat dan pembatalan pesanan
 - Pembatasan akses per peran dan jabatan lewat middleware, plus pembatasan percobaan login
 - Skema tabel aplikasi dikemas menjadi migrasi lengkap + seeder data demo; setup tanpa dump basis data
-- Seluruh test kembali aktif: 20 test (login tiap peran, register, akses, migrasi, foreign key)
+- Seluruh test kembali aktif: 22 test (login tiap peran, register, akses, migrasi, foreign key, dan data demo mobile)
 - Perbaikan bug halaman klaim merchandise CS dan endpoint barang penitip di aplikasi mobile
 - Checkout menyimpan alamat pengiriman dan metode pembayaran
 - Endpoint mobile dirapikan, termasuk login, token FCM, dan riwayat
+- Riwayat pembelian mobile menyertakan tanggal; data demo kurir dan Hunter terisi dengan rincian pesanan/komisi
 - Dokumentasi: `DESIGN.md` dan screenshot before/after
 
 **v1 (Juni 2025)**

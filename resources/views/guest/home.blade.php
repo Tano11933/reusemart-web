@@ -9,9 +9,8 @@
         <div class="container">
             <div class="row align-items-center g-4">
                 <div class="col-lg-7">
-                    <span class="rm-hero-badge mb-3"><i class="bi bi-recycle" aria-hidden="true"></i>Marketplace barang bekas</span>
-                    <h1 class="display-5 mb-3">Beri Barang Layak Pakai Kesempatan Kedua</h1>
-                    <p class="lead mb-4">
+                    <h1 class="display-5 mb-3">Beri barang layak pakai kesempatan kedua.</h1>
+                    <p class="lead mb-4 rm-hero-copy">
                         Jelajahi barang titipan berkualitas: elektronik, furnitur, fashion, dan perlengkapan lain dengan harga bersahabat, sekaligus ikut mengurangi limbah.
                     </p>
 
@@ -24,16 +23,6 @@
                         </button>
                     </form>
 
-                    <div class="d-flex flex-wrap gap-2">
-                        <div class="rm-stat">
-                            <div class="rm-stat-value">{{ $barang->count() }}</div>
-                            <div class="rm-stat-label">Barang pilihan</div>
-                        </div>
-                        <div class="rm-stat">
-                            <div class="rm-stat-value">{{ $kategoris->count() }}</div>
-                            <div class="rm-stat-label">Kategori</div>
-                        </div>
-                    </div>
                 </div>
                 <div class="col-lg-5 text-center">
                     <img class="rm-hero-mascot" src="{{ asset('image/a.png') }}" alt="Maskot ReuseMart">
@@ -43,10 +32,13 @@
     </section>
 
     {{-- Kategori --}}
-    <section class="container py-5">
-        <div class="text-center mb-4">
-            <img src="{{ asset('image/b.png') }}" alt="" width="56" class="mb-2">
-            <h2 class="rm-section-title h4 mb-0 d-block">Kategori</h2>
+    <section class="container rm-home-categories py-4 py-lg-5">
+        <div class="rm-section-head">
+            <div>
+                <h2 class="rm-section-title h4 mb-1">Kategori</h2>
+                <p class="rm-page-sub">Pilih jenis barang yang sedang kamu cari.</p>
+            </div>
+            <a href="{{ route('guest.lihat_semua') }}" class="rm-section-link">Semua produk <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
         </div>
 
         @if ($kategoris->isEmpty())
@@ -58,7 +50,7 @@
                 </a>
             </div>
         @else
-            <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-3 justify-content-center">
+            <div class="row row-cols-2 row-cols-sm-3 row-cols-lg-4 row-cols-xxl-6 g-2 g-md-3">
                 @foreach ($kategoris->unique('kategori') as $kategoriItem)
                     <div class="col">
                         <a class="rm-category-card" href="{{ route('guest.per_kategori', ['kategori' => $kategoriItem->kategori]) }}">
@@ -74,9 +66,13 @@
     </section>
 
     {{-- Barang terbaru --}}
-    <section class="container pb-5">
-        <div class="text-center mb-4">
-            <h2 class="rm-section-title h4 mb-0 d-block">Barang Terbaru</h2>
+    <section class="container rm-home-products pb-5">
+        <div class="rm-section-head">
+            <div>
+                <h2 class="rm-section-title h4 mb-1">Barang terbaru</h2>
+                <p class="rm-page-sub">Pilihan barang yang tersedia untuk dibeli.</p>
+            </div>
+            <a href="{{ route('guest.lihat_semua') }}" class="rm-section-link">Lihat semua <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
         </div>
 
         @if ($barang->isEmpty())
@@ -88,7 +84,7 @@
                 </a>
             </div>
         @else
-            <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-xl-5 row-cols-xxl-6 g-2 g-md-3 justify-content-center">
+            <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-xl-5 row-cols-xxl-6 g-2 g-md-3">
                 @foreach ($barang as $item)
                     <div class="col">
                         <x-product-card :item="$item" />
@@ -96,11 +92,6 @@
                 @endforeach
             </div>
 
-            <div class="text-center mt-4">
-                <a href="{{ route('guest.lihat_semua') }}" class="btn rm-btn-outline px-4">
-                    Lihat Semua Produk <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i>
-                </a>
-            </div>
         @endif
     </section>
 @endsection
