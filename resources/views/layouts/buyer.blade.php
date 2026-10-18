@@ -21,7 +21,7 @@
         $cartCount = count(session('cart', []));
     @endphp
 
-    <nav class="navbar navbar-expand-lg rm-navbar sticky-top py-2">
+    <nav class="navbar navbar-expand-lg rm-navbar sticky-top">
         <div class="container">
             <a class="navbar-brand text-white" href="{{ route('home_beli') }}">
                 <img src="{{ asset('image/white.png') }}" alt="Logo ReuseMart">

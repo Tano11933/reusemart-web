@@ -158,9 +158,12 @@ img {
    --------------------------------------------------------------------------- */
 .rm-navbar {
     background-color: var(--rm-primary);
-    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06) inset, 0 6px 18px rgba(15, 47, 46, 0.18);
-    padding-top: 0.6rem;
-    padding-bottom: 0.6rem;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.08) inset, 0 8px 24px rgba(15, 47, 46, 0.16);
+    padding: 0;
+}
+
+.rm-navbar > .container {
+    min-height: 68px;
 }
 
 .rm-navbar .navbar-brand {
@@ -168,36 +171,47 @@ img {
     letter-spacing: 0.01em;
     display: inline-flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.55rem;
     color: #fff;
-    padding-right: 0.75rem;
+    padding: 0;
+    margin-right: 1.15rem;
+    font-size: 1.05rem;
 }
 
 .rm-navbar .navbar-brand img {
-    max-width: 42px;
+    max-width: 36px;
     height: auto;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.18));
+    filter: none;
 }
 
 .rm-navbar .nav-link {
-    color: rgba(255, 255, 255, 0.86);
+    position: relative;
+    color: rgba(255, 255, 255, 0.78);
     font-weight: 500;
-    padding: 0.5rem 0.95rem;
-    margin-right: 0.15rem;
-    border-radius: var(--rm-radius-sm);
-    transition: background-color var(--rm-fast), color var(--rm-fast), box-shadow var(--rm-fast);
+    padding: 0.45rem 0.15rem;
+    margin-right: 1.15rem;
+    border-radius: 0;
+    transition: color var(--rm-fast);
 }
 
 .rm-navbar .nav-link:hover {
     color: #fff;
-    background-color: rgba(255, 255, 255, 0.16);
 }
 
 .rm-navbar .nav-link.active {
-    color: var(--rm-primary-dark);
-    background-color: #ffffff;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.14);
+    color: #fff;
     font-weight: 600;
+}
+
+.rm-navbar .nav-link.active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    border-radius: 2px;
+    background-color: var(--rm-accent);
 }
 
 .rm-navbar .navbar-toggler {
@@ -211,26 +225,27 @@ img {
 
 /* Pencarian di navbar */
 .rm-search {
-    max-width: 320px;
+    max-width: 300px;
     width: 100%;
 }
 
 .rm-search .form-control {
-    border-radius: var(--rm-radius-pill);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    background-color: rgba(255, 255, 255, 0.1);
+    min-height: 44px;
+    border-radius: var(--rm-radius-sm);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    background-color: rgba(255, 255, 255, 0.12);
     color: #fff;
-    padding: 0.5rem 1.1rem;
+    padding: 0.45rem 1rem;
     transition: background-color var(--rm-fast), border-color var(--rm-fast), box-shadow var(--rm-fast);
 }
 
 .rm-search .form-control::placeholder {
-    color: rgba(255, 255, 255, 0.85);
+    color: rgba(255, 255, 255, 0.75);
 }
 
 .rm-search .form-control:hover {
-    background-color: rgba(255, 255, 255, 0.18);
-    border-color: rgba(255, 255, 255, 0.75);
+    background-color: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.6);
 }
 
 .rm-search .form-control:focus {
@@ -242,6 +257,24 @@ img {
 
 .rm-search .form-control:focus::placeholder {
     color: var(--rm-muted);
+}
+
+/* Tombol dan ikon di dalam navbar mengikuti tinggi input. */
+.rm-navbar .btn.rm-btn-light {
+    min-height: 44px;
+    padding: 0.45rem 1.35rem;
+    border-width: 1px;
+    border-radius: var(--rm-radius-sm);
+    box-shadow: none;
+}
+
+.rm-navbar .btn.rm-btn-light:hover,
+.rm-navbar .btn.rm-btn-light:focus {
+    box-shadow: none;
+}
+
+.rm-navbar .rm-cart-btn {
+    border-radius: var(--rm-radius-sm);
 }
 
 /* Keranjang di navbar */
@@ -2690,23 +2723,49 @@ img {
 }
 
 @media (max-width: 991.98px) {
+    .rm-navbar > .container {
+        min-height: 60px;
+    }
+
     .rm-navbar .navbar-collapse {
-        margin-top: 0.65rem;
-        padding-top: 0.75rem;
+        margin-top: 0.5rem;
+        padding-top: 0.65rem;
         border-top: 1px solid rgba(255, 255, 255, 0.16);
     }
 
     .rm-navbar .navbar-nav {
-        margin-bottom: 0.35rem !important;
+        margin-bottom: 0.3rem !important;
     }
 
     .rm-navbar .nav-link {
         width: 100%;
+        margin-right: 0;
+        padding: 0.6rem 0.15rem;
+    }
+
+    .rm-navbar .nav-link.active::after {
+        display: none;
+    }
+
+    .rm-navbar .nav-link.active {
+        padding-left: 0.7rem;
+    }
+
+    .rm-navbar .nav-link.active::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 3px;
+        height: 18px;
+        border-radius: 2px;
+        background-color: var(--rm-accent);
     }
 
     .rm-navbar .rm-search {
         max-width: none;
-        margin-bottom: 0.5rem !important;
+        margin: 0 0 0.6rem !important;
     }
 
     .rm-navbar .rm-search .form-control {

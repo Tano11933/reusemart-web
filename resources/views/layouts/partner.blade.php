@@ -14,7 +14,7 @@
 </head>
 <body class="rm-body d-flex flex-column min-vh-100">
     @php($role = session('role'))
-    <nav class="navbar navbar-expand-lg rm-navbar sticky-top py-2">
+    <nav class="navbar navbar-expand-lg rm-navbar sticky-top">
         <div class="container">
             <a class="navbar-brand text-white" href="{{ $role === 'organisasi' ? url('/organisasi/index_organisasi') : route('penitip.barangTitipan') }}">
                 <img src="{{ asset('image/white.png') }}" alt="Logo ReuseMart"><span>ReuseMart</span>
